@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+    id 'antlr'
+    id 'application'
+}
+
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    antlr "org.antlr:antlr4:4.7.2"
+}
+
+generateGrammarSource {
+    outputDirectory = file("src/main/java/interpreter.parser")
+    arguments += ["-visitor",
+                  "-long-messages"]
+}
+
+run {
+    mainClassName = 'Main'
+//    args = [".sample/sample1.lang"]
+}
