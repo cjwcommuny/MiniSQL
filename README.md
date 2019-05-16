@@ -40,7 +40,7 @@ package manager:
 
 package file:
     package file.buffer:
-    		DefaultBufferManager -->(实现接口) FileHandler
+        DefaultBufferManager -->(实现接口) FileHandler
         DefaultBufferManager -->(依赖) DiskFileManager
 
     package file.diskfile:
