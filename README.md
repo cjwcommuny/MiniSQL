@@ -17,7 +17,7 @@ package main:
 
 package interpreter:
     DefaultInterpreter -->(实现接口) main.Interpreter
-    DefaultInterpreter -->(依赖) api.DatabaseFacade
+    DefaultInterpreter -->(依赖) DatabaseFacade
 
 package middlelayer:
     DefaultDatabaseFacade -->(实现接口) interpreter.DatabaseFacade
