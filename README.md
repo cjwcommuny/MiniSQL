@@ -34,15 +34,16 @@ package manager:
         DefaultIndexManager -->(实现接口) middlelayer.IndexManager
         DefaultIndexManager -->(依赖) FileHandler
 
-    package reocrd:
+    package manager.reocrd:
         DefaultRecordManager -->(实现接口) middlelayer.RecordManager
         DefaultRecordManager -->(依赖) FileHandler
 
 package file:
-    package buffer:
+    package file.buffer:
+    		DefaultBufferManager -->(实现接口) FileHandler
         DefaultBufferManager -->(依赖) DiskFileManager
 
-    package diskfile:
+    package file.diskfile:
         DefaultDiskFileManager -->(实现接口) DiskFileManager
 ```
 
