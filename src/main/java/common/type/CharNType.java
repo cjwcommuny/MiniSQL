@@ -1,4 +1,5 @@
 package common.type;
 
-public interface CharNType {
+public interface CharNType extends Type {
+    int getLength();
 }

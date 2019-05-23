@@ -1,4 +1,4 @@
 package common.type;
 
-public interface IntType {
+public interface IntType extends Type {
 }

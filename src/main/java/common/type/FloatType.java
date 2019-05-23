@@ -1,4 +1,4 @@
 package common.type;
 
-public interface FloatType {
+public interface FloatType extends Type {
 }

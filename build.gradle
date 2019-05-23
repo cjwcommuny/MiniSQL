@@ -15,15 +15,16 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     antlr "org.antlr:antlr4:4.7.2"
+    compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
 }
 
 generateGrammarSource {
-    outputDirectory = file("src/main/java/interpreter.parser")
+    outputDirectory = file("src/main/java/interpreter/antlrparser")
     arguments += ["-visitor",
                   "-long-messages"]
 }
 
 run {
     mainClassName = 'Main'
-//    args = [".sample/sample1.lang"]
+//    args = [""]
 }
