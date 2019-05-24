@@ -1,10 +1,17 @@
 package common.type.implementation;
 
 import common.type.CharNType;
+import common.type.FloatType;
+import lombok.Getter;
 
-class DefaultFloatType implements CharNType {
+class DefaultFloatType implements FloatType {
+    @Getter
+    private static FloatType instance = new DefaultFloatType();
+
+    private DefaultFloatType() {}
+
     @Override
-    public int getLength() {
-        return 0;
+    public String toString() {
+        return "float";
     }
 }

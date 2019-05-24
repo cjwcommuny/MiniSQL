@@ -19,12 +19,12 @@ public class MiniSqlParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, INT_LITERAL=7, STRING_LITERAL=8, 
-		DIGIT=9, CREATE=10, TABLE=11, PRIMARY=12, KEY=13, UNIQUE=14, INT=15, CHAR=16, 
-		FLOAT=17, DROP=18, INDEX=19, ON=20, SELECT=21, WHERE=22, FROM=23, AND=24, 
-		INSERT=25, INTO=26, DELETE=27, VALUES=28, QUIT=29, EXECFILE=30, OP=31, 
-		EQUAL=32, NOT_EQUAL=33, GREATER=34, LESS=35, GREATER_OR_EQUAL=36, LESS_OR_EQUAL=37, 
-		NAME_IDENTIFIER=38, WHITE_SPACE=39, LINE_COMMENT=40, COMMENT=41;
+		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, INT_LITERAL=6, STRING_LITERAL=7, 
+		DIGIT=8, CREATE=9, TABLE=10, PRIMARY=11, KEY=12, UNIQUE=13, INT=14, CHAR=15, 
+		FLOAT=16, DROP=17, INDEX=18, ON=19, SELECT=20, WHERE=21, FROM=22, AND=23, 
+		INSERT=24, INTO=25, DELETE=26, VALUES=27, QUIT=28, EXECFILE=29, OP=30, 
+		EQUAL=31, NOT_EQUAL=32, GREATER=33, LESS=34, GREATER_OR_EQUAL=35, LESS_OR_EQUAL=36, 
+		NAME_IDENTIFIER=37, WHITE_SPACE=38, LINE_COMMENT=39, COMMENT=40;
 	public static final int
 		RULE_literal = 0, RULE_type_identifier = 1, RULE_instruction = 2, RULE_createTable = 3, 
 		RULE_primaryKeyDefinition = 4, RULE_columnDefinition = 5, RULE_dropTable = 6, 
@@ -42,16 +42,16 @@ public class MiniSqlParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'('", "')'", "';'", "','", "'*'", "'and'", null, null, null, null, 
+			null, "'('", "')'", "','", "'*'", "'and'", null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, "'='", "'<>'", 
-			"'>'", "'<'", "'>='", "'<='"
+			null, null, null, null, null, null, null, null, "'='", "'<>'", "'>'", 
+			"'<'", "'>='", "'<='"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, null, null, null, null, "INT_LITERAL", "STRING_LITERAL", 
+			null, null, null, null, null, null, "INT_LITERAL", "STRING_LITERAL", 
 			"DIGIT", "CREATE", "TABLE", "PRIMARY", "KEY", "UNIQUE", "INT", "CHAR", 
 			"FLOAT", "DROP", "INDEX", "ON", "SELECT", "WHERE", "FROM", "AND", "INSERT", 
 			"INTO", "DELETE", "VALUES", "QUIT", "EXECFILE", "OP", "EQUAL", "NOT_EQUAL", 
@@ -332,7 +332,7 @@ public class MiniSqlParser extends Parser {
 		InstructionContext _localctx = new InstructionContext(_ctx, getState());
 		enterRule(_localctx, 4, RULE_instruction);
 		try {
-			setState(69);
+			setState(51);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
 			case 1:
@@ -340,80 +340,62 @@ public class MiniSqlParser extends Parser {
 				{
 				setState(42);
 				createTable();
-				setState(43);
-				match(T__2);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(45);
+				setState(43);
 				dropTable();
-				setState(46);
-				match(T__2);
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(48);
+				setState(44);
 				createIndex();
-				setState(49);
-				match(T__2);
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(51);
+				setState(45);
 				dropIndex();
-				setState(52);
-				match(T__2);
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(54);
+				setState(46);
 				selectInstruction();
-				setState(55);
-				match(T__2);
 				}
 				break;
 			case 6:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(57);
+				setState(47);
 				insertTuple();
-				setState(58);
-				match(T__2);
 				}
 				break;
 			case 7:
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(60);
+				setState(48);
 				deleteTuple();
-				setState(61);
-				match(T__2);
 				}
 				break;
 			case 8:
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(63);
+				setState(49);
 				quit();
-				setState(64);
-				match(T__2);
 				}
 				break;
 			case 9:
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(66);
+				setState(50);
 				executeFile();
-				setState(67);
-				match(T__2);
 				}
 				break;
 			}
@@ -468,33 +450,33 @@ public class MiniSqlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(71);
+			setState(53);
 			match(CREATE);
-			setState(72);
+			setState(54);
 			match(TABLE);
-			setState(73);
+			setState(55);
 			match(NAME_IDENTIFIER);
-			setState(74);
+			setState(56);
 			match(T__0);
-			setState(78); 
+			setState(60); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(75);
+				setState(57);
 				columnDefinition();
-				setState(76);
-				match(T__3);
+				setState(58);
+				match(T__2);
 				}
 				}
-				setState(80); 
+				setState(62); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( _la==NAME_IDENTIFIER );
-			setState(82);
+			setState(64);
 			primaryKeyDefinition();
-			setState(83);
+			setState(65);
 			match(T__1);
 			}
 		}
@@ -538,15 +520,15 @@ public class MiniSqlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(85);
+			setState(67);
 			match(PRIMARY);
-			setState(86);
+			setState(68);
 			match(KEY);
-			setState(87);
+			setState(69);
 			match(T__0);
-			setState(88);
+			setState(70);
 			match(NAME_IDENTIFIER);
-			setState(89);
+			setState(71);
 			match(T__1);
 			}
 		}
@@ -593,16 +575,16 @@ public class MiniSqlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(91);
+			setState(73);
 			match(NAME_IDENTIFIER);
-			setState(92);
+			setState(74);
 			type_identifier();
-			setState(94);
+			setState(76);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==UNIQUE) {
 				{
-				setState(93);
+				setState(75);
 				match(UNIQUE);
 				}
 			}
@@ -649,11 +631,11 @@ public class MiniSqlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(96);
+			setState(78);
 			match(DROP);
-			setState(97);
+			setState(79);
 			match(TABLE);
-			setState(98);
+			setState(80);
 			match(NAME_IDENTIFIER);
 			}
 		}
@@ -701,21 +683,21 @@ public class MiniSqlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(100);
+			setState(82);
 			match(CREATE);
-			setState(101);
+			setState(83);
 			match(INDEX);
-			setState(102);
+			setState(84);
 			match(NAME_IDENTIFIER);
-			setState(103);
+			setState(85);
 			match(ON);
-			setState(104);
+			setState(86);
 			match(NAME_IDENTIFIER);
-			setState(105);
+			setState(87);
 			match(T__0);
-			setState(106);
+			setState(88);
 			match(NAME_IDENTIFIER);
-			setState(107);
+			setState(89);
 			match(T__1);
 			}
 		}
@@ -759,11 +741,11 @@ public class MiniSqlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(109);
+			setState(91);
 			match(DROP);
-			setState(110);
+			setState(92);
 			match(INDEX);
-			setState(111);
+			setState(93);
 			match(NAME_IDENTIFIER);
 			}
 		}
@@ -818,27 +800,27 @@ public class MiniSqlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(113);
+			setState(95);
 			match(SELECT);
-			setState(114);
-			match(T__4);
-			setState(115);
+			setState(96);
+			match(T__3);
+			setState(97);
 			match(FROM);
-			setState(116);
+			setState(98);
 			match(NAME_IDENTIFIER);
-			setState(121);
+			setState(103);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==WHERE) {
 				{
 				{
-				setState(117);
+				setState(99);
 				match(WHERE);
-				setState(118);
+				setState(100);
 				conditions();
 				}
 				}
-				setState(123);
+				setState(105);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -886,11 +868,11 @@ public class MiniSqlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(124);
+			setState(106);
 			match(NAME_IDENTIFIER);
-			setState(125);
+			setState(107);
 			match(OP);
-			setState(126);
+			setState(108);
 			literal();
 			}
 		}
@@ -942,37 +924,37 @@ public class MiniSqlParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(128);
+			setState(110);
 			match(INSERT);
-			setState(129);
+			setState(111);
 			match(INTO);
-			setState(130);
+			setState(112);
 			match(NAME_IDENTIFIER);
-			setState(131);
+			setState(113);
 			match(VALUES);
-			setState(132);
+			setState(114);
 			match(T__0);
-			setState(138);
+			setState(120);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(133);
+					setState(115);
 					literal();
-					setState(134);
-					match(T__3);
+					setState(116);
+					match(T__2);
 					}
 					} 
 				}
-				setState(140);
+				setState(122);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
 			}
-			setState(141);
+			setState(123);
 			literal();
-			setState(142);
+			setState(124);
 			match(T__1);
 			}
 		}
@@ -1021,20 +1003,20 @@ public class MiniSqlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(144);
+			setState(126);
 			match(DELETE);
-			setState(145);
+			setState(127);
 			match(FROM);
-			setState(146);
+			setState(128);
 			match(NAME_IDENTIFIER);
-			setState(149);
+			setState(131);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==WHERE) {
 				{
-				setState(147);
+				setState(129);
 				match(WHERE);
-				setState(148);
+				setState(130);
 				conditions();
 				}
 			}
@@ -1084,19 +1066,19 @@ public class MiniSqlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(154);
+			setState(136);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,7,_ctx) ) {
 			case 1:
 				{
-				setState(151);
+				setState(133);
 				condition();
-				setState(152);
-				match(T__5);
+				setState(134);
+				match(T__4);
 				}
 				break;
 			}
-			setState(156);
+			setState(138);
 			condition();
 			}
 		}
@@ -1138,7 +1120,7 @@ public class MiniSqlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(158);
+			setState(140);
 			match(QUIT);
 			}
 		}
@@ -1181,9 +1163,9 @@ public class MiniSqlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(160);
+			setState(142);
 			match(EXECFILE);
-			setState(161);
+			setState(143);
 			match(STRING_LITERAL);
 			}
 		}
@@ -1199,50 +1181,44 @@ public class MiniSqlParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3+\u00a6\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3*\u0094\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\3\2\3\2\3"+
-		"\3\3\3\3\3\3\3\3\3\3\3\5\3+\n\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3"+
-		"\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4"+
-		"\5\4H\n\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\6\5Q\n\5\r\5\16\5R\3\5\3\5\3\5\3"+
-		"\6\3\6\3\6\3\6\3\6\3\6\3\7\3\7\3\7\5\7a\n\7\3\b\3\b\3\b\3\b\3\t\3\t\3"+
+		"\3\3\3\3\3\3\3\3\3\3\3\5\3+\n\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\5"+
+		"\4\66\n\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\6\5?\n\5\r\5\16\5@\3\5\3\5\3\5\3"+
+		"\6\3\6\3\6\3\6\3\6\3\6\3\7\3\7\3\7\5\7O\n\7\3\b\3\b\3\b\3\b\3\t\3\t\3"+
 		"\t\3\t\3\t\3\t\3\t\3\t\3\t\3\n\3\n\3\n\3\n\3\13\3\13\3\13\3\13\3\13\3"+
-		"\13\7\13z\n\13\f\13\16\13}\13\13\3\f\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3\r\3"+
-		"\r\3\r\3\r\7\r\u008b\n\r\f\r\16\r\u008e\13\r\3\r\3\r\3\r\3\16\3\16\3\16"+
-		"\3\16\3\16\5\16\u0098\n\16\3\17\3\17\3\17\5\17\u009d\n\17\3\17\3\17\3"+
-		"\20\3\20\3\21\3\21\3\21\3\21\2\2\22\2\4\6\b\n\f\16\20\22\24\26\30\32\34"+
-		"\36 \2\3\3\2\t\n\2\u00a5\2\"\3\2\2\2\4*\3\2\2\2\6G\3\2\2\2\bI\3\2\2\2"+
-		"\nW\3\2\2\2\f]\3\2\2\2\16b\3\2\2\2\20f\3\2\2\2\22o\3\2\2\2\24s\3\2\2\2"+
-		"\26~\3\2\2\2\30\u0082\3\2\2\2\32\u0092\3\2\2\2\34\u009c\3\2\2\2\36\u00a0"+
-		"\3\2\2\2 \u00a2\3\2\2\2\"#\t\2\2\2#\3\3\2\2\2$+\7\21\2\2%+\7\23\2\2&\'"+
-		"\7\22\2\2\'(\7\3\2\2()\7\t\2\2)+\7\4\2\2*$\3\2\2\2*%\3\2\2\2*&\3\2\2\2"+
-		"+\5\3\2\2\2,-\5\b\5\2-.\7\5\2\2.H\3\2\2\2/\60\5\16\b\2\60\61\7\5\2\2\61"+
-		"H\3\2\2\2\62\63\5\20\t\2\63\64\7\5\2\2\64H\3\2\2\2\65\66\5\22\n\2\66\67"+
-		"\7\5\2\2\67H\3\2\2\289\5\24\13\29:\7\5\2\2:H\3\2\2\2;<\5\30\r\2<=\7\5"+
-		"\2\2=H\3\2\2\2>?\5\32\16\2?@\7\5\2\2@H\3\2\2\2AB\5\36\20\2BC\7\5\2\2C"+
-		"H\3\2\2\2DE\5 \21\2EF\7\5\2\2FH\3\2\2\2G,\3\2\2\2G/\3\2\2\2G\62\3\2\2"+
-		"\2G\65\3\2\2\2G8\3\2\2\2G;\3\2\2\2G>\3\2\2\2GA\3\2\2\2GD\3\2\2\2H\7\3"+
-		"\2\2\2IJ\7\f\2\2JK\7\r\2\2KL\7(\2\2LP\7\3\2\2MN\5\f\7\2NO\7\6\2\2OQ\3"+
-		"\2\2\2PM\3\2\2\2QR\3\2\2\2RP\3\2\2\2RS\3\2\2\2ST\3\2\2\2TU\5\n\6\2UV\7"+
-		"\4\2\2V\t\3\2\2\2WX\7\16\2\2XY\7\17\2\2YZ\7\3\2\2Z[\7(\2\2[\\\7\4\2\2"+
-		"\\\13\3\2\2\2]^\7(\2\2^`\5\4\3\2_a\7\20\2\2`_\3\2\2\2`a\3\2\2\2a\r\3\2"+
-		"\2\2bc\7\24\2\2cd\7\r\2\2de\7(\2\2e\17\3\2\2\2fg\7\f\2\2gh\7\25\2\2hi"+
-		"\7(\2\2ij\7\26\2\2jk\7(\2\2kl\7\3\2\2lm\7(\2\2mn\7\4\2\2n\21\3\2\2\2o"+
-		"p\7\24\2\2pq\7\25\2\2qr\7(\2\2r\23\3\2\2\2st\7\27\2\2tu\7\7\2\2uv\7\31"+
-		"\2\2v{\7(\2\2wx\7\30\2\2xz\5\34\17\2yw\3\2\2\2z}\3\2\2\2{y\3\2\2\2{|\3"+
-		"\2\2\2|\25\3\2\2\2}{\3\2\2\2~\177\7(\2\2\177\u0080\7!\2\2\u0080\u0081"+
-		"\5\2\2\2\u0081\27\3\2\2\2\u0082\u0083\7\33\2\2\u0083\u0084\7\34\2\2\u0084"+
-		"\u0085\7(\2\2\u0085\u0086\7\36\2\2\u0086\u008c\7\3\2\2\u0087\u0088\5\2"+
-		"\2\2\u0088\u0089\7\6\2\2\u0089\u008b\3\2\2\2\u008a\u0087\3\2\2\2\u008b"+
-		"\u008e\3\2\2\2\u008c\u008a\3\2\2\2\u008c\u008d\3\2\2\2\u008d\u008f\3\2"+
-		"\2\2\u008e\u008c\3\2\2\2\u008f\u0090\5\2\2\2\u0090\u0091\7\4\2\2\u0091"+
-		"\31\3\2\2\2\u0092\u0093\7\35\2\2\u0093\u0094\7\31\2\2\u0094\u0097\7(\2"+
-		"\2\u0095\u0096\7\30\2\2\u0096\u0098\5\34\17\2\u0097\u0095\3\2\2\2\u0097"+
-		"\u0098\3\2\2\2\u0098\33\3\2\2\2\u0099\u009a\5\26\f\2\u009a\u009b\7\b\2"+
-		"\2\u009b\u009d\3\2\2\2\u009c\u0099\3\2\2\2\u009c\u009d\3\2\2\2\u009d\u009e"+
-		"\3\2\2\2\u009e\u009f\5\26\f\2\u009f\35\3\2\2\2\u00a0\u00a1\7\37\2\2\u00a1"+
-		"\37\3\2\2\2\u00a2\u00a3\7 \2\2\u00a3\u00a4\7\n\2\2\u00a4!\3\2\2\2\n*G"+
-		"R`{\u008c\u0097\u009c";
+		"\13\7\13h\n\13\f\13\16\13k\13\13\3\f\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3\r\3"+
+		"\r\3\r\3\r\7\ry\n\r\f\r\16\r|\13\r\3\r\3\r\3\r\3\16\3\16\3\16\3\16\3\16"+
+		"\5\16\u0086\n\16\3\17\3\17\3\17\5\17\u008b\n\17\3\17\3\17\3\20\3\20\3"+
+		"\21\3\21\3\21\3\21\2\2\22\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \2\3"+
+		"\3\2\b\t\2\u0093\2\"\3\2\2\2\4*\3\2\2\2\6\65\3\2\2\2\b\67\3\2\2\2\nE\3"+
+		"\2\2\2\fK\3\2\2\2\16P\3\2\2\2\20T\3\2\2\2\22]\3\2\2\2\24a\3\2\2\2\26l"+
+		"\3\2\2\2\30p\3\2\2\2\32\u0080\3\2\2\2\34\u008a\3\2\2\2\36\u008e\3\2\2"+
+		"\2 \u0090\3\2\2\2\"#\t\2\2\2#\3\3\2\2\2$+\7\20\2\2%+\7\22\2\2&\'\7\21"+
+		"\2\2\'(\7\3\2\2()\7\b\2\2)+\7\4\2\2*$\3\2\2\2*%\3\2\2\2*&\3\2\2\2+\5\3"+
+		"\2\2\2,\66\5\b\5\2-\66\5\16\b\2.\66\5\20\t\2/\66\5\22\n\2\60\66\5\24\13"+
+		"\2\61\66\5\30\r\2\62\66\5\32\16\2\63\66\5\36\20\2\64\66\5 \21\2\65,\3"+
+		"\2\2\2\65-\3\2\2\2\65.\3\2\2\2\65/\3\2\2\2\65\60\3\2\2\2\65\61\3\2\2\2"+
+		"\65\62\3\2\2\2\65\63\3\2\2\2\65\64\3\2\2\2\66\7\3\2\2\2\678\7\13\2\28"+
+		"9\7\f\2\29:\7\'\2\2:>\7\3\2\2;<\5\f\7\2<=\7\5\2\2=?\3\2\2\2>;\3\2\2\2"+
+		"?@\3\2\2\2@>\3\2\2\2@A\3\2\2\2AB\3\2\2\2BC\5\n\6\2CD\7\4\2\2D\t\3\2\2"+
+		"\2EF\7\r\2\2FG\7\16\2\2GH\7\3\2\2HI\7\'\2\2IJ\7\4\2\2J\13\3\2\2\2KL\7"+
+		"\'\2\2LN\5\4\3\2MO\7\17\2\2NM\3\2\2\2NO\3\2\2\2O\r\3\2\2\2PQ\7\23\2\2"+
+		"QR\7\f\2\2RS\7\'\2\2S\17\3\2\2\2TU\7\13\2\2UV\7\24\2\2VW\7\'\2\2WX\7\25"+
+		"\2\2XY\7\'\2\2YZ\7\3\2\2Z[\7\'\2\2[\\\7\4\2\2\\\21\3\2\2\2]^\7\23\2\2"+
+		"^_\7\24\2\2_`\7\'\2\2`\23\3\2\2\2ab\7\26\2\2bc\7\6\2\2cd\7\30\2\2di\7"+
+		"\'\2\2ef\7\27\2\2fh\5\34\17\2ge\3\2\2\2hk\3\2\2\2ig\3\2\2\2ij\3\2\2\2"+
+		"j\25\3\2\2\2ki\3\2\2\2lm\7\'\2\2mn\7 \2\2no\5\2\2\2o\27\3\2\2\2pq\7\32"+
+		"\2\2qr\7\33\2\2rs\7\'\2\2st\7\35\2\2tz\7\3\2\2uv\5\2\2\2vw\7\5\2\2wy\3"+
+		"\2\2\2xu\3\2\2\2y|\3\2\2\2zx\3\2\2\2z{\3\2\2\2{}\3\2\2\2|z\3\2\2\2}~\5"+
+		"\2\2\2~\177\7\4\2\2\177\31\3\2\2\2\u0080\u0081\7\34\2\2\u0081\u0082\7"+
+		"\30\2\2\u0082\u0085\7\'\2\2\u0083\u0084\7\27\2\2\u0084\u0086\5\34\17\2"+
+		"\u0085\u0083\3\2\2\2\u0085\u0086\3\2\2\2\u0086\33\3\2\2\2\u0087\u0088"+
+		"\5\26\f\2\u0088\u0089\7\7\2\2\u0089\u008b\3\2\2\2\u008a\u0087\3\2\2\2"+
+		"\u008a\u008b\3\2\2\2\u008b\u008c\3\2\2\2\u008c\u008d\5\26\f\2\u008d\35"+
+		"\3\2\2\2\u008e\u008f\7\36\2\2\u008f\37\3\2\2\2\u0090\u0091\7\37\2\2\u0091"+
+		"\u0092\7\t\2\2\u0092!\3\2\2\2\n*\65@Niz\u0085\u008a";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

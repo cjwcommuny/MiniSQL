@@ -1,19 +1,25 @@
 package interpreter;
 
+import middlelayer.DefaultDatabaseFacade;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class DefaultInterpreterTest {
-    private DefaultInterpreter interpreter = new DefaultInterpreter();
-
     @Before
     public void setUp() throws Exception {
     }
 
     public static void main(String[] args) {
+        testCreateTable();
+    }
 
+
+    public static void testCreateTable() {
+        var interpreter = new DefaultInterpreter(
+                new DefaultDatabaseFacade(null, null, null));
+        interpreter.interpret();
     }
 
 //    public void testParser() {

@@ -5,6 +5,7 @@ import common.Condition;
 import common.info.Info;
 import interpreter.api.DatabaseFacade;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class DefaultDatabaseFacade implements DatabaseFacade {
@@ -20,6 +21,10 @@ public class DefaultDatabaseFacade implements DatabaseFacade {
 
     @Override
     public List<Info> createTable(String tableName, List<Column> columns, Column primaryColumn) {
+//        System.out.println(tableName);
+//        System.out.println(columns);
+//        System.out.println(primaryColumn);
+//        return new LinkedList<>();
         return catalogManager.createTable(tableName, columns, primaryColumn);
     }
 

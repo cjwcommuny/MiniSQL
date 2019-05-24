@@ -184,15 +184,15 @@ LINE_COMMENT: '//' ~[\r\n]* -> skip;
 COMMENT: '/*' .*? '*/' -> skip;
 
 instruction:
-    createTable ';'
-    | dropTable ';'
-    | createIndex ';'
-    | dropIndex ';'
-    | selectInstruction ';'
-    | insertTuple ';'
-    | deleteTuple ';'
-    | quit ';'
-    | executeFile ';'
+    createTable
+    | dropTable
+    | createIndex
+    | dropIndex
+    | selectInstruction
+    | insertTuple
+    | deleteTuple
+    | quit
+    | executeFile
     ;
 
 createTable:

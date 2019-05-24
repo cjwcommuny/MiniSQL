@@ -1,0 +1,17 @@
+//success
+create table student ( 
+    sno char(8),
+    sname char(16) unique, 
+    sage int,
+    sgender char (1), 
+    primary key ( sno )
+);
+
+//name duplication
+create table student ( 
+    sno char(8),
+    sno char(16) unique, 
+    sage int,
+    sgender char (1), 
+    primary key ( sno )
+);
