@@ -224,7 +224,7 @@ dropIndex:
     ;
 
 selectInstruction:
-    SELECT '*' FROM NAME_IDENTIFIER (WHERE conditions)*
+    SELECT '*' FROM NAME_IDENTIFIER (WHERE conditions)?
     ;
 
 condition:
@@ -241,7 +241,7 @@ deleteTuple:
     ;
 
 conditions:
-    (condition 'and')? condition
+    (condition 'and')* condition
     ;
 
 quit:

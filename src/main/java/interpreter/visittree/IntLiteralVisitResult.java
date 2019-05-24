@@ -2,9 +2,9 @@ package interpreter.visittree;
 
 import lombok.Getter;
 
-public class IntLiteralVisitResult extends ParseTreeVisitResult {
+public class IntLiteralVisitResult extends LiteralVisitResult {
     @Getter
-    private int value;
+    private Integer value;
 
     public IntLiteralVisitResult(int value) {
         this.value = value;

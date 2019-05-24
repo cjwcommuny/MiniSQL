@@ -30,33 +30,59 @@ public class DefaultDatabaseFacade implements DatabaseFacade {
 
     @Override
     public List<Info> deleteTable(String tableName) {
-        System.out.println(tableName);
-        return new LinkedList<>();
-//        return catalogManager.deleteTable(tableName);
+//        System.out.println(tableName);
+//        return new LinkedList<>();
+        return catalogManager.deleteTable(tableName);
     }
 
     @Override
     public List<Info> createIndex(String indexName, String tableName, String columnName) {
+//        System.out.println(indexName);
+//        System.out.println(tableName);
+//        System.out.println(columnName);
+//        return new LinkedList<>();
         return null;
     }
 
     @Override
     public List<Info> deleteIndex(String indexName) {
-        return null;
+        System.out.println(indexName);
+        return new LinkedList<>();
+//        return null;
     }
 
     @Override
     public List<Info> select(String tableName, List<Condition> conditions) {
-        return null;
+        System.out.println(tableName);
+        System.out.println(conditions);
+        return new LinkedList<>();
+//        return null;
     }
 
     @Override
     public List<Info> quit() {
-        return null;
+        return new LinkedList<>();
     }
 
     @Override
     public List<Info> executeFile(String fileName) {
-        return null;
+        //do nothing
+        return new LinkedList<>();
+    }
+
+    @Override
+    public List<Info> insertTuple(String tableName, List<Object> values) {
+        System.out.println(tableName);
+        System.out.println(values);
+        return new LinkedList<>();
+//        return null;
+    }
+
+    @Override
+    public List<Info> deleteTuple(String tableName, List<Condition> conditions) {
+        System.out.println(tableName);
+        System.out.println(conditions);
+        return new LinkedList<>();
+//        return null;
     }
 }

@@ -17,3 +17,38 @@ create table student (
 );
 
 drop table hahah;
+
+create index stunameidx on student ( sname );
+
+
+drop index stunameidx;
+
+select * from student;
+
+select * from student where sno = '88888888';
+
+select * from student 
+where sage > 20 
+and sgender = 'F'
+and lalala < 3
+and qiqiq >= 6
+and kekeke <= 4
+and lll333 <> 19
+;
+
+insert into student values ('12345678','wy',22,'M');
+
+delete from student;
+
+delete from student 
+where sage > 20 
+and sgender = 'F'
+and lalala < 3
+and qiqiq >= 6
+and kekeke <= 4
+and lll333 <> 19
+;
+
+execfile 'C:/hahaha/dsjf333kll_77.txt';
+
+quit;

@@ -14,6 +14,8 @@ public interface DatabaseFacade {
     List<Info> deleteIndex(String indexName);
 
     List<Info> select(String tableName, List<Condition> conditions);
+    List<Info> insertTuple(String tableName, List<Object> values);
+    List<Info> deleteTuple(String tableName, List<Condition> conditions);
 
     List<Info> quit();
 
