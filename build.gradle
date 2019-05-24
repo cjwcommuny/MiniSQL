@@ -28,6 +28,6 @@ generateGrammarSource {
 }
 
 run {
-    mainClassName = 'Main'
-//    args = [""]
+    mainClassName = 'main.Main'
+    args = [""]
 }

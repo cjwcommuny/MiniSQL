@@ -106,4 +106,11 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
                 return null;
         }
     }
+
+    @Override
+    public ParseTreeVisitResult visitDropTable(MiniSqlParser.DropTableContext ctx) {
+        String tableName = ctx.NAME_IDENTIFIER().getText();
+        List<Info> infos = database.deleteTable(tableName);
+        return new InstructionVisitResult(infos);
+    }
 }

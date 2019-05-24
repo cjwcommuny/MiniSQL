@@ -30,7 +30,9 @@ public class DefaultDatabaseFacade implements DatabaseFacade {
 
     @Override
     public List<Info> deleteTable(String tableName) {
-        return catalogManager.deleteTable(tableName);
+        System.out.println(tableName);
+        return new LinkedList<>();
+//        return catalogManager.deleteTable(tableName);
     }
 
     @Override

@@ -5,6 +5,7 @@ import interpreter.api.DatabaseFacade;
 import interpreter.error.ParseException;
 import interpreter.visittree.InstructionVisitResult;
 import main.Interpreter;
+import middlelayer.DefaultDatabaseFacade;
 import org.antlr.v4.automata.ATNFactory;
 import org.antlr.v4.runtime.CommonTokenStream;
 
@@ -38,11 +39,11 @@ public class DefaultInterpreter implements Interpreter {
             printStream.print(prompt);
         }
         while (scanner.hasNext()) {
+            String instruction = scanner.next();
+            handleSingleInstruction(instruction, printStream);
             if (displayPrompt) {
                 printStream.print(prompt);
             }
-            String instruction = scanner.next();
-            handleSingleInstruction(instruction, printStream);
         }
     }
 
