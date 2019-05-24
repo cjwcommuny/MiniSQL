@@ -166,6 +166,16 @@ public interface MiniSqlListener extends ParseTreeListener {
 	 */
 	void exitDeleteTuple(MiniSqlParser.DeleteTupleContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MiniSqlParser#conditions}.
+	 * @param ctx the parse tree
+	 */
+	void enterConditions(MiniSqlParser.ConditionsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MiniSqlParser#conditions}.
+	 * @param ctx the parse tree
+	 */
+	void exitConditions(MiniSqlParser.ConditionsContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MiniSqlParser#quit}.
 	 * @param ctx the parse tree
 	 */

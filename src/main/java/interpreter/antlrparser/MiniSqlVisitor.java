@@ -106,6 +106,12 @@ public interface MiniSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDeleteTuple(MiniSqlParser.DeleteTupleContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MiniSqlParser#conditions}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConditions(MiniSqlParser.ConditionsContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MiniSqlParser#quit}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

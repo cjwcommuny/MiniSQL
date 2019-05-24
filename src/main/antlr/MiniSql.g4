@@ -15,6 +15,11 @@ literal:
     | INT_LITERAL
     ;
 
+//identifier:
+//    INT_LITERAL
+//    | type_identifier
+//    ;
+
 INT_LITERAL: [+-]? DIGIT+;
 
 STRING_LITERAL:
@@ -219,7 +224,7 @@ dropIndex:
     ;
 
 selectInstruction:
-    SELECT '*' FROM NAME_IDENTIFIER (WHERE (condition)+)*
+    SELECT '*' FROM NAME_IDENTIFIER (WHERE conditions)*
     ;
 
 condition:
@@ -232,7 +237,11 @@ insertTuple:
 
 
 deleteTuple:
-    DELETE FROM NAME_IDENTIFIER ( WHERE condition+ )?
+    DELETE FROM NAME_IDENTIFIER ( WHERE conditions )?
+    ;
+
+conditions:
+    (condition 'and')? condition
     ;
 
 quit:

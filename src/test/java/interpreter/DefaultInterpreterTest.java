@@ -13,6 +13,10 @@ public class DefaultInterpreterTest {
     }
 
     public static void main(String[] args) {
+
+    }
+
+    public void testParser() {
         new DefaultInterpreterTest().testCreateTable();
         new DefaultInterpreterTest().testDropTable();
         new DefaultInterpreterTest().testCreateIndex();
@@ -65,7 +69,7 @@ public class DefaultInterpreterTest {
     }
 
     public void testInsertTuple() {
-        interpreter.parseSingleInstruction("insert into student values (‘12345678’,’wy’,22,’M’);");
+        interpreter.parseSingleInstruction("insert into student values ('12345678','wy',22,'M');");
     }
 
     public void testDeleteTuple1() {
@@ -77,7 +81,7 @@ public class DefaultInterpreterTest {
     }
 
     public void testDeleteTuple3() {
-        interpreter.parseSingleInstruction("delete from student values (‘12345678’,’wy’,22,’M’);");
+        interpreter.parseSingleInstruction("delete from student where sno = ‘88888888’ and kk = 'lala';");
     }
 
     public void testQuit() {
@@ -85,6 +89,6 @@ public class DefaultInterpreterTest {
     }
 
     public void testExecFile() {
-        interpreter.parseSingleInstruction("execfile 'hello'");
+        interpreter.parseSingleInstruction("execfile 'C:/hello/xx.txt';");
     }
 }

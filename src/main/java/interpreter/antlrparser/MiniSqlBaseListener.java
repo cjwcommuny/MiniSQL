@@ -198,6 +198,18 @@ public class MiniSqlBaseListener implements MiniSqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterConditions(MiniSqlParser.ConditionsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConditions(MiniSqlParser.ConditionsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterQuit(MiniSqlParser.QuitContext ctx) { }
 	/**
 	 * {@inheritDoc}

@@ -1,5 +1,7 @@
 package interpreter.error;
 
+
+import lombok.Getter;
 import org.antlr.v4.misc.Utils;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
@@ -9,11 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LexErrorListener extends BaseErrorListener {
+    @Getter
     private final List<SyntaxError> syntaxErrors = new ArrayList<>();
-
-    public List<SyntaxError> getLexError() {
-        return syntaxErrors;
-    }
 
     public int getLexErrorsCount() {
         return syntaxErrors.size();
