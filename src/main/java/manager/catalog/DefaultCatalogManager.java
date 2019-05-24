@@ -7,6 +7,8 @@ import middlelayer.CatalogManager;
 import java.util.List;
 
 public class DefaultCatalogManager implements CatalogManager {
+
+
     @Override
     public List<Info> createTable(String tableName, List<Column> columns, Column primaryColumn) {
         return null;
