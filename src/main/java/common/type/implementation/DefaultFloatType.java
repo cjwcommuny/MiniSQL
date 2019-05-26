@@ -19,4 +19,9 @@ class DefaultFloatType implements FloatType {
     public boolean checkType(Object object) throws StringLengthBeyondLimitException {
         return object instanceof Double;
     }
+
+    @Override
+    public int getSize() {
+        return 8;
+    }
 }

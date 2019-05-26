@@ -9,4 +9,8 @@ public class IndexFactory {
         //TODO
         throw new UnsupportedOperationException();
     }
+
+    public String generatePrimaryKeyIndexName(String tableName) {
+        return "<" + tableName + "$Primary>";
+    }
 }

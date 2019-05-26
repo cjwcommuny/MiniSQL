@@ -2,31 +2,40 @@ package common.datastructure.implementation;
 
 import common.datastructure.*;
 import common.type.Type;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.naming.OperationNotSupportedException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.OptionalDataException;
+import java.util.*;
 
-@Getter
+
 class DefaultTable implements Table  {
-    private String tableName;
-    private List<Column> columns;
-    private Column primaryKey;
+    @Getter
+    private Catalog catalog;
     private List<Tuple> data = new LinkedList<>();
 
     @Getter
     private List<Type> types;
 
-    @Setter
-    private Index index;
+    @Getter
+    private Map<String, Index> indexesMap = new HashMap<>();
+
+    @Getter
+    private int tupleSize;
+
+    @Override
+    public void putIndex(Index index) {
+        indexesMap.put(index.getColumnName(), index);
+    }
 
     @Override
     public boolean existColumn(String columnName) {
-        for (var column: columns) {
+        for (var column: getColumns()) {
             if (column.getColumnName().equals(columnName)) {
                 return true;
             }
@@ -37,7 +46,7 @@ class DefaultTable implements Table  {
     @Override
     public int getColumnIndex(String columnName) {
         int i = 0;
-        for (var column: columns) {
+        for (var column: getColumns()) {
             if (column.getColumnName().equals(columnName)) {
                 return i;
             }
@@ -47,27 +56,22 @@ class DefaultTable implements Table  {
     }
 
     DefaultTable(String tableName, List<Column> columns, Column primaryKey) {
-        this.tableName = tableName;
-        this.columns = columns;
-        this.primaryKey = primaryKey;
+        this.catalog = new DefaultCatalog(tableName, columns, primaryKey);
         generateTypesBuffer();
     }
 
     private void generateTypesBuffer() {
-        types = new LinkedList<>();
-        for (var column: columns) {
-            types.add(column.getType());
+        types = new ArrayList<>();
+        for (var column: getColumns()) {
+            Type type = column.getType();
+            types.add(type);
+            tupleSize += type.getSize();
         }
     }
 
     @Override
     public int getColumnsCount() {
-        return columns.size();
-    }
-
-    @Override
-    public void putTuple(Tuple tuple) {
-        data.add(tuple);
+        return getColumns().size();
     }
 
     @Override
@@ -75,15 +79,19 @@ class DefaultTable implements Table  {
         throw new UnsupportedOperationException();
     }
 
-    private void writeObject(ObjectOutputStream oos) throws IOException {
-        // default serialization
-        oos.defaultWriteObject();
-        //TODO
+    @Override
+    public String getTableName() {
+        return catalog.getTableName();
     }
 
-    private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
-        // default deserialization
-        ois.defaultReadObject();
-        //TODO
+    @Override
+    public List<Column> getColumns() {
+        return catalog.getColumns();
     }
+
+    @Override
+    public Column getPrimaryKey() {
+        return catalog.getPrimaryKey();
+    }
+
 }

@@ -1,6 +1,8 @@
 package manager.record;
 
 import common.datastructure.Condition;
+import common.datastructure.Index;
+import common.datastructure.Table;
 import common.datastructure.Tuple;
 import common.datastructure.implementation.TupleFactory;
 import common.info.Info;
@@ -9,7 +11,11 @@ import common.info.TableNotExistError;
 import common.info.TypeMismatchError;
 import common.type.Type;
 import error.StringLengthBeyondLimitException;
+import file.buffer.DefaultBufferManager;
+import manager.FileHandler;
 import manager.TableManager;
+import manager.index.DefaultIndexManager;
+import middlelayer.IndexManager;
 import middlelayer.RecordManager;
 
 import java.util.LinkedList;
@@ -17,11 +23,16 @@ import java.util.List;
 
 public class DefaultRecordManager implements RecordManager {
     private TableManager tableManager = TableManager.getInstance();
+    private FileHandler fileHandler = DefaultBufferManager.getInstance();
+    private IndexManager indexManager = DefaultIndexManager.getInstance();
+
     private TupleFactory tupleFactory = new TupleFactory();
 
     @Override
     public List<Info> insertTuple(String tableName, List<Object> values) {
         List<Info> infos = new LinkedList<>();
+
+        //check
         var table = tableManager.getTable(tableName);
         if (table == null) {
             infos.add(new TableNotExistError(tableName));
@@ -32,10 +43,17 @@ public class DefaultRecordManager implements RecordManager {
         if (!typesMatch) {
             return infos;
         }
+
+        //insert
         Tuple tuple = tupleFactory.createTuple(values);
-        table.putTuple(tuple);
+        int offset = table.getTupleSize();
+        byte[] tupleBytes = tuple.toBytes(table.getTypes(), table.getTupleSize());
+        fileHandler.writeTupleToFile(tupleBytes, tableName, offset);
+        indexManager.updateIndexes(tuple, table, offset);
         return infos;
     }
+
+
 
     @Override
     public List<Info> deleteTuple(String tableName, List<Condition> conditions) {

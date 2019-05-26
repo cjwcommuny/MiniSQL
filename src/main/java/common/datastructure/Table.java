@@ -4,8 +4,9 @@ import common.type.Type;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
-public interface Table extends Serializable {
+public interface Table {
     String getTableName();
 
     List<Column> getColumns();
@@ -14,15 +15,17 @@ public interface Table extends Serializable {
 
     Column getPrimaryKey();
 
-    Index getIndex();
+    void putIndex(Index index);
 
     boolean existColumn(String columnName);
 
     int getColumnIndex(String columnName);
 
-    void putTuple(Tuple tuple);
-
     List<Type> getTypes();
 
     void deleteTuple(List<Condition> conditions);
+
+    Map<String, Index> getIndexesMap();
+
+    int getTupleSize();
 }

@@ -55,11 +55,11 @@ public class DefaultInterpreterTest {
 //    }
 //
 //    public void testCreateIndex() {
-//        interpreter.lexSingleInstruction("create index stunameidx on student ( sname );");
+//        interpreter.lexSingleInstruction("create putIndex stunameidx on student ( sname );");
 //    }
 //
 //    public void testDropIndex() {
-//        interpreter.lexSingleInstruction("drop index stunameidx;");
+//        interpreter.lexSingleInstruction("drop putIndex stunameidx;");
 //    }
 //
 //    public void testSelectInstruction1() {

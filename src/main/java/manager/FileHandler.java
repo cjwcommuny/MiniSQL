@@ -7,11 +7,11 @@ import java.util.List;
 public interface FileHandler {
     List<Info> quit();
 
-    List<Info> writeTableCatalogToFile(byte[] bytes);
-    List<Info> writeIndexToFile(byte[] bytes);
-    List<Info> writeTuplesToFile(byte[] bytes);
+    void writeTableCatalogToFile(byte[] bytes, String tableName, int offset);
+    void writeIndexToFile(byte[] bytes, String indexName, String tableName);
+    void writeTupleToFile(byte[] bytes, String tableName, int offset);
 
-    byte[] readTableCatalog(String tableName, List<Info> infos);
-    byte[] readIndex(String indexName, List<Info> infos);
-    byte[] readTuples(String tableName, List<Info> infos);
+    byte[] readTableCatalog(String tableName);
+    byte[] readIndex(String indexName);
+    byte[] readTuples(String tableName);
 }

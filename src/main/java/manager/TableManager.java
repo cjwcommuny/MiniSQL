@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TableManager {
-    TableFactory tableFactory = new TableFactory();
+    private TableFactory tableFactory = new TableFactory();
 
     @Getter
     private static TableManager instance = new TableManager();

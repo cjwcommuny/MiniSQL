@@ -5,6 +5,7 @@ import error.StringLengthBeyondLimitException;
 import lombok.Getter;
 
 class DefaultCharNType implements CharNType {
+    private static int CHAR_SIZE = 2;
     @Getter
     private int length;
 
@@ -33,5 +34,10 @@ class DefaultCharNType implements CharNType {
     @Override
     public String toString() {
         return "char(" + length + ")";
+    }
+
+    @Override
+    public int getSize() {
+        return length * 2;
     }
 }

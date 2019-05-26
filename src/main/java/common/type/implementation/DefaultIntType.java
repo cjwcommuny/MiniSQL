@@ -19,4 +19,9 @@ class DefaultIntType implements IntType {
     public boolean checkType(Object object) throws StringLengthBeyondLimitException {
         return object instanceof Integer;
     }
+
+    @Override
+    public int getSize() {
+        return 4;
+    }
 }
