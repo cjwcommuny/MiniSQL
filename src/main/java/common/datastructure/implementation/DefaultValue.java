@@ -1,6 +1,6 @@
-package common.implementation;
+package common.datastructure.implementation;
 
-import common.Value;
+import common.datastructure.Value;
 import common.type.Type;
 
 class DefaultValue implements Value {

@@ -1,6 +1,6 @@
 package interpreter.visittree;
 
-import common.Condition;
+import common.datastructure.Condition;
 import lombok.Getter;
 
 import java.util.List;

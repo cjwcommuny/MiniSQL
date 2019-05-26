@@ -1,6 +1,6 @@
 package manager.catalog;
 
-import common.Table;
+import common.datastructure.Table;
 
 import java.util.List;
 

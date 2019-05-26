@@ -1,6 +1,6 @@
 package interpreter.visittree;
 
-import common.Column;
+import common.datastructure.Column;
 import lombok.Getter;
 
 public class ColumnDefinitionVisitResult extends ParseTreeVisitResult {

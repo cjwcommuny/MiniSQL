@@ -1,9 +1,10 @@
 package middlelayer;
 
-import common.Column;
-import common.Condition;
+import common.datastructure.Column;
+import common.datastructure.Condition;
 import common.info.Info;
 import interpreter.api.DatabaseFacade;
+import manager.FileHandler;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,26 +13,22 @@ public class DefaultDatabaseFacade implements DatabaseFacade {
     private CatalogManager catalogManager;
     private IndexManager indexManager;
     private RecordManager recordManager;
+    private FileHandler fileHandler;
 
-    public DefaultDatabaseFacade(CatalogManager catalogManager, IndexManager indexManager, RecordManager recordManager) {
+    public DefaultDatabaseFacade(CatalogManager catalogManager, IndexManager indexManager, RecordManager recordManager, FileHandler fileHandler) {
         this.catalogManager = catalogManager;
         this.indexManager = indexManager;
         this.recordManager = recordManager;
+        this.fileHandler = fileHandler;
     }
 
     @Override
     public List<Info> createTable(String tableName, List<Column> columns, Column primaryColumn) {
-//        System.out.println(tableName);
-//        System.out.println(columns);
-//        System.out.println(primaryColumn);
-//        return new LinkedList<>();
         return catalogManager.createTable(tableName, columns, primaryColumn);
     }
 
     @Override
     public List<Info> deleteTable(String tableName) {
-//        System.out.println(tableName);
-//        return new LinkedList<>();
         return catalogManager.deleteTable(tableName);
     }
 
@@ -48,20 +45,16 @@ public class DefaultDatabaseFacade implements DatabaseFacade {
     public List<Info> deleteIndex(String indexName) {
         System.out.println(indexName);
         return new LinkedList<>();
-//        return null;
     }
 
     @Override
     public List<Info> select(String tableName, List<Condition> conditions) {
-        System.out.println(tableName);
-        System.out.println(conditions);
-        return new LinkedList<>();
-//        return null;
+        return recordManager.selectTuple(tableName, conditions);
     }
 
     @Override
     public List<Info> quit() {
-        return new LinkedList<>();
+        return fileHandler.quit();
     }
 
     @Override
@@ -72,17 +65,11 @@ public class DefaultDatabaseFacade implements DatabaseFacade {
 
     @Override
     public List<Info> insertTuple(String tableName, List<Object> values) {
-        System.out.println(tableName);
-        System.out.println(values);
-        return new LinkedList<>();
-//        return null;
+        return recordManager.insertTuple(tableName, values);
     }
 
     @Override
     public List<Info> deleteTuple(String tableName, List<Condition> conditions) {
-        System.out.println(tableName);
-        System.out.println(conditions);
-        return new LinkedList<>();
-//        return null;
+        return recordManager.deleteTuple(tableName, conditions);
     }
 }

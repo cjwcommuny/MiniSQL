@@ -1,7 +1,7 @@
 package interpreter.api;
 
-import common.Column;
-import common.Condition;
+import common.datastructure.Column;
+import common.datastructure.Condition;
 import common.info.Info;
 
 import java.util.List;

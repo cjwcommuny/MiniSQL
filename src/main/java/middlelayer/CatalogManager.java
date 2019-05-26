@@ -1,6 +1,6 @@
 package middlelayer;
 
-import common.Column;
+import common.datastructure.Column;
 import common.info.Info;
 
 import java.util.List;

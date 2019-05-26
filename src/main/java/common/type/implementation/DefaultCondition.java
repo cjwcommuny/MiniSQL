@@ -1,6 +1,6 @@
 package common.type.implementation;
 
-import common.Condition;
+import common.datastructure.Condition;
 import lombok.Getter;
 
 @Getter

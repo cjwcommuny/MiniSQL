@@ -1,6 +1,6 @@
-package common.implementation;
+package common.datastructure.implementation;
 
-import common.Column;
+import common.datastructure.Column;
 import common.type.Type;
 import lombok.Getter;
 

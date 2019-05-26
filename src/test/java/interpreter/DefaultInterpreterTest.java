@@ -18,7 +18,7 @@ public class DefaultInterpreterTest {
 
     public static void testCreateTable() {
         var interpreter = new DefaultInterpreter(
-                new DefaultDatabaseFacade(null, null, null));
+                new DefaultDatabaseFacade(null, null, null, null));
         interpreter.interpret();
     }
 

@@ -1,4 +1,4 @@
-package common;
+package common.datastructure;
 
 public interface Tuple {
     Object getValue(int index);

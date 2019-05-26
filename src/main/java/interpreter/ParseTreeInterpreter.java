@@ -1,8 +1,8 @@
 package interpreter;
 
-import common.Column;
-import common.Condition;
-import common.implementation.DefaultColumn;
+import common.datastructure.Column;
+import common.datastructure.Condition;
+import common.datastructure.implementation.DefaultColumn;
 import common.info.FileNotFoundError;
 import common.info.Info;
 import common.info.NameDuplicationInfo;

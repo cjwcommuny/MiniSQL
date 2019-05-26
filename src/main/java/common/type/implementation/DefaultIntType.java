@@ -1,6 +1,7 @@
 package common.type.implementation;
 
 import common.type.IntType;
+import error.StringLengthBeyondLimitException;
 import lombok.Getter;
 
 class DefaultIntType implements IntType {
@@ -12,5 +13,10 @@ class DefaultIntType implements IntType {
     @Override
     public String toString() {
         return "int";
+    }
+
+    @Override
+    public boolean checkType(Object object) throws StringLengthBeyondLimitException {
+        return object instanceof Integer;
     }
 }

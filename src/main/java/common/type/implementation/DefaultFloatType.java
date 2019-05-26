@@ -1,7 +1,7 @@
 package common.type.implementation;
 
-import common.type.CharNType;
 import common.type.FloatType;
+import error.StringLengthBeyondLimitException;
 import lombok.Getter;
 
 class DefaultFloatType implements FloatType {
@@ -13,5 +13,10 @@ class DefaultFloatType implements FloatType {
     @Override
     public String toString() {
         return "float";
+    }
+
+    @Override
+    public boolean checkType(Object object) throws StringLengthBeyondLimitException {
+        return object instanceof Double;
     }
 }

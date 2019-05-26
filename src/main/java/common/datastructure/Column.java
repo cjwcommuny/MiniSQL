@@ -1,4 +1,4 @@
-package common;
+package common.datastructure;
 
 import common.type.Type;
 
