@@ -24,6 +24,9 @@ public class DefaultBufferManager implements FileHandler {
 
     private Map<String, RandomAccessFile> filesMap = new HashMap<>();
     private static final String RANDOM_ACCESS_FILE_MODE = "rw";
+    private static final int BLOCK_SIZE = 4096;
+    private static final long FILE_EXTEND_SIZE = BLOCK_SIZE;
+    private static final long INIT_LENGTH_OF_FILE = BLOCK_SIZE;
 
     @Getter
     private static FileHandler instance = new DefaultBufferManager();
@@ -61,13 +64,17 @@ public class DefaultBufferManager implements FileHandler {
 
     @Override
     public void writeTupleToFile(byte[] bytes, String tableName, int offset) {
-        var randomAccessFile = filesMap.get(tableName);
-        if (randomAccessFile == null) {
+        var file = filesMap.get(tableName);
+        if (file == null) {
             System.err.println("random access file not exists");
             throw new MiniSqlRuntimeException();
         }
         try {
-            randomAccessFile.write(bytes, offset, bytes.length);
+            if (offset + bytes.length > file.length()) {
+                file.setLength(file.length() + FILE_EXTEND_SIZE);
+            }
+            file.seek(offset);
+            file.write(bytes);
         } catch (IOException e) {
             System.err.println(e.getMessage());
             throw new MiniSqlRuntimeException();
@@ -117,9 +124,10 @@ public class DefaultBufferManager implements FileHandler {
     public void createTable(String tableName) {
         File tableFile = diskFileManager.createTableFile(tableName);
         try {
-            RandomAccessFile randomAccessFile = new RandomAccessFile(tableFile, RANDOM_ACCESS_FILE_MODE);
-            filesMap.put(tableName, randomAccessFile);
-        } catch (FileNotFoundException e) {
+            var file = new RandomAccessFile(tableFile, RANDOM_ACCESS_FILE_MODE);
+//            file.setLength(INIT_LENGTH_OF_FILE);
+            filesMap.put(tableName, file);
+        } catch (IOException e) {
             System.err.println(e.getMessage());
             throw new MiniSqlRuntimeException();
         }

@@ -2,13 +2,13 @@ package common.datastructure.implementation;
 
 import common.datastructure.Condition;
 import common.datastructure.Index;
+import common.datastructure.Restriction;
 
 import java.util.List;
 
 public class DefaultIndex implements Index {
-    //TODO
     @Override
-    public List<Integer> getTupleIndex(List<Condition> conditions) {
+    public List<Integer> getTupleIndex(Restriction restriction) {
         throw new UnsupportedOperationException();
     }
 

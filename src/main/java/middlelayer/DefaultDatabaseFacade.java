@@ -2,6 +2,7 @@ package middlelayer;
 
 import common.datastructure.Column;
 import common.datastructure.Condition;
+import common.datastructure.Restriction;
 import common.info.Info;
 import interpreter.api.DatabaseFacade;
 import manager.FileHandler;
@@ -49,7 +50,7 @@ public class DefaultDatabaseFacade implements DatabaseFacade {
 
     @Override
     public List<Info> select(String tableName, List<Condition> conditions) {
-        return recordManager.selectTuple(tableName, conditions);
+        return recordManager.selectTuple(tableName, convertConditionsToRestrictions(conditions));
     }
 
     @Override
@@ -73,6 +74,10 @@ public class DefaultDatabaseFacade implements DatabaseFacade {
 
     @Override
     public List<Info> deleteTuple(String tableName, List<Condition> conditions) {
-        return recordManager.deleteTuple(tableName, conditions);
+        return recordManager.deleteTuple(tableName, convertConditionsToRestrictions(conditions));
+    }
+
+    private static List<Restriction> convertConditionsToRestrictions(List<Condition> conditions) {
+        throw new UnsupportedOperationException();
     }
 }

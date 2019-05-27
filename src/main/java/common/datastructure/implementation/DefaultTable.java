@@ -17,13 +17,17 @@ import java.util.*;
 class DefaultTable implements Table  {
     @Getter
     private Catalog catalog;
-    private List<Tuple> data = new LinkedList<>();
+    private int tuplesCount = 0;
 
     @Getter
     private List<Type> types;
 
+    // columnName -> index
     @Getter
     private Map<String, Index> indexesMap = new HashMap<>();
+
+    //TODO: index name -> index
+    private Map<String, Index> indexesNameMap = new HashMap<>();
 
     @Getter
     private int tupleSize;
@@ -75,7 +79,7 @@ class DefaultTable implements Table  {
     }
 
     private int getCurrentIndex() {
-        return data.size();
+        return tuplesCount;
     }
 
     @Override
@@ -103,4 +107,13 @@ class DefaultTable implements Table  {
         return catalog.getPrimaryKey();
     }
 
+    @Override
+    public void incrementTupleCount() {
+        tuplesCount += 1;
+    }
+
+    @Override
+    public Index getIndex(String columnName) {
+        return indexesMap.get(columnName);
+    }
 }

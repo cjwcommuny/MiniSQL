@@ -30,4 +30,8 @@ public interface Table {
     int getTupleSize();
 
     int getOffset();
+
+    void incrementTupleCount();
+
+    Index getIndex(String columnName);
 }

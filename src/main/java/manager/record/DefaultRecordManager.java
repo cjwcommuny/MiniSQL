@@ -1,9 +1,6 @@
 package manager.record;
 
-import common.datastructure.Condition;
-import common.datastructure.Index;
-import common.datastructure.Table;
-import common.datastructure.Tuple;
+import common.datastructure.*;
 import common.datastructure.implementation.TupleFactory;
 import common.info.Info;
 import common.info.StringLengthExcessLimitError;
@@ -46,7 +43,8 @@ public class DefaultRecordManager implements RecordManager {
 
         //insert
         Tuple tuple = tupleFactory.createTuple(values);
-        int offset = table.getTupleSize();
+        int offset = table.getOffset();
+        table.incrementTupleCount();
         byte[] tupleBytes = tuple.toBytes(table.getTypes(), table.getTupleSize());
         fileHandler.writeTupleToFile(tupleBytes, tableName, offset);
 //        indexManager.updateIndexes(tuple, table, offset);TODO
@@ -54,20 +52,35 @@ public class DefaultRecordManager implements RecordManager {
     }
 
     @Override
-    public List<Info> deleteTuple(String tableName, List<Condition> conditions) {
+    public List<Info> deleteTuple(String tableName, List<Restriction> restrictions) {
         List<Info> infos = new LinkedList<>();
         var table = tableManager.getTable(tableName);
         if (table == null) {
             infos.add(new TableNotExistError(tableName));
             return infos;
         }
-        table.deleteTuple(conditions);
-        return infos;
+        List<Restriction> noIndexRestrictions = new LinkedList<>();
+        for (Restriction restriction: restrictions) {
+            String columnName = restriction.getColumnName();
+            Index index = table.getIndex(columnName);
+            if (index == null) {
+                //not exist index in this column
+                noIndexRestrictions.add(restriction);
+            } else {
+                //TODO: 可并发查找
+                index.getTupleIndex(restriction);
+
+            }
+        }
+        //TODO
+//        table.deleteTuple(conditions);
+//        return infos;
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<Info> selectTuple(String tableName, List<Condition> conditions) {
-        return null;
+    public List<Info> selectTuple(String tableName, List<Restriction> restrictions) {
+        throw new UnsupportedOperationException();
     }
 
     private boolean checkTypesMatch(List<Object> values, List<Type> types, List<Info> outInfos) {

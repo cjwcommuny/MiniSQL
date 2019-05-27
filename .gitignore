@@ -1,6 +1,7 @@
 .idea
 .gradle
 out/
+db/
 
 # Compiled class file
 *.class
