@@ -55,4 +55,9 @@ public class DefaultTuple implements Tuple {
             throw new MiniSqlRuntimeException();
         }
     }
+
+    @Override
+    public int getSize() {
+        return data.size();
+    }
 }

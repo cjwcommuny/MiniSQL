@@ -21,17 +21,17 @@ public interface Table {
 
     int getColumnIndex(String columnName);
 
+    String getColumnName(int i);
+
     List<Type> getTypes();
 
-    void deleteTuple(List<Condition> conditions);
+    void deleteTuple(int i);
 
     Map<String, Index> getIndexesMap();
 
     int getTupleSize();
 
-    int getOffset();
-
-    void incrementTupleCount();
+    int addTuple();
 
     Index getIndex(String columnName);
 }

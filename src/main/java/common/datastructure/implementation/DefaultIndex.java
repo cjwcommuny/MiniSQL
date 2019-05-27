@@ -26,4 +26,9 @@ public class DefaultIndex implements Index {
     public void update(Object key, int offset) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public void delete(Object key) {
+
+    }
 }

@@ -36,7 +36,7 @@ class DefaultTable implements Table  {
     @Getter
     private int tupleSize;
     @Getter //TODO
-    private int lastTuplePosition;
+    private int lastTuplePosition = 0;
 
     @Override
     public void putIndex(Index index) {
@@ -72,7 +72,6 @@ class DefaultTable implements Table  {
     }
 
     private void initFreeTuplePositions() {
-        freeTuplePositions.add(0);
     }
 
     private void generateTypesBuffer() {
@@ -85,26 +84,17 @@ class DefaultTable implements Table  {
     }
 
     @Override
-    public int getOffset() {
-        return getCurrentIndex() * getTupleSize();
-    }
-
-    private int getCurrentIndex() {
-        if (freeTuplePositions.size() == 0) {
-            throw new MiniSqlRuntimeException();
-        }
-        return freeTuplePositions.poll();
-    }
-
-    @Override
     public int getColumnsCount() {
         return getColumns().size();
     }
 
     @Override
-    public void deleteTuple(List<Condition> conditions) {
-        //TODO: update free list
-        throw new UnsupportedOperationException();
+    public void deleteTuple(int i) {
+        if (i == lastTuplePosition - 1) {
+            lastTuplePosition -= 1;
+        } else {
+            freeTuplePositions.add(i);
+        }
     }
 
     @Override
@@ -123,12 +113,22 @@ class DefaultTable implements Table  {
     }
 
     @Override
-    public void incrementTupleCount() {
+    public int addTuple() {
         tuplesCount += 1;
+        if (freeTuplePositions.size() == 0) {
+            return lastTuplePosition++;
+        } else {
+            return freeTuplePositions.remove();
+        }
     }
 
     @Override
     public Index getIndex(String columnName) {
         return indexesMap.get(columnName);
+    }
+
+    @Override
+    public String getColumnName(int i) {
+        return catalog.getColumns().get(i).getColumnName();
     }
 }

@@ -13,8 +13,8 @@ public class TableFactory {
         var table =  new DefaultTable(tableName, columns, primaryColumn);
         String primaryIndexName = indexFactory.generatePrimaryKeyIndexName(tableName);
         //TODO
-//        Index primaryIndex = indexFactory.createIndex(primaryIndexName, table, primaryColumn);
-//        table.putIndex(primaryIndex);
+        Index primaryIndex = indexFactory.createIndex(primaryIndexName, table, primaryColumn);
+        table.putIndex(primaryIndex);
         return table;
     }
 }

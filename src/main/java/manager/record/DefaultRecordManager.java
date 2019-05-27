@@ -45,11 +45,11 @@ public class DefaultRecordManager implements RecordManager {
 
         //insert
         Tuple tuple = tupleFactory.createTuple(values);
-        int offset = table.getOffset();
-        table.incrementTupleCount();
+        int tupleIndex = table.addTuple();
+        int offset = tupleIndex * table.getTupleSize();
         byte[] tupleBytes = tuple.toBytes(table.getTypes(), table.getTupleSize());
         fileHandler.writeTupleToFile(tupleBytes, tableName, offset);
-//        indexManager.updateIndexes(tuple, table, offset);TODO
+        indexManager.updateIndexes(tuple, table, offset); //TODO
         return infos;
     }
 
@@ -63,12 +63,19 @@ public class DefaultRecordManager implements RecordManager {
         }
         Set<Integer> offsetsIntersection = new HashSet<>();
         var noIndexRestrictions = searchByIndex(restrictions, table, offsetsIntersection);
-        var tuples = searchLinearly(new LinkedList<>(offsetsIntersection), noIndexRestrictions);
-        updateIndexes(table, tuples);
-        //TODO
-//        table.deleteTuple(conditions);
-//        return infos;
+        List<Integer> indexesSatisfyRestrictions = new LinkedList<>();
+        var tuples = searchLinearly(new LinkedList<>(offsetsIntersection),
+                noIndexRestrictions,
+                indexesSatisfyRestrictions);
+        indexesDeleteTuple(table, tuples);
+        updateTableWhenDelete(indexesSatisfyRestrictions, table);
         throw new UnsupportedOperationException();
+    }
+
+    private void updateTableWhenDelete(List<Integer> tupleIndexes, Table table) {
+        for (int i: tupleIndexes) {
+            table.deleteTuple(i);
+        }
     }
 
     private List<Restriction> searchByIndex(List<Restriction> originalrRestrictions, Table table , Set<Integer> OUT_offsetsIntersection) {
@@ -88,14 +95,20 @@ public class DefaultRecordManager implements RecordManager {
         return noIndexRestrictions;
     }
 
-    private List<Tuple> searchLinearly(List<Integer> offsets, List<Restriction> restrictions) {
+    private List<Tuple> searchLinearly(List<Integer> offsets, List<Restriction> restrictions, List<Integer> OUT_indexesSatisfyRestrictions) {
         //TODO
         throw new UnsupportedOperationException();
     }
 
-    private void updateIndexes(Table table, List<Tuple> tuples) {
-        //TODO
-        throw new UnsupportedOperationException();
+    private void indexesDeleteTuple(Table table, List<Tuple> tuples) {
+        for (Tuple tuple: tuples) {
+            for (int i = 0; i < tuple.getSize(); ++i) {
+                String columnName = table.getColumnName(i);
+                //TODO: 可并发修改
+                Index index = table.getIndex(columnName);
+                index.delete(tuple.getValue(i));
+            }
+        }
     }
 
     @Override
