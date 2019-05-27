@@ -7,8 +7,7 @@ import common.info.Info;
 import interpreter.api.DatabaseFacade;
 import manager.FileHandler;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class DefaultDatabaseFacade implements DatabaseFacade {
     private CatalogManager catalogManager;
@@ -78,6 +77,18 @@ public class DefaultDatabaseFacade implements DatabaseFacade {
     }
 
     private static List<Restriction> convertConditionsToRestrictions(List<Condition> conditions) {
-        throw new UnsupportedOperationException();
+        Map<String, Restriction> restrictionMap = new HashMap<>();
+        for (Condition condition: conditions) {
+            String columnName = condition.getColumnName();
+            Restriction restriction = restrictionMap.get(columnName);
+            if (restriction == null) {
+                restriction = new Restriction(columnName);
+                restriction.addCondition(condition);
+                restrictionMap.put(columnName, restriction);
+            } else {
+                restriction.addCondition(condition);
+            }
+        }
+        return new LinkedList<>(restrictionMap.values());
     }
 }

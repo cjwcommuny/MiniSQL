@@ -15,8 +15,10 @@ import manager.index.DefaultIndexManager;
 import middlelayer.IndexManager;
 import middlelayer.RecordManager;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class DefaultRecordManager implements RecordManager {
     private TableManager tableManager = TableManager.getInstance();
@@ -59,22 +61,40 @@ public class DefaultRecordManager implements RecordManager {
             infos.add(new TableNotExistError(tableName));
             return infos;
         }
+        Set<Integer> offsetsIntersection = new HashSet<>();
+        var noIndexRestrictions = searchByIndex(restrictions, table, offsetsIntersection);
+        var tuples = searchLinearly(new LinkedList<>(offsetsIntersection), noIndexRestrictions);
+        updateIndexes(table, tuples);
+        //TODO
+//        table.deleteTuple(conditions);
+//        return infos;
+        throw new UnsupportedOperationException();
+    }
+
+    private List<Restriction> searchByIndex(List<Restriction> originalrRestrictions, Table table , Set<Integer> OUT_offsetsIntersection) {
         List<Restriction> noIndexRestrictions = new LinkedList<>();
-        for (Restriction restriction: restrictions) {
+        for (Restriction restriction: originalrRestrictions) {
             String columnName = restriction.getColumnName();
             Index index = table.getIndex(columnName);
             if (index == null) {
                 //not exist index in this column
                 noIndexRestrictions.add(restriction);
             } else {
-                //TODO: 可并发查找
-                index.getTupleIndex(restriction);
-
+                //TODO: 当table很大时可采用并发查找
+                List<Integer> offsets = index.getTupleIndex(restriction);
+                OUT_offsetsIntersection.addAll(offsets);
             }
         }
+        return noIndexRestrictions;
+    }
+
+    private List<Tuple> searchLinearly(List<Integer> offsets, List<Restriction> restrictions) {
         //TODO
-//        table.deleteTuple(conditions);
-//        return infos;
+        throw new UnsupportedOperationException();
+    }
+
+    private void updateIndexes(Table table, List<Tuple> tuples) {
+        //TODO
         throw new UnsupportedOperationException();
     }
 

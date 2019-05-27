@@ -2,6 +2,7 @@ package common.datastructure.implementation;
 
 import common.datastructure.*;
 import common.type.Type;
+import error.MiniSqlRuntimeException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,8 +30,13 @@ class DefaultTable implements Table  {
     //TODO: index name -> index
     private Map<String, Index> indexesNameMap = new HashMap<>();
 
+    //store index (not offset)
+    private Queue<Integer> freeTuplePositions = new LinkedList<>();
+
     @Getter
     private int tupleSize;
+    @Getter //TODO
+    private int lastTuplePosition;
 
     @Override
     public void putIndex(Index index) {
@@ -62,6 +68,11 @@ class DefaultTable implements Table  {
     DefaultTable(String tableName, List<Column> columns, Column primaryKey) {
         this.catalog = new DefaultCatalog(tableName, columns, primaryKey);
         generateTypesBuffer();
+        initFreeTuplePositions();
+    }
+
+    private void initFreeTuplePositions() {
+        freeTuplePositions.add(0);
     }
 
     private void generateTypesBuffer() {
@@ -79,7 +90,10 @@ class DefaultTable implements Table  {
     }
 
     private int getCurrentIndex() {
-        return tuplesCount;
+        if (freeTuplePositions.size() == 0) {
+            throw new MiniSqlRuntimeException();
+        }
+        return freeTuplePositions.poll();
     }
 
     @Override
@@ -89,6 +103,7 @@ class DefaultTable implements Table  {
 
     @Override
     public void deleteTuple(List<Condition> conditions) {
+        //TODO: update free list
         throw new UnsupportedOperationException();
     }
 
