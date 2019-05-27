@@ -1,5 +1,5 @@
 package error;
 
-public class StringLengthBeyondLimitException extends MiniSqlRuntimeError {
+public class StringLengthBeyondLimitException extends MiniSqlCheckedError {
 
 }

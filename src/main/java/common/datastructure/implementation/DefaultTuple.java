@@ -3,12 +3,11 @@ package common.datastructure.implementation;
 import common.datastructure.Tuple;
 import common.type.CharNType;
 import common.type.Type;
-import error.MiniSqlIOException;
+import error.MiniSqlRuntimeException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.List;
 
 public class DefaultTuple implements Tuple {
@@ -36,7 +35,7 @@ public class DefaultTuple implements Tuple {
             int i = 0;
             for (var value: data) {
                 if (value instanceof Integer) {
-                    dataOutputStream.write((int) value);
+                    dataOutputStream.writeInt((int) value);
                 } else if (value instanceof Double) {
                     dataOutputStream.writeDouble((double) value);
                 } else if (value instanceof String) {
@@ -52,8 +51,8 @@ public class DefaultTuple implements Tuple {
             }
             return byteArrayOutputStream.toByteArray();
         } catch (IOException e) {
-            //fatal error
-            throw new MiniSqlIOException();
+            System.err.println(e.getMessage());
+            throw new MiniSqlRuntimeException();
         }
     }
 }

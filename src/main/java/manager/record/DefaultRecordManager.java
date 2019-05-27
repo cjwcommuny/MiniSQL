@@ -49,11 +49,9 @@ public class DefaultRecordManager implements RecordManager {
         int offset = table.getTupleSize();
         byte[] tupleBytes = tuple.toBytes(table.getTypes(), table.getTupleSize());
         fileHandler.writeTupleToFile(tupleBytes, tableName, offset);
-        indexManager.updateIndexes(tuple, table, offset);
+//        indexManager.updateIndexes(tuple, table, offset);TODO
         return infos;
     }
-
-
 
     @Override
     public List<Info> deleteTuple(String tableName, List<Condition> conditions) {

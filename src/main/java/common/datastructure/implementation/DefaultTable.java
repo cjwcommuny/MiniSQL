@@ -70,6 +70,15 @@ class DefaultTable implements Table  {
     }
 
     @Override
+    public int getOffset() {
+        return getCurrentIndex() * getTupleSize();
+    }
+
+    private int getCurrentIndex() {
+        return data.size();
+    }
+
+    @Override
     public int getColumnsCount() {
         return getColumns().size();
     }

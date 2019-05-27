@@ -54,7 +54,10 @@ public class DefaultDatabaseFacade implements DatabaseFacade {
 
     @Override
     public List<Info> quit() {
-        return fileHandler.quit();
+        var catalogInfos = catalogManager.quit();
+        var fileHandlerInfos = fileHandler.quit();
+        catalogInfos.addAll(fileHandlerInfos);
+        return catalogInfos;
     }
 
     @Override

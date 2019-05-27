@@ -28,4 +28,6 @@ public interface Table {
     Map<String, Index> getIndexesMap();
 
     int getTupleSize();
+
+    int getOffset();
 }

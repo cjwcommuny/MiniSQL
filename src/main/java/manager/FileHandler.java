@@ -14,4 +14,8 @@ public interface FileHandler {
     byte[] readTableCatalog(String tableName);
     byte[] readIndex(String indexName);
     byte[] readTuples(String tableName);
+
+    void createTable(String tableName);
+
+    long getTableTuplesTotalLength(String tableName);
 }
