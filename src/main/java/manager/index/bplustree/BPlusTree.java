@@ -7,4 +7,5 @@ public interface BPlusTree {
     List<Integer> find(Object key);
     void insert(Object key, int index);
     void delete(Object key);
+    void print();
 }
