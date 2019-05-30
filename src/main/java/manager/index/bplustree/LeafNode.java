@@ -31,7 +31,7 @@ class LeafNode implements Node {
 
     @Override
     public void printSubTree(String prefix, boolean isTail) {
-        System.out.println(prefix + (isTail ? "└── " : "├── ") + printLeaf());
+        System.out.println(prefix + (isTail ? "└── " : "├── ") + printSelf());
         for (int i = 0; i < records.size() - 1; i++) {
             System.out.println(prefix + (isTail ? "    " : "│   ") + "├── " + records.get(i));
         }
@@ -40,7 +40,12 @@ class LeafNode implements Node {
         }
     }
 
-    private String printLeaf() {
+    public String printSelf() {
+        return printKeys() + ", parent: " + ((parent == null) ? "" : parent.printKeys());
+    }
+
+    @Override
+    public String printKeys() {
         return keys.toString();
     }
 
@@ -112,7 +117,7 @@ class LeafNode implements Node {
     }
 
     @Override
-    public void deleteKeyAndCorrespondingPointer(Object key) {
+    public void deleteCorrespondingPointer(Object key) {
         int index = keys.indexOf(key);
         keys.remove(key);
         records.remove(index);
@@ -174,18 +179,27 @@ class LeafNode implements Node {
     private void borrowChildrenFromPrevious(LeafNode node, int recordsRemained) {
         var borrowRecords = node.getRecords().subList(recordsRemained, node.recordsCount());
         this.getRecords().addAll(0, borrowRecords);
-        borrowRecords.clear();
+
         var borrowKeys = node.getKeys().subList(recordsRemained, node.keysCount());
         this.getKeys().addAll(0, borrowKeys);
+
+        borrowRecords.clear();
         borrowKeys.clear();
     }
 
     private void borrowChildrenFromFollow(LeafNode node, int recordsRemained) {
         var borrowRecords = node.getRecords().subList(0, node.recordsCount() - recordsRemained);
         this.getRecords().addAll(borrowRecords);
-        borrowRecords.clear();
+
         var borrowKeys = node.getKeys().subList(0, node.recordsCount() - recordsRemained);
         this.getKeys().addAll(borrowKeys);
+
+        borrowRecords.clear();
         borrowKeys.clear();
+    }
+
+    @Override
+    public void setKey(int i, Object key) {
+        keys.set(i, key);
     }
 }

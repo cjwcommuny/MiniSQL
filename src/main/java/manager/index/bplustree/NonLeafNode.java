@@ -59,7 +59,7 @@ public class NonLeafNode implements Node {
 
     @Override
     public void printSubTree(String prefix, boolean isTail) {
-        System.out.println(prefix + (isTail ? "└── " : "├── ") + printKeys());
+        System.out.println(prefix + (isTail ? "└── " : "├── ") + printSelf());
         for (int i = 0; i < children.size() - 1; i++) {
             children.get(i).printSubTree(prefix + (isTail ? "    " : "│   "), false);
         }
@@ -69,7 +69,12 @@ public class NonLeafNode implements Node {
         }
     }
 
-    private String printKeys() {
+    private String printSelf() {
+        return printKeys() + ", parent: " + ((parent == null) ? "" : parent.printKeys());
+    }
+
+    @Override
+    public String printKeys() {
         return keys.toString();
     }
 
@@ -101,7 +106,7 @@ public class NonLeafNode implements Node {
 
     @Override
     public Object getSmallestKey() {
-        return keys.get(0);
+        return getChild(0).getSmallestKey();
     }
 
     @Override
@@ -151,8 +156,9 @@ public class NonLeafNode implements Node {
     @Override
     public void merge(Node sibling) {
         var nonLeafSibling = (NonLeafNode) sibling;
-        this.children.addAll(nonLeafSibling.children);
-        this.keys.addAll(nonLeafSibling.children);
+        this.addChildren(nonLeafSibling.children);
+//        this.keys.add(sibling.getSmallestKey()); //TODO: needed
+        this.keys.addAll(nonLeafSibling.keys);
     }
 
     @Override
@@ -174,9 +180,8 @@ public class NonLeafNode implements Node {
     }
 
     @Override
-    public void deleteKeyAndCorrespondingPointer(Object key) {
+    public void deleteCorrespondingPointer(Object key) {
         int index = keys.indexOf(key);
-        keys.remove(key);
         children.remove(index + 1);
     }
 
@@ -199,10 +204,11 @@ public class NonLeafNode implements Node {
         var childrenBorrowed = nonLeafNode.children.subList(nonLeafNode.childrenCount() - childrenRemained, nonLeafNode.childrenCount());
         childrenBorrowed.forEach(node -> node.setParent(this));
         this.children.addAll(0, childrenBorrowed);
-        childrenBorrowed.clear();
 
         var keysBorrowed = nonLeafNode.keys.subList(nonLeafNode.childrenCount() - childrenRemained, nonLeafNode.childrenCount());
         this.keys.addAll(0, keysBorrowed);
+
+        childrenBorrowed.clear();
         keysBorrowed.clear();
         nonLeafNode.keys.remove(nonLeafNode.keysCount());
     }
@@ -211,11 +217,29 @@ public class NonLeafNode implements Node {
         var childrenBorrowed = nonLeafNode.children.subList(0, nonLeafNode.childrenCount() - childrenRemained);
         childrenBorrowed.forEach(node -> node.setParent(this));
         this.children.addAll(childrenBorrowed);
-        childrenBorrowed.clear();
+
 
         var keysBorrowed = nonLeafNode.keys.subList(0, nonLeafNode.childrenCount() - childrenRemained - 1);
         this.keys.addAll(keysBorrowed);
+
+        childrenBorrowed.clear();
         keysBorrowed.clear();
         nonLeafNode.keys.remove(0);
+    }
+
+    @Override
+    public void setKey(int i, Object key) {
+        keys.set(i, key);
+    }
+
+    void updateKey(Node node) {
+        //for node i, update key i - 1
+        int i = children.indexOf(node);
+        keys.set(i - 1, node.getSmallestKey());
+    }
+
+    void addChildren(List<Node> nodes) {
+        children.addAll(nodes);
+        nodes.forEach(node -> node.setParent(this));
     }
 }

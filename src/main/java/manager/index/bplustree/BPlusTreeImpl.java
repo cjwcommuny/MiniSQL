@@ -1,11 +1,8 @@
 package manager.index.bplustree;
 
-import lombok.Setter;
-
 import java.util.List;
 
 public class BPlusTreeImpl implements BPlusTree {
-    @Setter
     private Node root;
     private int rank;
     private Class keyClass;
@@ -86,7 +83,7 @@ public class BPlusTreeImpl implements BPlusTree {
     }
 
     private void deleteEntry(Node node, Object key) {
-        node.deleteKeyAndCorrespondingPointer(key);
+        node.deleteCorrespondingPointer(key);
         if (node.isRoot() && node.childrenCount() == 1) {
             setRoot(((NonLeafNode) node).getChild(0));
         } else {
@@ -115,11 +112,13 @@ public class BPlusTreeImpl implements BPlusTree {
                     deleteEntry(node.getParent(), rightNode.getSmallestKey());
                 } else {
                     //borrow child from sibling
+                    var parent = (NonLeafNode) node.getParent();
                     if (usePrevious) {
                         rightNode.borrowChildrenFrom(leftNode);
                     } else {
                         leftNode.borrowChildrenFrom(rightNode);
                     }
+                    parent.updateKey(rightNode);
                 }
             }
         }
@@ -133,10 +132,11 @@ public class BPlusTreeImpl implements BPlusTree {
     }
 
     public static void main(String[] args) {
-
+        var tree = testInsert();
+        testDelete(tree);
     }
 
-    private static void testInsert() {
+    private static BPlusTree testInsert() {
         BPlusTree tree  = new BPlusTreeImpl(3, Integer.class);
         tree.insert(8, 8);
         tree.insert(11, 11);
@@ -150,7 +150,20 @@ public class BPlusTreeImpl implements BPlusTree {
         tree.insert(52, 52);
         tree.insert(58, 59);
         tree.insert(61, 61);
+//        tree.print();
+        return tree;
+    }
+
+    private static void testDelete(BPlusTree tree) {
         tree.print();
+        tree.delete(22);
+        tree.print();
+        tree.delete(16);
+        tree.delete(11);
+        tree.delete(8);
+//        tree.print();
+//        tree.delete(31);
+//        tree.print();
     }
 
     private int getMinimumRank() {

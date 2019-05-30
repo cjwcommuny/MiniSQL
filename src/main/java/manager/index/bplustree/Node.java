@@ -23,9 +23,11 @@ public interface Node {
     //NonLeafNode: childrenCount; LeafNode: recordsCount;
     int getRank();
     void merge(Node sibling);
-    void deleteKeyAndCorrespondingPointer(Object key);
+    void deleteCorrespondingPointer(Object key);
     Object getKey(int i);
     int childrenCount();
 
     void borrowChildrenFrom(Node node);
+    void setKey(int i, Object key);
+    String printKeys();
 }
