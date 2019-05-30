@@ -195,7 +195,7 @@ public class BPlusTreeImpl implements BPlusTree {
         root.setParent(null);
     }
 
-    static int compareKeys(Object key1, Object key2) {
+    public static int compareKeys(Object key1, Object key2) {
         return ((Comparable) key1).compareTo(key2);
     }
 }

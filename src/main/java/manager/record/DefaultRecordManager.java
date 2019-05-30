@@ -2,6 +2,7 @@ package manager.record;
 
 import common.datastructure.*;
 import common.datastructure.implementation.TupleFactory;
+import common.datastructure.restriction.Restriction;
 import common.info.Info;
 import common.info.StringLengthExcessLimitError;
 import common.info.TableNotExistError;

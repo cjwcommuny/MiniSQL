@@ -2,7 +2,7 @@ package middlelayer;
 
 import common.datastructure.Column;
 import common.datastructure.Condition;
-import common.datastructure.Restriction;
+import common.datastructure.restriction.Restriction;
 import common.info.Info;
 import interpreter.api.DatabaseFacade;
 import manager.FileHandler;

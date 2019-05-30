@@ -1,5 +1,7 @@
 package common.datastructure;
 
+import common.datastructure.restriction.Restriction;
+
 import java.io.Serializable;
 import java.util.List;
 

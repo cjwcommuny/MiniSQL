@@ -1,8 +1,7 @@
 package common.datastructure.implementation;
 
-import common.datastructure.Condition;
 import common.datastructure.Index;
-import common.datastructure.Restriction;
+import common.datastructure.restriction.Restriction;
 
 import java.util.List;
 
