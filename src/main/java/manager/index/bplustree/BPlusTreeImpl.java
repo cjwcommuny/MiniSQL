@@ -46,7 +46,7 @@ public class BPlusTreeImpl implements BPlusTree {
         }
         var leaf = findLeafNode(key);
         insertInLeaf(leaf, key, index);
-        if (leaf.getKeysCount() > rank) {
+        if (leaf.keysCount() > rank) {
             splitLeafNode(leaf);
         }
     }
@@ -68,7 +68,7 @@ public class BPlusTreeImpl implements BPlusTree {
         }
         var parent = (NonLeafNode) originalNode.getParent();
         parent.insertKeyAndNode(nodeSplit.getSmallestKey(), nodeSplit);
-        if (parent.getChildrenCount() > rank) {
+        if (parent.childrenCount() > rank) {
             //split parent
             var nodeNewSplit = parent.split();
             insertInParent(parent, nodeNewSplit);
@@ -81,7 +81,48 @@ public class BPlusTreeImpl implements BPlusTree {
 
     @Override
     public void delete(Object key) {
-        throw new UnsupportedOperationException();
+        var leaf = findLeafNode(key);
+        deleteEntry(leaf, key);
+    }
+
+    private void deleteEntry(Node node, Object key) {
+        node.deleteKeyAndCorrespondingPointer(key);
+        if (node.isRoot() && node.childrenCount() == 1) {
+            setRoot(((NonLeafNode) node).getChild(0));
+        } else {
+            boolean needRearrange = node.getRank() < getMinimumRank();
+            if (needRearrange) {
+                //merge with the sibling
+                Node leftNode;
+                Node rightNode;
+                var previousNode = node.getPreviousSibling();
+                var followingNode = node.getFollowSibling();
+                boolean usePrevious;
+                if (previousNode == null || previousNode.getRank() > followingNode.getRank()) {
+                    leftNode = node;
+                    rightNode = followingNode;
+                    usePrevious = false;
+                } else {
+                    leftNode = previousNode;
+                    rightNode = node;
+                    usePrevious = true;
+                }
+
+                boolean singleNodeCanContainAllChildren = leftNode.getRank() + rightNode.getRank() <= rank;
+                if (singleNodeCanContainAllChildren) {
+                    //merge them
+                    leftNode.merge(rightNode);
+                    deleteEntry(node.getParent(), rightNode.getSmallestKey());
+                } else {
+                    //borrow child from sibling
+                    if (usePrevious) {
+                        rightNode.borrowChildrenFrom(leftNode);
+                    } else {
+                        leftNode.borrowChildrenFrom(rightNode);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -112,18 +153,16 @@ public class BPlusTreeImpl implements BPlusTree {
         tree.print();
     }
 
-//    private static BPlusTree constructTree() {
-//        var root = new NonLeafNode();
-//        root.getKeys().add("hello1");
-//        root.getKeys().add("789979");
-//        var leaf1 = new LeafNode();
-//        var leaf2 = new LeafNode();
-//        root.getChildren().add(leaf1);
-//        root.getChildren().add(leaf2);
-//        leaf1.getRecords().add(new LinkedList<>(Arrays.asList(1,2,3)));
-//
-//    }
+    private int getMinimumRank() {
+        return (rank - 1) / 2 + 1;
+    }
 
+    private void setRoot(Node node) {
+        root = node;
+        root.setParent(null);
+    }
 
-
+    static int compareKeys(Object key1, Object key2) {
+        return ((Comparable) key1).compareTo(key2);
+    }
 }

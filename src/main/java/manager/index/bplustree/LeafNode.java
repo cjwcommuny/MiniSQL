@@ -1,17 +1,19 @@
 package manager.index.bplustree;
 
-import lombok.Data;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
 
+import static manager.index.bplustree.BPlusTreeImpl.compareKeys;
+
 class LeafNode implements Node {
     //in LeafNode, size of records and keys are the same
-    @Setter
+    @Setter @Getter(AccessLevel.PRIVATE)
     private List<List<Integer>> records = new ArrayList<>();
 
-    @Setter
+    @Setter @Getter(AccessLevel.PRIVATE)
     private List<Object> keys = new ArrayList<>();
 
     @Getter @Setter
@@ -55,7 +57,7 @@ class LeafNode implements Node {
 
     private int searchSmallestLargerKeyIndex(Object key) {
         int index = Collections.binarySearch(keys, key,
-                (Object o1, Object o2) -> ((Comparable) o1).compareTo((Comparable) o2)
+                BPlusTreeImpl::compareKeys
         );
         if (index < 0) {
             //not found
@@ -69,7 +71,7 @@ class LeafNode implements Node {
         this.parent = parent;
     }
 
-    public int getKeysCount() {
+    public int keysCount() {
         return keys.size();
     }
 
@@ -109,5 +111,81 @@ class LeafNode implements Node {
         return keys.get(0);
     }
 
+    @Override
+    public void deleteKeyAndCorrespondingPointer(Object key) {
+        int index = keys.indexOf(key);
+        keys.remove(key);
+        records.remove(index);
+    }
 
+    int recordsCount() {
+        return records.size();
+    }
+
+    @Override
+    public Node getPreviousSibling() {
+        return ((NonLeafNode) parent).getPreviousSiblingOf(this);
+    }
+
+    @Override
+    public Node getFollowSibling() {
+        return ((NonLeafNode) parent).getFollowSiblingOf(this);
+    }
+
+    @Override
+    public int getRank() {
+        return keysCount();
+    }
+
+    @Override
+    public void merge(Node sibling) {
+        //thisNode is previous to sibling node
+        LeafNode siblingLeaf = (LeafNode) sibling;
+        records.addAll(siblingLeaf.getRecords());
+        keys.addAll(siblingLeaf.getKeys());
+    }
+
+    private List<Integer> getRecord(int i) {
+        return records.get(i);
+    }
+
+    @Override
+    public Object getKey(int i) {
+        return keys.get(i);
+    }
+
+    @Override
+    public int childrenCount() {
+        //leaf node has no children
+        return 0;
+    }
+
+    @Override
+    public void borrowChildrenFrom(Node node) {
+        LeafNode leafNode = (LeafNode) node;
+        int recordsRemained = (this.recordsCount() + leafNode.recordsCount()) / 2;
+        if (compareKeys(this.getSmallestKey(), node.getSmallestKey()) < 0) {
+            borrowChildrenFromFollow(leafNode, recordsRemained);
+        } else {
+            borrowChildrenFromPrevious(leafNode, recordsRemained);
+        }
+    }
+
+    private void borrowChildrenFromPrevious(LeafNode node, int recordsRemained) {
+        var borrowRecords = node.getRecords().subList(recordsRemained, node.recordsCount());
+        this.getRecords().addAll(0, borrowRecords);
+        borrowRecords.clear();
+        var borrowKeys = node.getKeys().subList(recordsRemained, node.keysCount());
+        this.getKeys().addAll(0, borrowKeys);
+        borrowKeys.clear();
+    }
+
+    private void borrowChildrenFromFollow(LeafNode node, int recordsRemained) {
+        var borrowRecords = node.getRecords().subList(0, node.recordsCount() - recordsRemained);
+        this.getRecords().addAll(borrowRecords);
+        borrowRecords.clear();
+        var borrowKeys = node.getKeys().subList(0, node.recordsCount() - recordsRemained);
+        this.getKeys().addAll(borrowKeys);
+        borrowKeys.clear();
+    }
 }

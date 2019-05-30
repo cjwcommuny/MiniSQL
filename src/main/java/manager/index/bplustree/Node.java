@@ -13,7 +13,19 @@ public interface Node {
 
     Object getSmallestKey();
     void setParent(Node root);
-    int getKeysCount();
+    int keysCount();
 
     void setKeys(List<Object> keys);
+
+    Node getPreviousSibling();
+    Node getFollowSibling();
+
+    //NonLeafNode: childrenCount; LeafNode: recordsCount;
+    int getRank();
+    void merge(Node sibling);
+    void deleteKeyAndCorrespondingPointer(Object key);
+    Object getKey(int i);
+    int childrenCount();
+
+    void borrowChildrenFrom(Node node);
 }

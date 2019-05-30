@@ -1,10 +1,11 @@
 package manager.index.bplustree;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
+
+import static manager.index.bplustree.BPlusTreeImpl.compareKeys;
 
 public class NonLeafNode implements Node {
     private List<Node> children = new ArrayList<>();
@@ -46,7 +47,7 @@ public class NonLeafNode implements Node {
 
     private int searchSmallestLargerKeyIndex(Object key) {
         int index = Collections.binarySearch(keys, key,
-                (Object o1, Object o2) -> ((Comparable) o1).compareTo((Comparable) o2)
+                BPlusTreeImpl::compareKeys
         );
         if (index < 0) {
             //not found
@@ -104,11 +105,11 @@ public class NonLeafNode implements Node {
     }
 
     @Override
-    public int getKeysCount() {
+    public int keysCount() {
         return keys.size();
     }
 
-    int getChildrenCount() {
+    public int childrenCount() {
         return children.size();
     }
 
@@ -117,5 +118,104 @@ public class NonLeafNode implements Node {
         keys.add(insertIndex, key);
         children.add(insertIndex + 1, nodeSplit);
         nodeSplit.setParent(this);
+    }
+
+    @Override
+    public Node getPreviousSibling() {
+        return ((NonLeafNode) parent).getPreviousSiblingOf(this);
+    }
+
+    Node getPreviousSiblingOf(Node node) {
+        int index = children.indexOf(node);
+        if (index == 0) {
+            return null;
+        } else {
+            return children.get(index - 1);
+        }
+    }
+
+    @Override
+    public Node getFollowSibling() {
+        return ((NonLeafNode) parent).getFollowSiblingOf(this);
+    }
+
+    Node getFollowSiblingOf(Node node) {
+        int index = children.indexOf(node);
+        if (index == children.size() - 1) {
+            return null;
+        } else {
+            return children.get(index + 1);
+        }
+    }
+
+    @Override
+    public void merge(Node sibling) {
+        var nonLeafSibling = (NonLeafNode) sibling;
+        this.children.addAll(nonLeafSibling.children);
+        this.keys.addAll(nonLeafSibling.children);
+    }
+
+    @Override
+    public int getRank() {
+        return childrenCount();
+    }
+
+    void removeChild(Node child) {
+        children.remove(child);
+    }
+
+    void removeKey(Object key) {
+        keys.remove(key);
+    }
+
+    @Override
+    public Object getKey(int i) {
+        return keys.get(i);
+    }
+
+    @Override
+    public void deleteKeyAndCorrespondingPointer(Object key) {
+        int index = keys.indexOf(key);
+        keys.remove(key);
+        children.remove(index + 1);
+    }
+
+    Node getChild(int i) {
+        return children.get(i);
+    }
+
+    @Override
+    public void borrowChildrenFrom(Node node) {
+        var nonLeafNode = (NonLeafNode) node;
+        int childrenRemained = (this.childrenCount() + node.childrenCount()) / 2;
+        if (compareKeys(this.getSmallestKey(), node.getSmallestKey()) < 0) {
+            borrowChildrenFromFollow(nonLeafNode, childrenRemained);
+        } else {
+            borrowChildrenFromPrevious(nonLeafNode, childrenRemained);
+        }
+    }
+
+    private void borrowChildrenFromPrevious(NonLeafNode nonLeafNode, int childrenRemained) {
+        var childrenBorrowed = nonLeafNode.children.subList(nonLeafNode.childrenCount() - childrenRemained, nonLeafNode.childrenCount());
+        childrenBorrowed.forEach(node -> node.setParent(this));
+        this.children.addAll(0, childrenBorrowed);
+        childrenBorrowed.clear();
+
+        var keysBorrowed = nonLeafNode.keys.subList(nonLeafNode.childrenCount() - childrenRemained, nonLeafNode.childrenCount());
+        this.keys.addAll(0, keysBorrowed);
+        keysBorrowed.clear();
+        nonLeafNode.keys.remove(nonLeafNode.keysCount());
+    }
+
+    private void borrowChildrenFromFollow(NonLeafNode nonLeafNode, int childrenRemained) {
+        var childrenBorrowed = nonLeafNode.children.subList(0, nonLeafNode.childrenCount() - childrenRemained);
+        childrenBorrowed.forEach(node -> node.setParent(this));
+        this.children.addAll(childrenBorrowed);
+        childrenBorrowed.clear();
+
+        var keysBorrowed = nonLeafNode.keys.subList(0, nonLeafNode.childrenCount() - childrenRemained - 1);
+        this.keys.addAll(keysBorrowed);
+        keysBorrowed.clear();
+        nonLeafNode.keys.remove(0);
     }
 }
