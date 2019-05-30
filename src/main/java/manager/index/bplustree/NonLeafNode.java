@@ -38,7 +38,12 @@ public class NonLeafNode implements Node {
     }
 
     Node getSmallestLargerNode(Object key) {
-        return children.get(getChildIndex(key));
+        int index = getChildIndex(key);
+        if (index < keys.size() && compareKeys(keys.get(index), key) == 0) {
+            return children.get(index + 1); //equal key
+        } else {
+            return children.get(index);
+        }
     }
 
     private int getChildIndex(Object key) {
@@ -157,7 +162,7 @@ public class NonLeafNode implements Node {
     public void merge(Node sibling) {
         var nonLeafSibling = (NonLeafNode) sibling;
         this.addChildren(nonLeafSibling.children);
-//        this.keys.add(sibling.getSmallestKey()); //TODO: needed
+        this.keys.add(sibling.getSmallestKey()); //TODO: needed
         this.keys.addAll(nonLeafSibling.keys);
     }
 
@@ -180,9 +185,21 @@ public class NonLeafNode implements Node {
     }
 
     @Override
-    public void deleteCorrespondingPointer(Object key) {
-        int index = keys.indexOf(key);
-        children.remove(index + 1);
+    public void deleteKeyAndCorrespondingPointer(Object key) {
+        int index = searchSmallestLargerKeyIndex(key);
+        if (compareKeys(keys.get(index), key) == 0) {
+            children.remove(index + 1);
+            keys.remove(index);
+        } else {
+            children.remove(index);
+            if (index == 0) {
+                keys.remove(index);
+            } else {
+                keys.remove(index - 1);
+            }
+        }
+
+//        children.remove(index + 1);
     }
 
     Node getChild(int i) {

@@ -26,7 +26,7 @@ class LeafNode implements Node {
 
     @Override
     public boolean isLeaf() {
-        return false;
+        return true;
     }
 
     @Override
@@ -117,7 +117,7 @@ class LeafNode implements Node {
     }
 
     @Override
-    public void deleteCorrespondingPointer(Object key) {
+    public void deleteKeyAndCorrespondingPointer(Object key) {
         int index = keys.indexOf(key);
         keys.remove(key);
         records.remove(index);

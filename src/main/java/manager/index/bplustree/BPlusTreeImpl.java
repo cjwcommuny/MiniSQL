@@ -83,7 +83,10 @@ public class BPlusTreeImpl implements BPlusTree {
     }
 
     private void deleteEntry(Node node, Object key) {
-        node.deleteCorrespondingPointer(key);
+        node.deleteKeyAndCorrespondingPointer(key);
+        if (node.isRoot() && node.isLeaf()) {
+            return;
+        }
         if (node.isRoot() && node.childrenCount() == 1) {
             setRoot(((NonLeafNode) node).getChild(0));
         } else {
@@ -95,7 +98,9 @@ public class BPlusTreeImpl implements BPlusTree {
                 var previousNode = node.getPreviousSibling();
                 var followingNode = node.getFollowSibling();
                 boolean usePrevious;
-                if (previousNode == null || previousNode.getRank() > followingNode.getRank()) {
+                if (previousNode == null
+                        || (followingNode != null && previousNode.getRank() > followingNode.getRank())
+                ) {
                     leftNode = node;
                     rightNode = followingNode;
                     usePrevious = false;
@@ -128,6 +133,8 @@ public class BPlusTreeImpl implements BPlusTree {
     public void print() {
         if (root != null) {
             root.printSubTree("", true);
+        } else {
+            System.out.println("└──no vertex");
         }
     }
 
@@ -148,22 +155,35 @@ public class BPlusTreeImpl implements BPlusTree {
         tree.insert(31, 31);
         tree.insert(41, 41);
         tree.insert(52, 52);
-        tree.insert(58, 59);
+        tree.insert(58, 58);
         tree.insert(61, 61);
 //        tree.print();
         return tree;
     }
 
     private static void testDelete(BPlusTree tree) {
-        tree.print();
+//        tree.print();
         tree.delete(22);
-        tree.print();
+//        tree.print();
         tree.delete(16);
+//        tree.print();
         tree.delete(11);
         tree.delete(8);
 //        tree.print();
-//        tree.delete(31);
+        tree.delete(31);
 //        tree.print();
+        tree.delete(17);
+//        tree.print();
+        tree.delete(41);
+//        tree.print();
+        tree.delete(61);
+//        tree.print();
+        tree.delete(12);
+//        tree.print();
+        tree.delete(52);
+        tree.delete(58);
+        tree.delete(23);
+        tree.print();
     }
 
     private int getMinimumRank() {
