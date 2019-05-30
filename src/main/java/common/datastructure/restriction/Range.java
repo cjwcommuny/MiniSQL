@@ -1,5 +1,7 @@
 package common.datastructure.restriction;
 
+import common.datastructure.MaxValue;
+import common.datastructure.MinValue;
 import lombok.Data;
 
 import static manager.index.bplustree.BPlusTreeImpl.compareKeys;
@@ -39,14 +41,20 @@ class Range {
         return range;
     }
 
-    Object getMaxValue(Class clazz) {
-        if (clazz == String.class) {
-            //string has no maximum value
-            return
-        } else if (clazz == Integer.class) {
-
-        } else {
-            //double
-        }
+    static Object getMaxValue() {
+        return new MaxValue();
     }
+
+    static Object getMinValue() {
+        return new MinValue();
+    }
+
+    Range(Object leftValue, Object rightValue, boolean leftOpen, boolean rightOpen) {
+        this.leftValue = leftValue;
+        this.rightValue = rightValue;
+        this.leftOpen = leftOpen;
+        this.rightOpen = rightOpen;
+    }
+
+    private Range() {}
 }

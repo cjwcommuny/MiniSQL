@@ -12,7 +12,9 @@ public class Restriction {
     private List<Condition> conditions = new LinkedList<>();
 
     private Object equationValue;
-    private Range range = new Range();
+    private List<Object> notEqualValues = new LinkedList<>();
+    private Range range = new Range(Range.getMinValue(),
+            Range.getMaxValue(), true, true);
     private boolean noRestriction;
 
     public Restriction(String columnName) {
@@ -24,11 +26,10 @@ public class Restriction {
     }
 
     public boolean isEquationRestriction() {
-        generateInternalForm();
         return equationValue == null;
     }
 
-    private void generateInternalForm() {
+    public void generateInternalForm() {
         conditionLoop:
         for (var condition: conditions) {
             var compareType = condition.getCompareType();
@@ -43,19 +44,29 @@ public class Restriction {
                     }
                     break;
                 case NOT_EQUAL:
-
+                    notEqualValues.add(condition.getValue());
                     break;
                 case LESS:
+                    range = range.intersect(new Range(Range.getMinValue(),
+                            condition.getValue(),
+                            true, true));
                     break;
                 case GREATER:
+                    range = range.intersect(new Range(condition.getValue(),
+                            Range.getMaxValue(),
+                            true, true));
                     break;
                 case LESS_OR_EQUAL:
+                    range = range.intersect(new Range(Range.getMinValue(),
+                            condition.getValue(),
+                            true, false));
                     break;
                 case GREATER_OR_EQUAL:
+                    range = range.intersect(new Range(condition.getValue(),
+                            Range.getMaxValue(),
+                            false, true));
                     break;
             }
         }
     }
-
-    private void handle
 }

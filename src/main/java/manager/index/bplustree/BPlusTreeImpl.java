@@ -1,5 +1,8 @@
 package manager.index.bplustree;
 
+import common.datastructure.MaxValue;
+import common.datastructure.MinValue;
+
 import java.util.List;
 
 public class BPlusTreeImpl implements BPlusTree {
@@ -196,6 +199,11 @@ public class BPlusTreeImpl implements BPlusTree {
     }
 
     public static int compareKeys(Object key1, Object key2) {
+        if (key1 instanceof MaxValue || key2 instanceof MinValue) {
+            return 1;
+        } else if (key1 instanceof MinValue || key2 instanceof MaxValue) {
+            return -1;
+        }
         return ((Comparable) key1).compareTo(key2);
     }
 }
