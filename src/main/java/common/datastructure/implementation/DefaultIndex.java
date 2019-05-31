@@ -2,10 +2,14 @@ package common.datastructure.implementation;
 
 import common.datastructure.Index;
 import common.datastructure.restriction.Restriction;
+import manager.index.bplustree.BPlusTree;
+import manager.index.bplustree.BPlusTreeImpl;
 
 import java.util.List;
 
 public class DefaultIndex implements Index {
+    private BPlusTree tree = new BPlusTreeImpl(3);
+
     @Override
     public List<Integer> getTupleIndex(Restriction restriction) {
         throw new UnsupportedOperationException();
@@ -23,11 +27,11 @@ public class DefaultIndex implements Index {
 
     @Override
     public void update(Object key, int offset) {
-        throw new UnsupportedOperationException();
+        tree.insert(key, offset);
     }
 
     @Override
-    public void delete(Object key) {
+    public void delete(Object key, Restriction restriction) {
 
     }
 }

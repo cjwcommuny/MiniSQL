@@ -8,11 +8,11 @@ import java.util.List;
 public class BPlusTreeImpl implements BPlusTree {
     private Node root;
     private int rank;
-    private Class keyClass;
+//    private Class keyClass;
 
-    public BPlusTreeImpl(int rank, Class keyClass) {
+
+    public BPlusTreeImpl(int rank) {
         this.rank = rank;
-        this.keyClass = keyClass;
     }
 
     @Override
@@ -147,7 +147,7 @@ public class BPlusTreeImpl implements BPlusTree {
     }
 
     private static BPlusTree testInsert() {
-        BPlusTree tree  = new BPlusTreeImpl(3, Integer.class);
+        BPlusTree tree  = new BPlusTreeImpl(3);
         tree.insert(8, 8);
         tree.insert(11, 11);
         tree.insert(12, 12);

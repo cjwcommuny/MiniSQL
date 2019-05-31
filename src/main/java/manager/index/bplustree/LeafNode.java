@@ -86,11 +86,20 @@ class LeafNode implements Node {
     }
 
     void insertKeyAndRecord(Object key, int record) {
-        var list = new LinkedList<Integer>();
-        list.add(record);
-        int insertIndex = searchSmallestLargerKeyIndex(key);
-        records.add(insertIndex, list);
-        keys.add(insertIndex, key);
+        int i = Collections.binarySearch(keys, key,
+                BPlusTreeImpl::compareKeys
+        );
+        if (i < 0) {
+            //not found
+            var list = new LinkedList<Integer>();
+            list.add(record);
+            int insertIndex = -i - 1;
+            records.add(insertIndex, list);
+            keys.add(insertIndex, key);
+        } else {
+            //found and update
+            records.get(i).add(record);
+        }
     }
 
     @Override
