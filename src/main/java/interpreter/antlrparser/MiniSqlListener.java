@@ -56,6 +56,16 @@ public interface MiniSqlListener extends ParseTreeListener {
 	 */
 	void exitCharNType(MiniSqlParser.CharNTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MiniSqlParser#instructionWrap}.
+	 * @param ctx the parse tree
+	 */
+	void enterInstructionWrap(MiniSqlParser.InstructionWrapContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MiniSqlParser#instructionWrap}.
+	 * @param ctx the parse tree
+	 */
+	void exitInstructionWrap(MiniSqlParser.InstructionWrapContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MiniSqlParser#instruction}.
 	 * @param ctx the parse tree
 	 */

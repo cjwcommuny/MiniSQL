@@ -17,6 +17,11 @@ public class DefaultColumn implements Column {
     }
 
     @Override
+    public String visualInfo() {
+        return columnName;
+    }
+
+    @Override
     public String toString() {
         return "Column: {" + columnName + ", " + type + ", " + "unique=" + unique + "}";
     }

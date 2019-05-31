@@ -6,4 +6,5 @@ public interface Column {
     boolean isUnique();
     String getColumnName();
     Type getType();
+    String visualInfo();
 }

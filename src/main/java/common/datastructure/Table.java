@@ -34,4 +34,6 @@ public interface Table {
     int addTuple();
 
     Index getIndex(String columnName);
+
+    Tuple bytesToTuple(byte[] bytes, int base);
 }

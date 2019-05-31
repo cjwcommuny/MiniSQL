@@ -40,6 +40,12 @@ public interface MiniSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCharNType(MiniSqlParser.CharNTypeContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MiniSqlParser#instructionWrap}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInstructionWrap(MiniSqlParser.InstructionWrapContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MiniSqlParser#instruction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

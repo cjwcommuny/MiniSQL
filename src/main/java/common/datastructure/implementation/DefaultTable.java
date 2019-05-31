@@ -1,6 +1,9 @@
 package common.datastructure.implementation;
 
 import common.datastructure.*;
+import common.type.CharNType;
+import common.type.FloatType;
+import common.type.IntType;
 import common.type.Type;
 import error.MiniSqlRuntimeException;
 import lombok.AccessLevel;
@@ -12,10 +15,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
 class DefaultTable implements Table  {
+    private TupleFactory tupleFactory = new TupleFactory();
     @Getter
     private Catalog catalog;
     private int tuplesCount = 0;
@@ -130,5 +136,26 @@ class DefaultTable implements Table  {
     @Override
     public String getColumnName(int i) {
         return catalog.getColumns().get(i).getColumnName();
+    }
+
+    @Override
+    public Tuple bytesToTuple(byte[] bytes, int base) {
+        List<Object> data = new ArrayList<>();
+        int offset = base;
+        for (Type type: types) {
+            int byteCount = type.getSize();
+            byte[] subArr = Arrays.copyOfRange(bytes, base, offset);
+            if (type instanceof IntType) {
+                ByteBuffer byteBuffer = ByteBuffer.wrap(subArr);
+                data.add(byteBuffer.getInt());
+            } else if (type instanceof FloatType) {
+                ByteBuffer byteBuffer = ByteBuffer.wrap(subArr);
+                data.add(byteBuffer.getDouble());
+            } else if (type instanceof CharNType) {
+                data.add(new String(subArr, StandardCharsets.UTF_16).replace("\u0000", ""));
+            }
+            offset += byteCount;
+        }
+        return tupleFactory.createTuple(data);
     }
 }

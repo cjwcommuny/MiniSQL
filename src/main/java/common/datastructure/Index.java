@@ -11,4 +11,5 @@ public interface Index extends Serializable {
     String getColumnName();
     void update(Object key, int offset);
     void delete(Restriction restriction);
+    void delete(Object value);
 }

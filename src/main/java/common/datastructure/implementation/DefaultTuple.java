@@ -60,4 +60,13 @@ public class DefaultTuple implements Tuple {
     public int getSize() {
         return data.size();
     }
+
+    @Override
+    public String visualInfo() {
+        StringBuilder sb = new StringBuilder();
+        for (var value: data) {
+            sb.append(value);
+        }
+        return sb.toString();
+    }
 }

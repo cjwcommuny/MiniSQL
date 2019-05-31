@@ -1,10 +1,7 @@
 package interpreter;
 
-import middlelayer.DefaultDatabaseFacade;
+import middlelayer.DatabaseFacadeImpl;
 import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class DefaultInterpreterTest {
     @Before
@@ -18,7 +15,7 @@ public class DefaultInterpreterTest {
 
     public static void testCreateTable() {
         var interpreter = new DefaultInterpreter(
-                new DefaultDatabaseFacade(null, null, null, null));
+                new DatabaseFacadeImpl(null, null, null, null));
         interpreter.interpret();
     }
 

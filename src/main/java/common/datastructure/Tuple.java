@@ -9,4 +9,5 @@ public interface Tuple {
     void setValue(int index, Object value);
     byte[] toBytes(List<Type> types, int size);
     int getSize();
+    String visualInfo();
 }

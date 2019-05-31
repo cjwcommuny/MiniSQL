@@ -23,7 +23,7 @@ literal:
 INT_LITERAL: [+-]? DIGIT+;
 
 STRING_LITERAL:
-    '\'' (DIGIT | [a-zA-Z:/\\_. \t])* '\''
+    '\'' (DIGIT | [a-zA-Z:/\\_.~\- \t])* '\''
     ;
 
 DIGIT:
@@ -179,9 +179,13 @@ type_identifier:
 
 WHITE_SPACE: [ \t\r\n]+ -> skip;
 
-LINE_COMMENT: '//' ~[\r\n]* -> skip;
+LINE_COMMENT: '--' ~[\r\n]* -> skip;
 
 COMMENT: '/*' .*? '*/' -> skip;
+
+instructionWrap:
+    instruction EOF
+    ;
 
 instruction:
     createTable

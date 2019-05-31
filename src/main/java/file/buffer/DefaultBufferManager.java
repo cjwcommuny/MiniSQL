@@ -117,7 +117,16 @@ public class DefaultBufferManager implements FileHandler {
 
     @Override
     public byte[] readTuples(String tableName) {
-        throw new UnsupportedOperationException();
+        //TODO: buffer?
+        var randomAccessFile = filesMap.get(tableName);
+        try {
+            byte[] bytes = new byte[(int) randomAccessFile.length()]; //TODO: may not read the whole file!!
+            randomAccessFile.read(bytes);
+            return bytes;
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            throw new MiniSqlRuntimeException();
+        }
     }
 
     @Override

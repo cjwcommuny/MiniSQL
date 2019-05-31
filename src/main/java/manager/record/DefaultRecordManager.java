@@ -3,10 +3,7 @@ package manager.record;
 import common.datastructure.*;
 import common.datastructure.implementation.TupleFactory;
 import common.datastructure.restriction.Restriction;
-import common.info.Info;
-import common.info.StringLengthExcessLimitError;
-import common.info.TableNotExistError;
-import common.info.TypeMismatchError;
+import common.info.*;
 import common.type.Type;
 import error.StringLengthBeyondLimitException;
 import file.buffer.DefaultBufferManager;
@@ -16,10 +13,7 @@ import manager.index.DefaultIndexManager;
 import middlelayer.IndexManager;
 import middlelayer.RecordManager;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DefaultRecordManager implements RecordManager {
     private TableManager tableManager = TableManager.getInstance();
@@ -50,7 +44,7 @@ public class DefaultRecordManager implements RecordManager {
         int offset = tupleIndex * table.getTupleSize();
         byte[] tupleBytes = tuple.toBytes(table.getTypes(), table.getTupleSize());
         fileHandler.writeTupleToFile(tupleBytes, tableName, offset);
-        indexManager.updateIndexes(tuple, table, offset); //TODO
+        indexManager.updateIndexes(tuple, table, offset);
         return infos;
     }
 
@@ -62,15 +56,52 @@ public class DefaultRecordManager implements RecordManager {
             infos.add(new TableNotExistError(tableName));
             return infos;
         }
-        Set<Integer> offsetsIntersection = new HashSet<>();
+        List<Integer> offsetsFiltered = new ArrayList<>();
+        var tuples = getTuplesAndOffsets(table, restrictions, offsetsFiltered);
+        indexManager.deleteOffsets(tuples, table);
+        deleteTuplesFromFile(offsetsFiltered, table);
+        return infos;
+    }
+
+    private List<Tuple> getTuplesAndOffsets(Table table,
+                                            List<Restriction> restrictions,
+                                            List<Integer> OUT_offsets) {
+        Set<Integer> offsetsIntersection = new HashSet<>(); //offsets stored in index
         var noIndexRestrictions = searchByIndex(restrictions, table, offsetsIntersection);
-        List<Integer> indexesSatisfyRestrictions = new LinkedList<>();
-        var tuples = searchLinearly(new LinkedList<>(offsetsIntersection),
-                noIndexRestrictions,
-                indexesSatisfyRestrictions);
-        indexesDeleteTuple(table, tuples);
-        updateTableWhenDelete(indexesSatisfyRestrictions, table);
-        throw new UnsupportedOperationException();
+        var tuples = getTuplesFromFile(offsetsIntersection, table);
+        OUT_offsets.addAll(offsetsIntersection);
+        filterTuplesAndOffsetsByRestrictions(OUT_offsets, tuples, noIndexRestrictions);
+        return tuples;
+    }
+
+    private void deleteTuplesFromFile(Collection<Integer> offsets, Table table) {
+        //lazy delete
+        for (int i: offsets) {
+            table.deleteTuple(i);
+        }
+    }
+
+    private void filterTuplesAndOffsetsByRestrictions(List<Integer> offsets,
+                                                      List<Tuple> tuples,
+                                                      List<Restriction> restrictions) {
+        for (var restriction: restrictions) {
+
+        }
+        throw new UnsupportedOperationException(); //TODO
+    }
+
+    @Override
+    public List<Info> selectTuple(String tableName, List<Restriction> restrictions) {
+        List<Info> infos = new LinkedList<>();
+        var table = tableManager.getTable(tableName);
+        if (table == null) {
+            infos.add(new TableNotExistError(tableName));
+            return infos;
+        }
+        List<Integer> offsetsFiltered = new ArrayList<>();
+        var tuples = getTuplesAndOffsets(table, restrictions, offsetsFiltered);
+        infos.add(new ResultInfo(table.getColumns(), tuples));
+        return infos;
     }
 
     private void updateTableWhenDelete(List<Integer> tupleIndexes, Table table) {
@@ -113,9 +144,14 @@ public class DefaultRecordManager implements RecordManager {
 //        }
     }
 
-    @Override
-    public List<Info> selectTuple(String tableName, List<Restriction> restrictions) {
-        throw new UnsupportedOperationException();
+    private List<Tuple> getTuplesFromFile(Collection<Integer> offsets, Table table) {
+        //TODO: buffer
+        byte[] records = fileHandler.readTuples(table.getTableName());
+        List<Tuple> tuples = new LinkedList<>();
+        for (int offset: offsets) {
+            tuples.add(table.bytesToTuple(records, offset));
+        }
+        return tuples;
     }
 
     private boolean checkTypesMatch(List<Object> values, List<Type> types, List<Info> outInfos) {

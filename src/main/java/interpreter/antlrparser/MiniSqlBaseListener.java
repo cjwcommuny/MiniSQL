@@ -66,6 +66,18 @@ public class MiniSqlBaseListener implements MiniSqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterInstructionWrap(MiniSqlParser.InstructionWrapContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInstructionWrap(MiniSqlParser.InstructionWrapContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterInstruction(MiniSqlParser.InstructionContext ctx) { }
 	/**
 	 * {@inheritDoc}

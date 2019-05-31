@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.Recognizer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LexErrorListener extends BaseErrorListener {
+public class SyntaxErrorListener extends BaseErrorListener {
     @Getter
     private final List<SyntaxError> syntaxErrors = new ArrayList<>();
 

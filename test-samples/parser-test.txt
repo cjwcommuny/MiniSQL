@@ -37,6 +37,10 @@ and lll333 <> 19
 ;
 
 insert into student values ('12345678','wy',22,'M');
+insert into student values ('1','lala',22,'M');
+insert into student values ('2','haha',20,'F');
+insert into student values ('3','cjw',23,'M');
+insert into student values ('4','zzz',10,'F');
 
 delete from student;
 
@@ -50,5 +54,6 @@ and lll333 <> 19
 ;
 
 execfile 'C:/hahaha/dsjf333kll_77.txt';
+execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/file.sql';
 
 quit;

@@ -9,13 +9,13 @@ import manager.FileHandler;
 
 import java.util.*;
 
-public class DefaultDatabaseFacade implements DatabaseFacade {
+public class DatabaseFacadeImpl implements DatabaseFacade {
     private CatalogManager catalogManager;
     private IndexManager indexManager;
     private RecordManager recordManager;
     private FileHandler fileHandler;
 
-    public DefaultDatabaseFacade(CatalogManager catalogManager, IndexManager indexManager, RecordManager recordManager, FileHandler fileHandler) {
+    public DatabaseFacadeImpl(CatalogManager catalogManager, IndexManager indexManager, RecordManager recordManager, FileHandler fileHandler) {
         this.catalogManager = catalogManager;
         this.indexManager = indexManager;
         this.recordManager = recordManager;

@@ -6,8 +6,7 @@ import common.datastructure.Table;
 
 public class IndexFactory {
     public Index createIndex(String indexName, Table table, Column column) {
-        //TODO
-        throw new UnsupportedOperationException();
+        return new DefaultIndex(column.getColumnName(), indexName);
     }
 
     public String generatePrimaryKeyIndexName(String tableName) {

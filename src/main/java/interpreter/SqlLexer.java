@@ -2,7 +2,7 @@ package interpreter;
 
 
 import interpreter.antlrparser.MiniSqlLexer;
-import interpreter.error.LexErrorListener;
+import interpreter.error.SyntaxErrorListener;
 import org.antlr.v4.runtime.*;
 
 public class SqlLexer {
@@ -14,7 +14,7 @@ public class SqlLexer {
 
     public CommonTokenStream tokenize() {
         Lexer lexer = new MiniSqlLexer(CharStreams.fromString(instruction));
-        LexErrorListener lexListener = new LexErrorListener();
+        SyntaxErrorListener lexListener = new SyntaxErrorListener();
         lexer.removeErrorListener(ConsoleErrorListener.INSTANCE);
         lexer.addErrorListener(lexListener);
         return new CommonTokenStream(lexer);

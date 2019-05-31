@@ -3,15 +3,16 @@ package main;
 import file.buffer.DefaultBufferManager;
 import interpreter.DefaultInterpreter;
 import manager.catalog.DefaultCatalogManager;
+import manager.index.DefaultIndexManager;
 import manager.record.DefaultRecordManager;
-import middlelayer.DefaultDatabaseFacade;
+import middlelayer.DatabaseFacadeImpl;
 
 public class Main {
     public static void main(String[] args) {
         new DefaultInterpreter(
-                new DefaultDatabaseFacade(
+                new DatabaseFacadeImpl(
                         new DefaultCatalogManager(),
-                        null,
+                        new DefaultIndexManager(),
                         new DefaultRecordManager(),
                         new DefaultBufferManager()
                 )

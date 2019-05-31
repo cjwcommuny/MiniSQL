@@ -38,7 +38,15 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
     }
 
     @Override
+    public ParseTreeVisitResult visitInstructionWrap(MiniSqlParser.InstructionWrapContext ctx) {
+        return visit(ctx.instruction());
+    }
+
+    @Override
     public InstructionVisitResult visitInstruction(MiniSqlParser.InstructionContext ctx) {
+        if (ctx.getChildCount() == 0) {
+            return new InstructionVisitResult(new LinkedList<>());
+        }
         return (InstructionVisitResult) visit(ctx.getChild(0));
     }
 
