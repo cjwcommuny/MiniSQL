@@ -4,10 +4,9 @@ import common.datastructure.MaxValue;
 import common.datastructure.MinValue;
 import common.datastructure.restriction.Range;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class BPlusTreeImpl implements BPlusTree {
     private Node root;
@@ -165,7 +164,7 @@ public class BPlusTreeImpl implements BPlusTree {
         tree.insert(52, 52);
         tree.insert(58, 58);
         tree.insert(61, 61);
-        tree.print();
+//        tree.print();
         return tree;
     }
 
@@ -195,16 +194,26 @@ public class BPlusTreeImpl implements BPlusTree {
     }
 
     private static void testRange(BPlusTreeImpl tree) {
-//        Node node1 = tree.findLeafNode(Range.getMaxValue());
-//        System.out.println(node1.printKeys());
-//        var node2 = tree.findLeafNode(Range.getMinValue());
-//        System.out.println(node2.printKeys());
         var list = tree.find(new Range(10, 20, true, true), null);
         System.out.println(list);
         list = tree.find(new Range(Range.getMinValue(), Range.getMaxValue(), true, true), null);
         System.out.println(list);
         list = tree.find(new Range(Range.getMinValue(), 17, true, false), null);
         System.out.println(list);
+        list = tree.find(new Range(Range.getMinValue(), Range.getMaxValue(), true, true), Arrays.asList(8,17,61,3));
+        System.out.println(list);
+
+        tree.delete(new Range(10, 20, true, true), null);
+        tree.print();
+        tree = testInsert();
+        tree.delete(new Range(Range.getMinValue(), Range.getMaxValue(), true, true), null);
+        tree.print();
+        tree = testInsert();
+        tree.delete(new Range(Range.getMinValue(), 17, true, false), null);
+        tree.print();
+        tree = testInsert();
+        tree.delete(new Range(Range.getMinValue(), Range.getMaxValue(), true, true), Arrays.asList(8,17,61,3));
+        tree.print();
     }
 
     private int getMinimumRank() {
@@ -227,17 +236,37 @@ public class BPlusTreeImpl implements BPlusTree {
 
     @Override
     public List<Integer> find(Range range, List<Object> notEqualValues) {
+        List<Integer> result = new LinkedList<>();
+        // function <=> (LeafNode leaf, Integer i) -> result.addAll(leaf.getIndexes((int) i))
+        Function<LeafNode, Consumer<Integer>> function
+                = (LeafNode leaf) -> (Integer i) -> result.addAll(leaf.getIndexes((int) i));
+        handleRangeOperation(range, notEqualValues, function);
+        return result;
+    }
+
+    @Override
+    public void delete(Range range, List<Object> notEqualValues) {
+//        //function <=> (LeafNode leaf, Integer i) -> deleteEntry(leaf, leaf.getKey((int) i))
+//        Function<LeafNode, Consumer<Integer>> function = (LeafNode leaf) -> (Integer i) -> deleteEntry(leaf, leaf.getKey((int) i));
+//        handleRangeOperation(range, notEqualValues, function);
+        var indexList = find(range, notEqualValues);
+        for (Integer i: indexList) {
+            delete(i);
+        }
+    }
+
+    private void handleRangeOperation(Range range, List<Object> notEqualValues, Function<LeafNode, Consumer<Integer>> function) {
         Set<Object> notEqualValuesSet
                 = new HashSet<>((notEqualValues == null) ? new LinkedList<>() : notEqualValues);
         LeafNode currentLeaf = findLeafNode(range.getLeftValue());
-        var result = new LinkedList<Integer>();
 
         //handle leftist leaf
         for (int i = 0; i < currentLeaf.recordsCount(); ++i) {
             var key = currentLeaf.getKey(i);
             if (range.inRange(key)) {
                 if (!notEqualValuesSet.contains(key)) {
-                    result.addAll(currentLeaf.getIndexes(i));
+                    function.apply(currentLeaf).accept(i);
+//                    result.addAll(currentLeaf.getIndexes(i));
                 }
             }
         }
@@ -250,7 +279,9 @@ public class BPlusTreeImpl implements BPlusTree {
                 var key = currentLeaf.getKey(i);
                 if (range.inRange(key)) {
                     if (!notEqualValuesSet.contains(key)) {
-                        result.addAll(currentLeaf.getIndexes(i));
+//                        intConsumer.accept(i);
+                        function.apply(currentLeaf).accept(i);
+//                        result.addAll(currentLeaf.getIndexes(i));
                     }
                 } else {
                     break whileLoop;
@@ -258,6 +289,5 @@ public class BPlusTreeImpl implements BPlusTree {
             }
             currentLeaf = currentLeaf.getNextLeaf();
         }
-        return result;
     }
 }

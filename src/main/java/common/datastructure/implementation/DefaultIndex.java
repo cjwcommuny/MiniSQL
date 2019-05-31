@@ -31,7 +31,12 @@ public class DefaultIndex implements Index {
     }
 
     @Override
-    public void delete(Object key, Restriction restriction) {
+    public void delete(Restriction restriction) {
+        restriction.generateInternalForm();
+        if (restriction.isEquationRestriction()) {
+            tree.delete(restriction.getEquationValue());
+        } else {
 
+        }
     }
 }

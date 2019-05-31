@@ -187,7 +187,7 @@ public class NonLeafNode implements Node {
     @Override
     public void deleteKeyAndCorrespondingPointer(Object key) {
         int index = searchSmallestLargerKeyIndex(key);
-        if (compareKeys(keys.get(index), key) == 0) {
+        if (!(index >= keysCount()) && compareKeys(keys.get(index), key) == 0) {
             children.remove(index + 1);
             keys.remove(index);
         } else {
