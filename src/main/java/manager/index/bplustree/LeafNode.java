@@ -18,6 +18,10 @@ class LeafNode implements Node {
 
     @Getter @Setter
     private Node parent;
+    @Getter @Setter
+    private LeafNode previousLeaf;
+    @Getter @Setter
+    private LeafNode nextLeaf;
 
     @Override
     public boolean isRoot() {
@@ -40,8 +44,14 @@ class LeafNode implements Node {
         }
     }
 
+//    public String printSelf() {
+//        return printKeys() + ", parent: " + ((parent == null) ? "" : parent.printKeys());
+//    }
+
     public String printSelf() {
-        return printKeys() + ", parent: " + ((parent == null) ? "" : parent.printKeys());
+        return printKeys()
+                + ", pre: " + ((previousLeaf == null) ? "" : previousLeaf.printKeys())
+                + ", next: " + ((nextLeaf == null) ? "" : nextLeaf.printKeys());
     }
 
     @Override
@@ -58,7 +68,9 @@ class LeafNode implements Node {
         }
     }
 
-
+    List<Integer> getIndexes(int i) {
+        return records.get(i);
+    }
 
     private int searchSmallestLargerKeyIndex(Object key) {
         int index = Collections.binarySearch(keys, key,
@@ -105,18 +117,17 @@ class LeafNode implements Node {
     @Override
     public Node split() {
         var nodeSplit = new LeafNode(null);
-        List<Object> keysSplit = new ArrayList<>();
-        var recordsSplit = new ArrayList<List<Integer>>();
         int left = keys.size() / 2;
         int right = keys.size();
-        for (int i = left; i < right; ++i) {
-            keysSplit.add(keys.get(i));
-            recordsSplit.add(records.get(i));
-        }
+        nodeSplit.getKeys().addAll(keys.subList(left, right));
+        nodeSplit.getRecords().addAll(records.subList(left, right));
+
         keys.subList(left, right).clear();
         records.subList(left, right).clear();
-        nodeSplit.setKeys(keysSplit);
-        nodeSplit.setRecords(recordsSplit);
+
+        nodeSplit.setNextLeaf(this.getNextLeaf());
+        nodeSplit.setPreviousLeaf(this);
+        this.setNextLeaf(nodeSplit);
         return nodeSplit;
     }
 
@@ -157,6 +168,10 @@ class LeafNode implements Node {
         LeafNode siblingLeaf = (LeafNode) sibling;
         records.addAll(siblingLeaf.getRecords());
         keys.addAll(siblingLeaf.getKeys());
+        this.setNextLeaf(siblingLeaf.getNextLeaf());
+        if (this.getNextLeaf() != null) {
+            this.getNextLeaf().setPreviousLeaf(this);
+        }
     }
 
     private List<Integer> getRecord(int i) {

@@ -2,8 +2,12 @@ package manager.index.bplustree;
 
 import common.datastructure.MaxValue;
 import common.datastructure.MinValue;
+import common.datastructure.restriction.Range;
 
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class BPlusTreeImpl implements BPlusTree {
     private Node root;
@@ -143,11 +147,12 @@ public class BPlusTreeImpl implements BPlusTree {
 
     public static void main(String[] args) {
         var tree = testInsert();
-        testDelete(tree);
+        testRange(tree);
+//        testDelete(tree);
     }
 
-    private static BPlusTree testInsert() {
-        BPlusTree tree  = new BPlusTreeImpl(3);
+    private static BPlusTreeImpl testInsert() {
+        var tree  = new BPlusTreeImpl(3);
         tree.insert(8, 8);
         tree.insert(11, 11);
         tree.insert(12, 12);
@@ -160,7 +165,7 @@ public class BPlusTreeImpl implements BPlusTree {
         tree.insert(52, 52);
         tree.insert(58, 58);
         tree.insert(61, 61);
-//        tree.print();
+        tree.print();
         return tree;
     }
 
@@ -169,7 +174,7 @@ public class BPlusTreeImpl implements BPlusTree {
         tree.delete(22);
 //        tree.print();
         tree.delete(16);
-//        tree.print();
+        tree.print();
         tree.delete(11);
         tree.delete(8);
 //        tree.print();
@@ -189,6 +194,19 @@ public class BPlusTreeImpl implements BPlusTree {
         tree.print();
     }
 
+    private static void testRange(BPlusTreeImpl tree) {
+//        Node node1 = tree.findLeafNode(Range.getMaxValue());
+//        System.out.println(node1.printKeys());
+//        var node2 = tree.findLeafNode(Range.getMinValue());
+//        System.out.println(node2.printKeys());
+        var list = tree.find(new Range(10, 20, true, true), null);
+        System.out.println(list);
+        list = tree.find(new Range(Range.getMinValue(), Range.getMaxValue(), true, true), null);
+        System.out.println(list);
+        list = tree.find(new Range(Range.getMinValue(), 17, true, false), null);
+        System.out.println(list);
+    }
+
     private int getMinimumRank() {
         return (rank - 1) / 2 + 1;
     }
@@ -205,5 +223,41 @@ public class BPlusTreeImpl implements BPlusTree {
             return -1;
         }
         return ((Comparable) key1).compareTo(key2);
+    }
+
+    @Override
+    public List<Integer> find(Range range, List<Object> notEqualValues) {
+        Set<Object> notEqualValuesSet
+                = new HashSet<>((notEqualValues == null) ? new LinkedList<>() : notEqualValues);
+        LeafNode currentLeaf = findLeafNode(range.getLeftValue());
+        var result = new LinkedList<Integer>();
+
+        //handle leftist leaf
+        for (int i = 0; i < currentLeaf.recordsCount(); ++i) {
+            var key = currentLeaf.getKey(i);
+            if (range.inRange(key)) {
+                if (!notEqualValuesSet.contains(key)) {
+                    result.addAll(currentLeaf.getIndexes(i));
+                }
+            }
+        }
+        currentLeaf = currentLeaf.getNextLeaf();
+
+        //handle other leaf
+        whileLoop:
+        while (currentLeaf != null) {
+            for (int i = 0; i < currentLeaf.recordsCount(); ++i) {
+                var key = currentLeaf.getKey(i);
+                if (range.inRange(key)) {
+                    if (!notEqualValuesSet.contains(key)) {
+                        result.addAll(currentLeaf.getIndexes(i));
+                    }
+                } else {
+                    break whileLoop;
+                }
+            }
+            currentLeaf = currentLeaf.getNextLeaf();
+        }
+        return result;
     }
 }

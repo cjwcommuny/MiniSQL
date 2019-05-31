@@ -102,14 +102,15 @@ public class DefaultRecordManager implements RecordManager {
     }
 
     private void indexesDeleteTuple(Table table, List<Tuple> tuples) {
-        for (Tuple tuple: tuples) {
-            for (int i = 0; i < tuple.getSize(); ++i) {
-                String columnName = table.getColumnName(i);
-                //TODO: 可并发修改
-                Index index = table.getIndex(columnName);
-                index.delete(tuple.getValue(i));
-            }
-        }
+        throw new UnsupportedOperationException();
+//        for (Tuple tuple: tuples) {
+//            for (int i = 0; i < tuple.getSize(); ++i) {
+//                String columnName = table.getColumnName(i);
+//                //TODO: 可并发修改
+//                Index index = table.getIndex(columnName);
+//                index.delete(tuple.getValue(i)); //TODO
+//            }
+//        }
     }
 
     @Override

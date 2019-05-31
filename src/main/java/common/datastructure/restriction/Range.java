@@ -7,7 +7,7 @@ import lombok.Data;
 import static manager.index.bplustree.BPlusTreeImpl.compareKeys;
 
 @Data
-class Range {
+public class Range {
     private Object leftValue;
     private Object rightValue;
     private boolean leftOpen;
@@ -41,15 +41,15 @@ class Range {
         return range;
     }
 
-    static Object getMaxValue() {
+    public static Object getMaxValue() {
         return new MaxValue();
     }
 
-    static Object getMinValue() {
+    public static Object getMinValue() {
         return new MinValue();
     }
 
-    Range(Object leftValue, Object rightValue, boolean leftOpen, boolean rightOpen) {
+    public Range(Object leftValue, Object rightValue, boolean leftOpen, boolean rightOpen) {
         this.leftValue = leftValue;
         this.rightValue = rightValue;
         this.leftOpen = leftOpen;
@@ -57,4 +57,19 @@ class Range {
     }
 
     private Range() {}
+
+    public boolean inRange(Object value) {
+        boolean result;
+        if (leftOpen) {
+            result = compareKeys(leftValue, value) < 0;
+        } else {
+            result = compareKeys(leftValue, value) <= 0;
+        }
+        if (rightOpen) {
+            result = result && compareKeys(value, rightValue) < 0;
+        } else {
+            result = result && compareKeys(value, rightValue) <= 0;
+        }
+        return result;
+    }
 }
