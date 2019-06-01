@@ -72,4 +72,8 @@ public class Range {
         }
         return result;
     }
+
+    public static Range generateTotalRange() {
+        return new Range(Range.getMinValue(), Range.getMaxValue(), true, true);
+    }
 }

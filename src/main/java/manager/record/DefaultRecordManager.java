@@ -2,6 +2,7 @@ package manager.record;
 
 import common.datastructure.*;
 import common.datastructure.implementation.TupleFactory;
+import common.datastructure.restriction.Range;
 import common.datastructure.restriction.Restriction;
 import common.info.*;
 import common.type.Type;
@@ -70,7 +71,7 @@ public class DefaultRecordManager implements RecordManager {
         var noIndexRestrictions = searchByIndex(restrictions, table, offsetsIntersection);
         var tuples = getTuplesFromFile(offsetsIntersection, table);
         OUT_offsets.addAll(offsetsIntersection);
-        filterTuplesAndOffsetsByRestrictions(OUT_offsets, tuples, noIndexRestrictions);
+        filterTuplesAndOffsetsByRestrictions(OUT_offsets, tuples, noIndexRestrictions, table);
         return tuples;
     }
 
@@ -83,11 +84,24 @@ public class DefaultRecordManager implements RecordManager {
 
     private void filterTuplesAndOffsetsByRestrictions(List<Integer> offsets,
                                                       List<Tuple> tuples,
-                                                      List<Restriction> restrictions) {
-        for (var restriction: restrictions) {
-
+                                                      List<Restriction> restrictions,
+                                                      Table table) {
+        for (int i = tuples.size() - 1; i > 0; --i) {
+            var tuple = tuples.get(i);
+            boolean satisfyRestrictions = true;
+            for (var restriction: restrictions) {
+                var columnName = restriction.getColumnName();
+                var key = tuple.getValue(table.getColumnIndex(columnName));
+                if (!restriction.satisfy(key)) {
+                    satisfyRestrictions = false;
+                    break;
+                }
+            }
+            if (!satisfyRestrictions) {
+                offsets.remove(i);
+                tuples.remove(i);
+            }
         }
-        throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
@@ -110,9 +124,9 @@ public class DefaultRecordManager implements RecordManager {
         }
     }
 
-    private List<Restriction> searchByIndex(List<Restriction> originalrRestrictions, Table table , Set<Integer> OUT_offsetsIntersection) {
+    private List<Restriction> searchByIndex(List<Restriction> originalRestrictions, Table table , Set<Integer> OUT_offsetsIntersection) {
         List<Restriction> noIndexRestrictions = new LinkedList<>();
-        for (Restriction restriction: originalrRestrictions) {
+        for (Restriction restriction: originalRestrictions) {
             String columnName = restriction.getColumnName();
             Index index = table.getIndex(columnName);
             if (index == null) {
@@ -120,9 +134,13 @@ public class DefaultRecordManager implements RecordManager {
                 noIndexRestrictions.add(restriction);
             } else {
                 //TODO: 当table很大时可采用并发查找
-                List<Integer> offsets = index.getTupleIndex(restriction);
+                List<Integer> offsets = index.getTuplesIndex(restriction);
                 OUT_offsetsIntersection.addAll(offsets);
             }
+        }
+        if (noIndexRestrictions.size() == originalRestrictions.size()) {
+            //not exist index restriction
+            OUT_offsetsIntersection.addAll(table.getPrimaryIndex().getTuplesIndex(Range.generateTotalRange()));
         }
         return noIndexRestrictions;
     }
@@ -147,7 +165,7 @@ public class DefaultRecordManager implements RecordManager {
     private List<Tuple> getTuplesFromFile(Collection<Integer> offsets, Table table) {
         //TODO: buffer
         byte[] records = fileHandler.readTuples(table.getTableName());
-        List<Tuple> tuples = new LinkedList<>();
+        List<Tuple> tuples = new ArrayList<>();
         for (int offset: offsets) {
             tuples.add(table.bytesToTuple(records, offset));
         }

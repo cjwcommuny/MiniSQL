@@ -40,7 +40,7 @@ public class DefaultIndexManager implements IndexManager {
         for (var restriction: restrictions) {
             String columnName = restriction.getColumnName();
             Index index = table.getIndex(columnName);
-            result.addAll(index.getTupleIndex(restriction));
+            result.addAll(index.getTuplesIndex(restriction));
         }
         return result;
     }

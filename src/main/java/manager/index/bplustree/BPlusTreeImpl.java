@@ -237,7 +237,6 @@ public class BPlusTreeImpl implements BPlusTree {
     @Override
     public List<Integer> find(Range range, List<Object> notEqualValues) {
         List<Integer> result = new LinkedList<>();
-        // function <=> (LeafNode leaf, Integer i) -> result.addAll(leaf.getIndexes((int) i))
         Function<LeafNode, Consumer<Integer>> function
                 = (LeafNode leaf) -> (Integer i) -> result.addAll(leaf.getIndexes((int) i));
         handleRangeOperation(range, notEqualValues, function);
@@ -246,9 +245,6 @@ public class BPlusTreeImpl implements BPlusTree {
 
     @Override
     public void delete(Range range, List<Object> notEqualValues) {
-//        //function <=> (LeafNode leaf, Integer i) -> deleteEntry(leaf, leaf.getKey((int) i))
-//        Function<LeafNode, Consumer<Integer>> function = (LeafNode leaf) -> (Integer i) -> deleteEntry(leaf, leaf.getKey((int) i));
-//        handleRangeOperation(range, notEqualValues, function);
         var indexList = find(range, notEqualValues);
         for (Integer i: indexList) {
             delete(i);

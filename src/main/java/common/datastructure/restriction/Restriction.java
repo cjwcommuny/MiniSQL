@@ -6,6 +6,8 @@ import lombok.Getter;
 import java.util.LinkedList;
 import java.util.List;
 
+import static manager.index.bplustree.BPlusTreeImpl.compareKeys;
+
 @Getter
 public class Restriction {
     private String columnName;
@@ -16,6 +18,7 @@ public class Restriction {
     private Range range = new Range(Range.getMinValue(),
             Range.getMaxValue(), true, true);
     private boolean noRestriction;
+    private boolean hasGenerateInternalFrom;
 
     public Restriction(String columnName) {
         this.columnName = columnName;
@@ -67,6 +70,23 @@ public class Restriction {
                             false, true));
                     break;
             }
+        }
+        hasGenerateInternalFrom = true;
+    }
+
+    public boolean satisfy(Object key) {
+        if (!hasGenerateInternalFrom) {
+            generateInternalForm();
+        }
+        if (isEquationRestriction()) {
+            return compareKeys(key, getEquationValue()) == 0;
+        } else {
+            for (var notEqualValue: notEqualValues) {
+                if (compareKeys(key, notEqualValue) == 0) {
+                    return false;
+                }
+            }
+            return range.inRange(key);
         }
     }
 }

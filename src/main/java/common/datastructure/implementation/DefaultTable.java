@@ -22,6 +22,7 @@ import java.util.*;
 
 class DefaultTable implements Table  {
     private TupleFactory tupleFactory = new TupleFactory();
+    private IndexFactory indexFactory = new IndexFactory();
     @Getter
     private Catalog catalog;
     private int tuplesCount = 0;
@@ -47,6 +48,7 @@ class DefaultTable implements Table  {
     @Override
     public void putIndex(Index index) {
         indexesMap.put(index.getColumnName(), index);
+        indexesNameMap.put(index.getIndexName(), index);
     }
 
     @Override
@@ -157,5 +159,10 @@ class DefaultTable implements Table  {
             offset += byteCount;
         }
         return tupleFactory.createTuple(data);
+    }
+
+    @Override
+    public Index getPrimaryIndex() {
+        return indexesNameMap.get(indexFactory.generatePrimaryKeyIndexName(getTableName()));
     }
 }

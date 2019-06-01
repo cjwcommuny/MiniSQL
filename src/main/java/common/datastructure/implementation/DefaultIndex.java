@@ -1,6 +1,7 @@
 package common.datastructure.implementation;
 
 import common.datastructure.Index;
+import common.datastructure.restriction.Range;
 import common.datastructure.restriction.Restriction;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,13 +23,18 @@ public class DefaultIndex implements Index {
     }
 
     @Override
-    public List<Integer> getTupleIndex(Restriction restriction) {
+    public List<Integer> getTuplesIndex(Restriction restriction) {
         restriction.generateInternalForm();
         if (restriction.isEquationRestriction()) {
             return tree.find(restriction.getEquationValue());
         } else {
             return tree.find(restriction.getRange(), restriction.getNotEqualValues());
         }
+    }
+
+    @Override
+    public List<Integer> getTuplesIndex(Range range) {
+        return tree.find(range, null);
     }
 
     @Override

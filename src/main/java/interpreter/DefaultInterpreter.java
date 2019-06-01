@@ -60,7 +60,7 @@ public class DefaultInterpreter implements Interpreter {
                     new ParseTreeInterpreter(this, database, printStream).visit(parseTree);
             var infos = ((InstructionVisitResult) parseTreeVisitResult).getInfos();
             for (Info info: infos) {
-                printStream.println(info.toString());
+                printStream.println(info.getFormatMessage());
             }
         } catch (ParseException e) {
             for (var info: e.getInfos()) {
