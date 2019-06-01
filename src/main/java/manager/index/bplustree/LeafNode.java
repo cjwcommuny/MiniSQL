@@ -44,10 +44,6 @@ class LeafNode implements Node {
         }
     }
 
-//    public String printSelf() {
-//        return printKeys() + ", parent: " + ((parent == null) ? "" : parent.printKeys());
-//    }
-
     public String printSelf() {
         return printKeys()
                 + ", pre: " + ((previousLeaf == null) ? "" : previousLeaf.printKeys())
@@ -225,5 +221,10 @@ class LeafNode implements Node {
     @Override
     public void setKey(int i, Object key) {
         keys.set(i, key);
+    }
+
+    public LeafNode(List<List<Integer>> records, List<Object> keys) {
+        this.records = records;
+        this.keys = keys;
     }
 }

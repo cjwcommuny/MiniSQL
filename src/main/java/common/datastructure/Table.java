@@ -38,4 +38,10 @@ public interface Table extends Serializable {
     Tuple bytesToTuple(byte[] bytes, int base);
 
     Index getPrimaryIndex();
+
+    boolean existIndex(String indexName);
+
+    Column getColumn(String columnName);
+
+    void deleteIndex(String indexName);
 }

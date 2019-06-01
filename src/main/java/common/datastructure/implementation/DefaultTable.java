@@ -31,7 +31,7 @@ class DefaultTable implements Table {
     @Getter
     private Map<String, Index> indexesMap = new HashMap<>();
 
-    //TODO: index name -> index
+    //index name -> index
     private Map<String, Index> indexesNameMap = new HashMap<>();
 
     //store index (not offset)
@@ -39,7 +39,7 @@ class DefaultTable implements Table {
 
     @Getter
     private int tupleSize;
-    @Getter //TODO
+    @Getter
     private int lastTuplePosition = 0;
 
     @Override
@@ -161,5 +161,22 @@ class DefaultTable implements Table {
     @Override
     public Index getPrimaryIndex() {
         return indexesNameMap.get(indexFactory.generatePrimaryKeyIndexName(getTableName()));
+    }
+
+    @Override
+    public boolean existIndex(String indexName) {
+        return indexesNameMap.containsKey(indexName);
+    }
+
+    @Override
+    public Column getColumn(String columnName) {
+        return getColumns().get(getColumnIndex(columnName));
+    }
+
+    @Override
+    public void deleteIndex(String indexName) {
+        Index index = indexesNameMap.get(indexName);
+        indexesMap.remove(index.getColumnName());
+        indexesNameMap.remove(indexName);
     }
 }

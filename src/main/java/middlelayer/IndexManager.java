@@ -13,4 +13,6 @@ public interface IndexManager {
 
     void deleteOffsets(List<Tuple> tuples, Table table);
     List<Info> createIndex(String indexName, String tableName, String columnName);
+
+    List<Info> deleteIndex(String indexName);
 }

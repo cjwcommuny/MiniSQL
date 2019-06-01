@@ -2,6 +2,7 @@ package manager.index.bplustree;
 
 import common.datastructure.MaxValue;
 import common.datastructure.MinValue;
+import common.datastructure.Pair;
 import common.datastructure.restriction.Range;
 
 import java.util.*;
@@ -286,4 +287,16 @@ public class BPlusTreeImpl implements BPlusTree {
             currentLeaf = currentLeaf.getNextLeaf();
         }
     }
+
+    /**Pair<Object, List<Integer>>: <key, offsets>
+     * */
+    public BPlusTreeImpl(int rank, List<Pair<Object, List<Integer>>> list) {
+        this.rank = rank;
+        //sort list by key
+        //TODO: for efficiency
+        throw new UnsupportedOperationException();
+
+    }
+
+//    private List<LeafNode>
 }

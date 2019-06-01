@@ -147,8 +147,10 @@ public class DefaultBufferManager implements FileHandler {
 
     @Override
     public byte[] readTuples(String tableName) {
-        //TODO: buffer?
         var randomAccessFile = filesMap.get(tableName);
+        if (randomAccessFile == null) {
+            return new byte[0];
+        }
         try {
             byte[] bytes = new byte[(int) randomAccessFile.length()]; //TODO: may not read the whole file!!
             randomAccessFile.seek(0);
@@ -165,7 +167,6 @@ public class DefaultBufferManager implements FileHandler {
         File tableFile = diskFileManager.createRecordFile(tableName);
         try {
             var file = new RandomAccessFile(tableFile, RANDOM_ACCESS_FILE_MODE);
-//            file.setLength(INIT_LENGTH_OF_FILE);
             filesMap.put(tableName, file);
         } catch (IOException e) {
             System.err.println(e.getMessage());

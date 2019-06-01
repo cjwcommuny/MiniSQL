@@ -46,8 +46,7 @@ public class DatabaseFacadeImpl implements DatabaseFacade {
 
     @Override
     public List<Info> deleteIndex(String indexName) {
-        System.out.println(indexName);
-        return new LinkedList<>();
+        return indexManager.deleteIndex(indexName);
     }
 
     @Override
