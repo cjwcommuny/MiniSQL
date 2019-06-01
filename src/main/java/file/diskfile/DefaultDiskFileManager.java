@@ -8,8 +8,10 @@ import file.buffer.DiskFileManager;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DefaultDiskFileManager implements DiskFileManager {
     private static final String DATABASE_DIRECTORY = "./db";
@@ -17,7 +19,8 @@ public class DefaultDiskFileManager implements DiskFileManager {
     private static final String CATALOG_RELATIVE_DIRECTORY = "catalogs";
     private static final String INDEX_RELATIVE_DIRECTORY = "indexes";
 
-    private static final String RECORD_FILE_POSTFIX = ".db";
+    private static final String RECORD_FILE_EXTENSION = "db";
+    private static final String RECORD_FILE_POSTFIX = "." + RECORD_FILE_EXTENSION;
     private static final String CATALOG_FILE_EXTENSION = "ser";
     private static final String CATALOG_FILE_POSTFIX = "." + CATALOG_FILE_EXTENSION;
 
@@ -42,8 +45,12 @@ public class DefaultDiskFileManager implements DiskFileManager {
     }
 
     @Override
-    public File[] getAllTableFiles() {
-        return Paths.get(DATABASE_DIRECTORY, CATALOG_RELATIVE_DIRECTORY).toFile().listFiles();
+    public List<File> getAllTableFiles() {
+        File[] files = Paths.get(DATABASE_DIRECTORY, CATALOG_RELATIVE_DIRECTORY).toFile().listFiles();
+        if (files == null) {
+            System.err.println("Get catalog file error");
+        }
+        return Arrays.asList(files).stream().filter((file) -> isCatalogFileName(file.getName())).collect(Collectors.toList());
     }
 
     @Override
@@ -64,15 +71,20 @@ public class DefaultDiskFileManager implements DiskFileManager {
         List<Pair<File, String>> result = new LinkedList<>();
         for (var file: files) {
             String fileName = file.getName();
-            if (isCatalogFileName(fileName)) {
+            if (isRecordFileName(fileName)) {
                 result.add(new Pair<>(file, extractTableName(fileName)));
             }
         }
         return result;
     }
 
+    private boolean isRecordFileName(String fileName) {
+        return RECORD_FILE_EXTENSION.equals(Files.getFileExtension(fileName));
+    }
+
+
     private boolean isCatalogFileName(String fileName) {
-        return "ser".equals(Files.getFileExtension(fileName));
+        return CATALOG_FILE_EXTENSION.equals(Files.getFileExtension(fileName));
     }
 
     private String extractTableName(String fileName) {

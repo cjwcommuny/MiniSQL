@@ -9,6 +9,7 @@ import common.type.Type;
 import error.MiniSqlAbortException;
 import error.StringLengthBeyondLimitException;
 import file.buffer.DefaultBufferManager;
+import lombok.Getter;
 import manager.FileHandler;
 import manager.TableManager;
 import manager.index.DefaultIndexManager;
@@ -23,6 +24,12 @@ public class DefaultRecordManager implements RecordManager {
     private IndexManager indexManager = DefaultIndexManager.getInstance();
 
     private TupleFactory tupleFactory = new TupleFactory();
+
+    @Getter
+    private static DefaultRecordManager instance = new DefaultRecordManager();
+
+    private DefaultRecordManager() {
+    }
 
     @Override
     public List<Info> insertTuple(String tableName, List<Object> values) {

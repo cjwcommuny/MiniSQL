@@ -6,6 +6,7 @@ import common.info.Info;
 import error.MiniSqlAbortException;
 import error.MiniSqlRuntimeException;
 import file.buffer.DefaultBufferManager;
+import lombok.Getter;
 import manager.FileHandler;
 import manager.TableManager;
 import middlelayer.CatalogManager;
@@ -19,6 +20,11 @@ import java.util.List;
 public class DefaultCatalogManager implements CatalogManager {
     private TableManager tableManager = TableManager.getInstance();
     private FileHandler fileHandler = DefaultBufferManager.getInstance();
+
+    @Getter
+    private static DefaultCatalogManager instance = new DefaultCatalogManager();
+
+    private DefaultCatalogManager() {}
 
     @Override
     public List<Info> createTable(String tableName, List<Column> columns, Column primaryColumn) {

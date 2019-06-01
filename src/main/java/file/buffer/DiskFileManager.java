@@ -10,6 +10,6 @@ public interface DiskFileManager {
     File createIndexFile(String indexName);
     File createTableCatalogFile(String tableName);
 
-    File[] getAllTableFiles();
+    List<File> getAllTableFiles();
     List<Pair<File, String>> getAllRecordFiles();
 }

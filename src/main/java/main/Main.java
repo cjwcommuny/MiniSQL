@@ -11,10 +11,10 @@ public class Main {
     public static void main(String[] args) {
         new DefaultInterpreter(
                 new DatabaseFacadeImpl(
-                        new DefaultCatalogManager(),
-                        new DefaultIndexManager(),
-                        new DefaultRecordManager(),
-                        new DefaultBufferManager()
+                        DefaultCatalogManager.getInstance(),
+                        DefaultIndexManager.getInstance(),
+                        DefaultRecordManager.getInstance(),
+                        DefaultBufferManager.getInstance()
                 )
         ).interpret();
     }

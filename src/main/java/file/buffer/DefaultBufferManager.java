@@ -33,6 +33,7 @@ public class DefaultBufferManager implements FileHandler {
     private static FileHandler instance = new DefaultBufferManager();
 
 //    private Map<String, Index> indexesMap
+    private DefaultBufferManager() {}
 
     @Override
     public List<Info> quit() {

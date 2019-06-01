@@ -19,6 +19,9 @@ public class DefaultIndexManager implements IndexManager {
 
     private FileHandler fileHandler = DefaultBufferManager.getInstance();
 
+    private DefaultIndexManager() {
+    }
+
     @Override
     public void updateIndexes(Tuple tuple, Table table, int offset) {
         for (var entry: table.getIndexesMap().entrySet()) {
