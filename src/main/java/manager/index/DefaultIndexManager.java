@@ -50,7 +50,9 @@ public class DefaultIndexManager implements IndexManager {
         for (var tuple: tuples) {
             for (int columnIndex = 0; columnIndex < tuple.getSize(); ++columnIndex) {
                 var index = table.getIndex(table.getColumnName(columnIndex));
-                index.delete(tuple.getValue(columnIndex));
+                if (index != null) {
+                    index.delete(tuple.getValue(columnIndex));
+                }
             }
         }
     }

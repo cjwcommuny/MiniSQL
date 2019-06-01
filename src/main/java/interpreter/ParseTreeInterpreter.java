@@ -57,7 +57,7 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
         var primaryKeyVisitResult = (PrimaryKeyVisitResult) visit(ctx.primaryKeyDefinition());
         String primaryKeyName = primaryKeyVisitResult.getPrimaryKeyName();
 
-        List<Column> columns = new LinkedList<>();
+        List<Column> columns = new LinkedList<>();//TODO: linkedlist
         Column primaryColumn = null;
         Set<String> columnNames = new HashSet<>();
         for (var columnDefinition: ctx.columnDefinition()) {
