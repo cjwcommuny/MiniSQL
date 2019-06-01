@@ -29,7 +29,7 @@ public class Restriction {
     }
 
     public boolean isEquationRestriction() {
-        return equationValue == null;
+        return equationValue != null;
     }
 
     public void generateInternalForm() {

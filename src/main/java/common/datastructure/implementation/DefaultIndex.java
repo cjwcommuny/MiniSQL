@@ -40,7 +40,7 @@ public class DefaultIndex implements Index {
     @Override
     public void update(Object key, int offset) {
         tree.insert(key, offset);
-        tree.print();
+//        tree.print();
     }
 
     @Override

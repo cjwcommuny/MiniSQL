@@ -121,6 +121,7 @@ public class DefaultBufferManager implements FileHandler {
         var randomAccessFile = filesMap.get(tableName);
         try {
             byte[] bytes = new byte[(int) randomAccessFile.length()]; //TODO: may not read the whole file!!
+            randomAccessFile.seek(0);
             randomAccessFile.read(bytes);
             return bytes;
         } catch (IOException e) {

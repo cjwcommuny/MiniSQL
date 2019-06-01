@@ -82,12 +82,12 @@ public class DefaultRecordManager implements RecordManager {
         }
     }
 
-    private void filterTuplesAndOffsetsByRestrictions(List<Integer> offsets,
-                                                      List<Tuple> tuples,
+    private void filterTuplesAndOffsetsByRestrictions(List<Integer> OUT_offsets,
+                                                      List<Tuple> OUT_tuples,
                                                       List<Restriction> restrictions,
                                                       Table table) {
-        for (int i = tuples.size() - 1; i > 0; --i) {
-            var tuple = tuples.get(i);
+        for (int i = OUT_tuples.size() - 1; i >= 0; --i) {
+            var tuple = OUT_tuples.get(i);
             boolean satisfyRestrictions = true;
             for (var restriction: restrictions) {
                 var columnName = restriction.getColumnName();
@@ -98,8 +98,8 @@ public class DefaultRecordManager implements RecordManager {
                 }
             }
             if (!satisfyRestrictions) {
-                offsets.remove(i);
-                tuples.remove(i);
+                OUT_offsets.remove(i);
+                OUT_tuples.remove(i);
             }
         }
     }

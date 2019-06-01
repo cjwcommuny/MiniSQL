@@ -4,12 +4,14 @@ import common.datastructure.Tuple;
 import common.type.CharNType;
 import common.type.Type;
 import error.MiniSqlRuntimeException;
+import lombok.ToString;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+@ToString
 public class DefaultTuple implements Tuple {
     private List<Object> data;
 
@@ -65,7 +67,14 @@ public class DefaultTuple implements Tuple {
     public String visualInfo() {
         StringBuilder sb = new StringBuilder();
         for (var value: data) {
-            sb.append(value);
+            if (value instanceof String) {
+                sb.append("'");
+                sb.append(value);
+                sb.append("'");
+            } else {
+                sb.append(value);
+            }
+            sb.append(", ");
         }
         return sb.toString();
     }

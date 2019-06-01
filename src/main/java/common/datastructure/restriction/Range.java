@@ -76,4 +76,15 @@ public class Range {
     public static Range generateTotalRange() {
         return new Range(Range.getMinValue(), Range.getMaxValue(), true, true);
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(leftOpen ? '(' : '[');
+        sb.append(leftValue);
+        sb.append(", ");
+        sb.append(rightValue);
+        sb.append(rightOpen ? ')' : ']');
+        return sb.toString();
+    }
 }

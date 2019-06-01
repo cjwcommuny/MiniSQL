@@ -146,7 +146,7 @@ class DefaultTable implements Table  {
         int offset = base;
         for (Type type: types) {
             int byteCount = type.getSize();
-            byte[] subArr = Arrays.copyOfRange(bytes, base, offset);
+            byte[] subArr = Arrays.copyOfRange(bytes, offset, offset + byteCount);
             if (type instanceof IntType) {
                 ByteBuffer byteBuffer = ByteBuffer.wrap(subArr);
                 data.add(byteBuffer.getInt());
