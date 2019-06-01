@@ -2,7 +2,9 @@ package common.datastructure;
 
 import common.type.Type;
 
-public interface Column {
+import java.io.Serializable;
+
+public interface Column extends Serializable {
     boolean isUnique();
     String getColumnName();
     Type getType();

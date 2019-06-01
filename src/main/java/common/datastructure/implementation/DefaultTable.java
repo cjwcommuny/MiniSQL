@@ -11,18 +11,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.naming.OperationNotSupportedException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OptionalDataException;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
-class DefaultTable implements Table  {
-    private TupleFactory tupleFactory = new TupleFactory();
-    private IndexFactory indexFactory = new IndexFactory();
+class DefaultTable implements Table {
+    private static TupleFactory tupleFactory = new TupleFactory();
+    private static IndexFactory indexFactory = new IndexFactory();
     @Getter
     private Catalog catalog;
     private int tuplesCount = 0;

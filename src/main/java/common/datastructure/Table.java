@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public interface Table {
+public interface Table extends Serializable {
     String getTableName();
 
     List<Column> getColumns();
