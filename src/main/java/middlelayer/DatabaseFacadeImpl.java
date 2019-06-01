@@ -21,6 +21,12 @@ public class DatabaseFacadeImpl implements DatabaseFacade {
         this.indexManager = indexManager;
         this.recordManager = recordManager;
         this.fileHandler = fileHandler;
+        init();
+    }
+
+    private void init() {
+        catalogManager.init();
+        fileHandler.init();
     }
 
     @Override
@@ -52,8 +58,8 @@ public class DatabaseFacadeImpl implements DatabaseFacade {
     @Override
     public List<Info> quit() {
         var catalogInfos = catalogManager.quit();
-        var fileHandlerInfos = fileHandler.quit();
-        catalogInfos.addAll(fileHandlerInfos);
+//        var fileHandlerInfos = fileHandler.quit();
+//        catalogInfos.addAll(fileHandlerInfos);
         return catalogInfos;
     }
 

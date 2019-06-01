@@ -206,6 +206,7 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
 
     @Override
     public ParseTreeVisitResult visitQuit(MiniSqlParser.QuitContext ctx) {
+        database.quit();
         throw new QuitException();
     }
 

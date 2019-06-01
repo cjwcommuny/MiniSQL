@@ -20,4 +20,6 @@ public interface FileHandler {
     void createTable(String tableName);
 
     long getTableTuplesTotalLength(String tableName);
+
+    void init();
 }

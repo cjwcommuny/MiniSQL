@@ -41,5 +41,9 @@ public class DefaultCatalogManager implements CatalogManager {
         return new LinkedList<>();
     }
 
-
+    @Override
+    public void init() {
+        var tables = fileHandler.readAllTableCatalogsFromFiles();
+        tableManager.addTables(tables);
+    }
 }

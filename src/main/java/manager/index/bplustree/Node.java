@@ -1,8 +1,9 @@
 package manager.index.bplustree;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface Node {
+public interface Node extends Serializable {
     void printSubTree(String prefix, boolean isTail);
     boolean isRoot();
     Node getParent();

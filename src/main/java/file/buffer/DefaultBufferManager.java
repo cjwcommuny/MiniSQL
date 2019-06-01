@@ -23,6 +23,7 @@ public class DefaultBufferManager implements FileHandler {
     private static DiskFileManager diskFileManager = new DefaultDiskFileManager();
 
     private Map<String, RandomAccessFile> filesMap = new HashMap<>();
+
     private static final String RANDOM_ACCESS_FILE_MODE = "rw";
     private static final int BLOCK_SIZE = 4096;
     private static final long FILE_EXTEND_SIZE = BLOCK_SIZE;
@@ -54,13 +55,16 @@ public class DefaultBufferManager implements FileHandler {
 
     @Override
     public void writeTableCatalogToFile(Table table) {
-        File tableFile = diskFileManager.createTableFile(table.getTableName());
-        try (var fileOutputStream = new FileOutputStream(tableFile);
-             var objectOutputStream = new ObjectOutputStream(fileOutputStream)
-        ) {
+        File tableFile = diskFileManager.createTableCatalogFile(table.getTableName());
+        try {
+            var fileOutputStream = new FileOutputStream(tableFile);
+            var objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(table);
+            objectOutputStream.close();
+            fileOutputStream.close();
         } catch (IOException e) {
             System.err.println("cannot serialize table catalog: " + table.getTableName());
+            System.err.println(e.getMessage());
             throw new MiniSqlRuntimeException();
         }
     }
@@ -157,7 +161,7 @@ public class DefaultBufferManager implements FileHandler {
 
     @Override
     public void createTable(String tableName) {
-        File tableFile = diskFileManager.createTableFile(tableName);
+        File tableFile = diskFileManager.createRecordFile(tableName);
         try {
             var file = new RandomAccessFile(tableFile, RANDOM_ACCESS_FILE_MODE);
 //            file.setLength(INIT_LENGTH_OF_FILE);
@@ -176,6 +180,20 @@ public class DefaultBufferManager implements FileHandler {
         }
         try {
             return file.length();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            throw new MiniSqlRuntimeException();
+        }
+    }
+
+    @Override
+    public void init() {
+        try {
+            for (var pair: diskFileManager.getAllRecordFiles()) {
+                String tableName = pair.getValue2();
+                File file = pair.getValue1();
+                filesMap.put(tableName, new RandomAccessFile(file, RANDOM_ACCESS_FILE_MODE));
+            }
         } catch (IOException e) {
             System.err.println(e.getMessage());
             throw new MiniSqlRuntimeException();

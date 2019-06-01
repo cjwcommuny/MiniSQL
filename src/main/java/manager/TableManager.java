@@ -52,4 +52,10 @@ public class TableManager {
     public Collection<Table> getAllTables() {
         return tableMap.values();
     }
+
+    public void addTables(Collection<Table> tables) {
+        for (var table: tables) {
+            tableMap.put(table.getTableName(), table);
+        }
+    }
 }
