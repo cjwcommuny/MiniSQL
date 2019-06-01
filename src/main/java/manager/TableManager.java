@@ -8,13 +8,10 @@ import common.info.TableExistError;
 import common.info.TableNotExistError;
 import lombok.Getter;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TableManager {
-    private TableFactory tableFactory = new TableFactory();
+    private static TableFactory tableFactory = new TableFactory();
 
     @Getter
     private static TableManager instance = new TableManager();
@@ -50,5 +47,9 @@ public class TableManager {
 
     public Table getTable(String tableName) {
         return tableMap.get(tableName);
+    }
+
+    public Collection<Table> getAllTables() {
+        return tableMap.values();
     }
 }

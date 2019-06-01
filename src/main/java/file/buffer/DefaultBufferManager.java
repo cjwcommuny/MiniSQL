@@ -1,5 +1,6 @@
 package file.buffer;
 
+import common.datastructure.Table;
 import common.datastructure.Tuple;
 import common.datastructure.implementation.TupleFactory;
 import common.info.Info;
@@ -12,15 +13,14 @@ import file.diskfile.DefaultDiskFileManager;
 import lombok.Getter;
 import manager.FileHandler;
 
-import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
 
 public class DefaultBufferManager implements FileHandler {
-    private TupleFactory tupleFactory = new TupleFactory();
-    private DiskFileManager diskFileManager = new DefaultDiskFileManager();
+    private static TupleFactory tupleFactory = new TupleFactory();
+    private static DiskFileManager diskFileManager = new DefaultDiskFileManager();
 
     private Map<String, RandomAccessFile> filesMap = new HashMap<>();
     private static final String RANDOM_ACCESS_FILE_MODE = "rw";
@@ -53,8 +53,16 @@ public class DefaultBufferManager implements FileHandler {
     }
 
     @Override
-    public void writeTableCatalogToFile(byte[] bytes, String tableName, int offset) {
-        throw new UnsupportedOperationException();
+    public void writeTableCatalogToFile(Table table) {
+        File tableFile = diskFileManager.createTableFile(table.getTableName());
+        try (var fileOutputStream = new FileOutputStream(tableFile);
+             var objectOutputStream = new ObjectOutputStream(fileOutputStream)
+        ) {
+            objectOutputStream.writeObject(table);
+        } catch (IOException e) {
+            System.err.println("cannot serialize table catalog: " + table.getTableName());
+            throw new MiniSqlRuntimeException();
+        }
     }
 
     @Override
@@ -106,9 +114,26 @@ public class DefaultBufferManager implements FileHandler {
     }
 
     @Override
-    public byte[] readTableCatalog(String tableName) {
-        throw new UnsupportedOperationException();
+    public Collection<Table> readAllTableCatalogsFromFiles() {
+        List<Table> tables = new LinkedList<>();
+        for (File file: diskFileManager.getAllTableFiles()) {
+            tables.add(readTableCatalog(file));
+        }
+        return tables;
     }
+
+    private Table readTableCatalog(File file) {
+        try (var fileInputStream = new FileInputStream(file);
+             var objectInputStream = new ObjectInputStream(fileInputStream)
+        ) {
+            return (Table) objectInputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Deserialize table catalog error");
+            System.err.println(e.getMessage());
+            throw new MiniSqlRuntimeException();
+        }
+    }
+
 
     @Override
     public byte[] readIndex(String indexName) {

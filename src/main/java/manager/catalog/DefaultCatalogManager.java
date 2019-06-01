@@ -1,12 +1,19 @@
 package manager.catalog;
 
 import common.datastructure.Column;
+import common.datastructure.Table;
 import common.info.Info;
+import error.MiniSqlAbortException;
+import error.MiniSqlRuntimeException;
 import file.buffer.DefaultBufferManager;
 import manager.FileHandler;
 import manager.TableManager;
 import middlelayer.CatalogManager;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.LinkedList;
 import java.util.List;
 
 public class DefaultCatalogManager implements CatalogManager {
@@ -27,7 +34,12 @@ public class DefaultCatalogManager implements CatalogManager {
 
     @Override
     public List<Info> quit() {
-        //TODO: save all catalog info to file
-        throw new UnsupportedOperationException();
+        for (Table table: tableManager.getAllTables()) {
+            //TODO: 并发
+            fileHandler.writeTableCatalogToFile(table);
+        }
+        return new LinkedList<>();
     }
+
+
 }
