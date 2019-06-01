@@ -4,6 +4,7 @@ import common.datastructure.Index;
 import common.datastructure.Table;
 import common.datastructure.Tuple;
 import common.datastructure.restriction.Restriction;
+import common.info.Info;
 import file.buffer.DefaultBufferManager;
 import lombok.Getter;
 import manager.FileHandler;
@@ -55,5 +56,10 @@ public class DefaultIndexManager implements IndexManager {
                 }
             }
         }
+    }
+
+    @Override
+    public List<Info> createIndex(String indexName, String tableName, String columnName) {
+        throw new UnsupportedOperationException();//TODO
     }
 }

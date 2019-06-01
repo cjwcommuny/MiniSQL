@@ -8,6 +8,7 @@ import interpreter.api.DatabaseFacade;
 import manager.FileHandler;
 
 import java.util.*;
+import java.util.concurrent.TransferQueue;
 
 public class DatabaseFacadeImpl implements DatabaseFacade {
     private CatalogManager catalogManager;
@@ -34,11 +35,7 @@ public class DatabaseFacadeImpl implements DatabaseFacade {
 
     @Override
     public List<Info> createIndex(String indexName, String tableName, String columnName) {
-//        System.out.println(indexName);
-//        System.out.println(tableName);
-//        System.out.println(columnName);
-//        return new LinkedList<>();
-        return null;
+        return indexManager.createIndex(indexName, tableName, columnName);
     }
 
     @Override

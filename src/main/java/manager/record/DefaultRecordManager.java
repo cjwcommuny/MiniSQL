@@ -6,6 +6,7 @@ import common.datastructure.restriction.Range;
 import common.datastructure.restriction.Restriction;
 import common.info.*;
 import common.type.Type;
+import error.MiniSqlAbortException;
 import error.StringLengthBeyondLimitException;
 import file.buffer.DefaultBufferManager;
 import manager.FileHandler;
@@ -58,15 +59,20 @@ public class DefaultRecordManager implements RecordManager {
             return infos;
         }
         List<Integer> offsetsFiltered = new ArrayList<>();
-        var tuples = getTuplesAndOffsets(table, restrictions, offsetsFiltered);
-        indexManager.deleteOffsets(tuples, table);
-        deleteTuplesFromFile(offsetsFiltered, table);
-        return infos;
+        try {
+            var tuples = getTuplesAndOffsets(table, restrictions, offsetsFiltered);
+            indexManager.deleteOffsets(tuples, table);
+            deleteTuplesFromFile(offsetsFiltered, table);
+            return infos;
+        } catch (MiniSqlAbortException e) {
+            infos.addAll(e.getInfos());
+            return infos;
+        }
     }
 
     private List<Tuple> getTuplesAndOffsets(Table table,
                                             List<Restriction> restrictions,
-                                            List<Integer> OUT_offsets) {
+                                            List<Integer> OUT_offsets) throws MiniSqlAbortException {
         Set<Integer> offsetsIntersection = new HashSet<>(); //offsets stored in index
         var noIndexRestrictions = searchByIndex(restrictions, table, offsetsIntersection);
         var tuples = getTuplesFromFile(offsetsIntersection, table);
@@ -113,21 +119,27 @@ public class DefaultRecordManager implements RecordManager {
             return infos;
         }
         List<Integer> offsetsFiltered = new ArrayList<>();
-        var tuples = getTuplesAndOffsets(table, restrictions, offsetsFiltered);
-        infos.add(new ResultInfo(table.getColumns(), tuples));
-        return infos;
-    }
-
-    private void updateTableWhenDelete(List<Integer> tupleIndexes, Table table) {
-        for (int i: tupleIndexes) {
-            table.deleteTuple(i);
+        try {
+            var tuples = getTuplesAndOffsets(table, restrictions, offsetsFiltered);
+            infos.add(new ResultInfo(table.getColumns(), tuples));
+            return infos;
+        } catch (MiniSqlAbortException e) {
+            infos.addAll(e.getInfos());
+            return infos;
         }
     }
 
-    private List<Restriction> searchByIndex(List<Restriction> originalRestrictions, Table table , Set<Integer> OUT_offsetsIntersection) {
+    private List<Restriction> searchByIndex(List<Restriction> originalRestrictions,
+                                            Table table ,
+                                            Set<Integer> OUT_offsetsIntersection) throws MiniSqlAbortException {
         List<Restriction> noIndexRestrictions = new LinkedList<>();
         for (Restriction restriction: originalRestrictions) {
             String columnName = restriction.getColumnName();
+            if (!table.existColumn(columnName)) {
+                throw new MiniSqlAbortException(Collections.singletonList(
+                        new ColumnNotExistError(table.getTableName(), columnName))
+                );
+            }
             Index index = table.getIndex(columnName);
             if (index == null) {
                 //not exist index in this column
@@ -143,23 +155,6 @@ public class DefaultRecordManager implements RecordManager {
             OUT_offsetsIntersection.addAll(table.getPrimaryIndex().getTuplesIndex(Range.generateTotalRange()));
         }
         return noIndexRestrictions;
-    }
-
-    private List<Tuple> searchLinearly(List<Integer> offsets, List<Restriction> restrictions, List<Integer> OUT_indexesSatisfyRestrictions) {
-        //TODO
-        throw new UnsupportedOperationException();
-    }
-
-    private void indexesDeleteTuple(Table table, List<Tuple> tuples) {
-        throw new UnsupportedOperationException();
-//        for (Tuple tuple: tuples) {
-//            for (int i = 0; i < tuple.getSize(); ++i) {
-//                String columnName = table.getColumnName(i);
-//                //TODO: 可并发修改
-//                Index index = table.getIndex(columnName);
-//                index.delete(tuple.getValue(i)); //TODO
-//            }
-//        }
     }
 
     private List<Tuple> getTuplesFromFile(Collection<Integer> offsets, Table table) {

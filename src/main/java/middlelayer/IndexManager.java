@@ -3,6 +3,7 @@ package middlelayer;
 import common.datastructure.Table;
 import common.datastructure.Tuple;
 import common.datastructure.restriction.Restriction;
+import common.info.Info;
 
 import java.util.List;
 
@@ -11,4 +12,5 @@ public interface IndexManager {
     List<Integer> getOffsets(List<Restriction> restrictions, Table table);
 
     void deleteOffsets(List<Tuple> tuples, Table table);
+    List<Info> createIndex(String indexName, String tableName, String columnName);
 }

@@ -21,10 +21,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResult> {
     private DefaultInterpreter interpreter;
@@ -57,7 +54,7 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
         var primaryKeyVisitResult = (PrimaryKeyVisitResult) visit(ctx.primaryKeyDefinition());
         String primaryKeyName = primaryKeyVisitResult.getPrimaryKeyName();
 
-        List<Column> columns = new LinkedList<>();//TODO: linkedlist
+        List<Column> columns = new ArrayList<>();//TODO: linkedlist
         Column primaryColumn = null;
         Set<String> columnNames = new HashSet<>();
         for (var columnDefinition: ctx.columnDefinition()) {
