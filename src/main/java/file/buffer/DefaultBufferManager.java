@@ -1,5 +1,6 @@
 package file.buffer;
 
+import common.datastructure.ByteCarrier;
 import common.datastructure.Table;
 import common.datastructure.Tuple;
 import common.datastructure.implementation.TupleFactory;
@@ -70,10 +71,10 @@ public class DefaultBufferManager implements FileHandler {
         }
     }
 
-    @Override
-    public void writeIndexToFile(byte[] bytes, String indexName, String tableName) {
-        throw new UnsupportedOperationException();
-    }
+//    @Override
+//    public void writeIndexToFile(byte[] bytes, String indexName, String tableName) {
+//        throw new UnsupportedOperationException();
+//    }
 
     @Override
     public void writeTupleToFile(byte[] bytes, String tableName, int offset) {
@@ -140,13 +141,13 @@ public class DefaultBufferManager implements FileHandler {
     }
 
 
-    @Override
-    public byte[] readIndex(String indexName) {
-        throw new UnsupportedOperationException();
-    }
+//    @Override
+//    public byte[] readIndex(String indexName) {
+//        throw new UnsupportedOperationException();
+//    }
 
     @Override
-    public byte[] readTuples(String tableName) {
+    public byte[] readTupleBytes(String tableName) {
         var randomAccessFile = filesMap.get(tableName);
         if (randomAccessFile == null) {
             return new byte[0];
@@ -163,6 +164,15 @@ public class DefaultBufferManager implements FileHandler {
     }
 
     @Override
+    public ByteCarrier readTupleBytes(String tableName, int offset, int length) {
+        var randomAccessFile = filesMap.get(tableName);
+        if (randomAccessFile == null) {
+            System.err.println("random access file not exist");
+        }
+        
+    }
+
+    @Override
     public void createTable(String tableName) {
         File tableFile = diskFileManager.createRecordFile(tableName);
         try {
@@ -174,19 +184,19 @@ public class DefaultBufferManager implements FileHandler {
         }
     }
 
-    @Override
-    public long getTableTuplesTotalLength(String tableName) {
-        var file = filesMap.get(tableName);
-        if (file == null) {
-            throw new MiniSqlRuntimeException();
-        }
-        try {
-            return file.length();
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            throw new MiniSqlRuntimeException();
-        }
-    }
+//    @Override
+//    public long getTableTuplesTotalLength(String tableName) {
+//        var file = filesMap.get(tableName);
+//        if (file == null) {
+//            throw new MiniSqlRuntimeException();
+//        }
+//        try {
+//            return file.length();
+//        } catch (IOException e) {
+//            System.err.println(e.getMessage());
+//            throw new MiniSqlRuntimeException();
+//        }
+//    }
 
     @Override
     public void init() {

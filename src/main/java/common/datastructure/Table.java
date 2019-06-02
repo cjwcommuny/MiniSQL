@@ -1,6 +1,7 @@
 package common.datastructure;
 
 import common.type.Type;
+import manager.FileHandler;
 
 import java.io.Serializable;
 import java.util.List;
@@ -35,7 +36,7 @@ public interface Table extends Serializable {
 
     Index getIndex(String columnName);
 
-    Tuple bytesToTuple(byte[] bytes, int base);
+//    Tuple bytesToTuple(String tableName, FileHandler fileHandler, int base);
 
     Index getPrimaryIndex();
 

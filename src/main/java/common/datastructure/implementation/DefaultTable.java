@@ -137,26 +137,26 @@ class DefaultTable implements Table {
         return catalog.getColumns().get(i).getColumnName();
     }
 
-    @Override
-    public Tuple bytesToTuple(byte[] bytes, int base) {
-        List<Object> data = new ArrayList<>();
-        int offset = base;
-        for (Type type: types) {
-            int byteCount = type.getSize();
-            byte[] subArr = Arrays.copyOfRange(bytes, offset, offset + byteCount);
-            if (type instanceof IntType) {
-                ByteBuffer byteBuffer = ByteBuffer.wrap(subArr);
-                data.add(byteBuffer.getInt());
-            } else if (type instanceof FloatType) {
-                ByteBuffer byteBuffer = ByteBuffer.wrap(subArr);
-                data.add(byteBuffer.getDouble());
-            } else if (type instanceof CharNType) {
-                data.add(new String(subArr, StandardCharsets.UTF_16).replace("\u0000", ""));
-            }
-            offset += byteCount;
-        }
-        return tupleFactory.createTuple(data);
-    }
+//    @Override
+//    public Tuple bytesToTuple(byte[] bytes, int base) {
+//        List<Object> data = new ArrayList<>();
+//        int offset = base;
+//        for (Type type: types) {
+//            int byteCount = type.getSize();
+//            byte[] subArr = Arrays.copyOfRange(bytes, offset, offset + byteCount);
+//            if (type instanceof IntType) {
+//                ByteBuffer byteBuffer = ByteBuffer.wrap(subArr);
+//                data.add(byteBuffer.getInt());
+//            } else if (type instanceof FloatType) {
+//                ByteBuffer byteBuffer = ByteBuffer.wrap(subArr);
+//                data.add(byteBuffer.getDouble());
+//            } else if (type instanceof CharNType) {
+//                data.add(new String(subArr, StandardCharsets.UTF_16).replace("\u0000", ""));
+//            }
+//            offset += byteCount;
+//        }
+//        return tupleFactory.createTuple(data);
+//    }
 
     @Override
     public Index getPrimaryIndex() {

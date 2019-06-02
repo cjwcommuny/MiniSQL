@@ -5,6 +5,9 @@ import common.datastructure.implementation.TupleFactory;
 import common.datastructure.restriction.Range;
 import common.datastructure.restriction.Restriction;
 import common.info.*;
+import common.type.CharNType;
+import common.type.FloatType;
+import common.type.IntType;
 import common.type.Type;
 import error.MiniSqlAbortException;
 import error.StringLengthBeyondLimitException;
@@ -16,6 +19,9 @@ import manager.index.DefaultIndexManager;
 import middlelayer.IndexManager;
 import middlelayer.RecordManager;
 
+import java.io.File;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class DefaultRecordManager implements RecordManager {
@@ -165,13 +171,31 @@ public class DefaultRecordManager implements RecordManager {
     }
 
     private List<Tuple> getTuplesFromFile(Collection<Integer> offsets, Table table) {
-        //TODO: buffer
-        byte[] records = fileHandler.readTuples(table.getTableName());
+        //TODO: 并发
         List<Tuple> tuples = new ArrayList<>();
         for (int offset: offsets) {
-            tuples.add(table.bytesToTuple(records, offset));
+            tuples.add(bytesToTuple(table.getTableName(), table.getTypes(), offset));
         }
         return tuples;
+    }
+
+    private Tuple bytesToTuple(String tableName, List<Type> types, int base) {
+        List<Object> data = new ArrayList<>();
+        int offset = base;
+        for (Type type: types) {
+            int bytesCount = type.getSize();
+            ByteCarrier byteCarrier = fileHandler.readTupleBytes(tableName, offset, bytesCount);
+            if (type instanceof IntType) {
+                data.add(byteCarrier.getInt(offset));
+            } else if (type instanceof FloatType) {
+                data.add(byteCarrier.getDouble(offset));
+            } else if (type instanceof CharNType) {
+                data.add(byteCarrier.getString(offset, bytesCount, StandardCharsets.UTF_16)
+                        .replace("\u0000", ""));
+            }
+            offset += bytesCount;
+        }
+        return tupleFactory.createTuple(data);
     }
 
     private boolean checkTypesMatch(List<Object> values, List<Type> types, List<Info> outInfos) {
