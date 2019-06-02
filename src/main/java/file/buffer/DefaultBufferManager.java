@@ -15,6 +15,8 @@ import lombok.Getter;
 import manager.FileHandler;
 
 import java.io.*;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
@@ -169,7 +171,12 @@ public class DefaultBufferManager implements FileHandler {
         if (randomAccessFile == null) {
             System.err.println("random access file not exist");
         }
-        
+        FileChannel channel = randomAccessFile.getChannel();
+        try {
+            MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_WRITE, 0, channel.size());
+        } catch (IOException e) {
+            //TODO
+        }
     }
 
     @Override

@@ -16,7 +16,7 @@ class Main {
         System.out.println(buffer1.capacity());
         buffer1.putChar('v');
         fileChannel.write(buffer1);
-        System.out.println(buffer1.capacity());
+        System.out.println(file.length());
     }
 
     // private static void test2() {
