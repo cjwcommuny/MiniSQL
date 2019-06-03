@@ -5,6 +5,9 @@ import common.datastructure.MinValue;
 import common.datastructure.Pair;
 import common.datastructure.restriction.Range;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -317,5 +320,13 @@ public class BPlusTreeImpl implements BPlusTree {
             currentNode = ((NonLeafNode) currentNode).getChild(0);
         }
         return depth;
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+
+    }
+
+    private void writeObject(ObjectOutputStream outputStream) throws IOException {
+
     }
 }

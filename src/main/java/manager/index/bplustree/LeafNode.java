@@ -4,6 +4,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.*;
 
 import static manager.index.bplustree.BPlusTreeImpl.compareKeys;
@@ -231,4 +234,45 @@ class LeafNode implements Node {
     boolean containsKey(Object key) {
         return keys.contains(key);
     }
+
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+        int rank = inputStream.readInt();
+        records = new ArrayList<>(rank);
+        for (int i = 0; i < rank; ++i) {
+            var record = new LinkedList<Integer>();
+            int recordCount = inputStream.readInt();
+            for (int j = 0; j < recordCount; ++j) {
+                record.add(inputStream.readInt());
+            }
+            records.add(record);
+        }
+
+        keys = new ArrayList<>(rank);
+        for (int i = 0; i < rank; ++i) {
+            keys.add(inputStream.readObject());
+        }
+    }
+
+    private void writeObject(ObjectOutputStream outputStream) throws IOException {
+        outputStream.writeInt(records.size());
+        for (var record: records) {
+            outputStream.writeInt(record.size());
+            for (int value: record) {
+                outputStream.writeInt(value);
+            }
+        }
+
+        for (var key: keys) {
+            outputStream.writeObject(keys);
+        }
+    }
 }
+
+/*
+* serialization format:
+*
+* rankCount: int
+* (recordCount: int, (record: int)*)*
+* (key: Object)*
+*
+* */
