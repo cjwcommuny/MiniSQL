@@ -11,8 +11,6 @@ class DefaultCharNType implements CharNType {
     private static int CHAR_SIZE = 2;
     @Getter
     private int length;
-    @Getter
-    private Charset charset = StandardCharsets.UTF_16;
 
     DefaultCharNType(int length) {
         this.length = length;

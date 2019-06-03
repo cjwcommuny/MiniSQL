@@ -212,6 +212,8 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
 
     @Override
     public ParseTreeVisitResult visitExecuteFile(MiniSqlParser.ExecuteFileContext ctx) {
+        long startTime = System.nanoTime(); //TODO: for test
+
         String fileName = ((StringLiteralVisitResult) visit(ctx.STRING_LITERAL())).getValue();
         try {
             var fileInputStream = new FileInputStream(fileName);
@@ -221,6 +223,12 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
             var exception = new ParseException();
             exception.addInfo(new FileNotFoundError(fileName));
             throw exception;
+        } finally {
+            //TODO: for test
+            long endTime = System.nanoTime();
+            long totalTime = endTime - startTime;
+            double seconds = (double)totalTime / 1_000_000_000.0;
+            System.out.println("exec file time: " + seconds + "s");
         }
     }
 

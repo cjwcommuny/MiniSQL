@@ -96,7 +96,7 @@ public class DefaultIndexManager implements IndexManager {
         Index index = indexFactory.createIndex(indexName, table, table.getColumn(columnName));
         table.addIndex(index, columnName, indexName);
         buildIndexFromRecords(index, table);
-        throw new UnsupportedOperationException();//TODO
+        return infos;
     }
 
     private void buildIndexFromRecords(Index index, Table table) {
@@ -110,7 +110,7 @@ public class DefaultIndexManager implements IndexManager {
         int offset = getOffsetWithinTuple(types, columnIndex);
 
 
-        for (int tupleIndex = 0; tupleIndex < tupleSize; ++tupleSize) {
+        for (int tupleIndex = 0; tupleIndex < tuplesCount; ++tupleIndex) {
             int base = tupleIndex * tupleSize;
             ByteCarrier byteCarrier = fileHandler.readTupleBytes(tableName,
                     base + offset, correspondingTypeSize);

@@ -57,4 +57,7 @@ execfile 'C:/hahaha/dsjf333kll_77.txt';
 execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/file.sql';
 execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/select.sql';
 execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/insert.sql';
+execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/100_000insert.sql';
 quit;
+
+//B+ tree depth: log_{M/2}N, M: rank, N item number

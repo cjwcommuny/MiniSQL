@@ -31,7 +31,7 @@ public class DefaultBufferManager implements FileHandler {
     private List<FileChannel> channels = new LinkedList<>();
 
     private static final String RANDOM_ACCESS_FILE_MODE = "rw";
-    private static final int BYTE_BUFFER_SIZE = 4096;
+    private static final int BYTE_BUFFER_SIZE = Integer.MAX_VALUE;
 //    private static final int BLOCK_SIZE = 4096;
 //    private static final long FILE_EXTEND_SIZE = BLOCK_SIZE;
 //    private static final long INIT_LENGTH_OF_FILE = BLOCK_SIZE;

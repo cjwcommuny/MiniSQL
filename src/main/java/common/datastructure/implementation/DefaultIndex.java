@@ -15,7 +15,7 @@ public class DefaultIndex implements Index {
     private String columnName;
     @Getter
     private String indexName;
-    private BPlusTree tree = new BPlusTreeImpl(3);
+    private BPlusTree tree = new BPlusTreeImpl(5);
 
     public DefaultIndex(String columnName, String indexName) {
         this.columnName = columnName;

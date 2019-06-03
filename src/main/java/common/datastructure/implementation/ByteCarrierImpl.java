@@ -44,7 +44,7 @@ public class ByteCarrierImpl implements ByteCarrier {
         } else {
             //CharNType
             CharNType charNType = (CharNType) type;
-            return getString(offset, length, charNType.getCharset())
+            return getString(offset, length, CharNType.charset)
                     .replace("\u0000", "");
         }
     }

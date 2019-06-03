@@ -17,16 +17,27 @@ public class DefaultInterpreter implements Interpreter {
     private static final String PROMPT = ">>> ";
     private static final String QUIT_MESSAGE = "Bye.";
     private DatabaseFacade database;
+    private InputStream inputStream;
+    private PrintStream printStream;
 
     public DefaultInterpreter(DatabaseFacade database) {
         this.database = database;
+        this.inputStream = System.in;
+        this.printStream = System.out;
     }
 
+    public DefaultInterpreter(DatabaseFacade database, InputStream inputStream, PrintStream printStream) {
+        this.database = database;
+        this.inputStream = inputStream;
+        this.printStream = printStream;
+    }
+
+    @Override
     public void interpret() {
-        handleInstructions(System.in, System.out, true);
+        handleInstructions(inputStream, printStream, true);
     }
 
-    CommonTokenStream lexSingleInstruction(String instruction) {
+    private CommonTokenStream lexSingleInstruction(String instruction) {
         SqlLexer sqlLexer = new SqlLexer(instruction);
         var tokenStream = sqlLexer.tokenize();
         return tokenStream;

@@ -306,4 +306,16 @@ public class BPlusTreeImpl implements BPlusTree {
         var leaf = findLeafNode(key);
         return leaf.containsKey(key);
     }
+
+    @Override
+    public int getDepth() {
+        int depth = 0;
+
+        Node currentNode = root;
+        while (!(currentNode instanceof LeafNode)) {
+            depth += 1;
+            currentNode = ((NonLeafNode) currentNode).getChild(0);
+        }
+        return depth;
+    }
 }
