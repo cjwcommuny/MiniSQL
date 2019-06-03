@@ -166,4 +166,106 @@ class DefaultTable implements Table {
         indexesMap.put(columnName, index);
         indexesNameMap.put(indexName, index);
     }
+
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+        catalog = (Catalog) inputStream.readObject();
+        tuplesCount = inputStream.readInt();
+
+        int typesCount = inputStream.readInt();
+        types = new ArrayList<>(typesCount);
+        for (int i = 0; i < typesCount; ++i) {
+            types.add((Type) inputStream.readObject());
+        }
+
+        int mapSize = inputStream.readInt();
+        indexesMap = new HashMap<>();
+        indexesNameMap = new HashMap<>();
+        for (int i = 0; i < mapSize; ++i) {
+            String indexName = inputStream.readUTF();
+            String columnName = inputStream.readUTF();
+            Index index = (Index) inputStream.readObject();
+            indexesMap.put(columnName, index);
+            indexesNameMap.put(indexName, index);
+        }
+
+        int freeTuplePositionsSize = inputStream.readInt();
+        freeTuplePositions = new LinkedList<>();
+        for (int i = 0; i < freeTuplePositionsSize; ++i) {
+            freeTuplePositions.add(inputStream.readInt());
+        }
+
+        lastTuplePosition = inputStream.readInt();
+
+        //operation in constructor
+        generateTypesBuffer();
+    }
+
+    private void writeObject(ObjectOutputStream outputStream) throws IOException {
+        outputStream.writeObject(catalog);
+        outputStream.writeInt(tuplesCount);
+
+        outputStream.writeInt(types.size());
+        for (int i = 0; i < types.size(); ++i) {
+            outputStream.writeObject(types.get(i));
+        }
+
+        //write two index maps
+        var reverseMap = generateReverseMap();
+        outputStream.writeInt(reverseMap.size());
+        for (var entry: reverseMap.entrySet()) {
+            Index index = entry.getKey();
+            String columnName = entry.getValue().getValue1();
+            String indexName = entry.getValue().getValue2();
+            outputStream.writeUTF(indexName);
+            outputStream.writeUTF(columnName);
+            outputStream.writeObject(index);
+        }
+
+        outputStream.writeInt(freeTuplePositions.size());
+        for (int position: freeTuplePositions) {
+            outputStream.writeInt(position);
+        }
+
+        outputStream.writeInt(lastTuplePosition);
+    }
+
+    private Map<Index, Pair<String, String>> generateReverseMap() {
+        //index -> (columnName, indexName)
+        Map<Index, Pair<String, String>> reverseMap = new HashMap<>();
+        for (var entry: indexesMap.entrySet()) {
+            String columnName = entry.getKey();
+            Index index = entry.getValue();
+            var pair = new Pair<String, String>(columnName, null);
+            reverseMap.put(index, pair);
+        }
+        for (var entry: indexesNameMap.entrySet()) {
+            String indexName = entry.getKey();
+            Index index= entry.getValue();
+            var pair = reverseMap.get(index);
+            pair.setValue2(indexName);
+        }
+        return reverseMap;
+    }
 }
+/*
+* table serialization format:
+*
+* catalog: Catalog (default)
+* tuplesCount: int
+*
+* typesCount: int
+* (type: Type)*
+*
+* //first build a reverse-map to avoid circular reference
+* indexCount: int
+* (indexName: String, columnName: String, index: Index)*
+*
+* freeTuplePositionsCount: int
+* (position: int)*
+*
+* lastTuplePosition: int
+*
+*
+* other operation:
+* generateTypesBuffer(): generate types, tupleSize
+* */
