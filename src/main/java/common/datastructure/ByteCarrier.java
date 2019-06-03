@@ -1,5 +1,7 @@
 package common.datastructure;
 
+import common.type.Type;
+
 import java.nio.charset.Charset;
 
 public interface ByteCarrier {
@@ -7,4 +9,5 @@ public interface ByteCarrier {
     int getInt(int offset);
     double getDouble(int offset);
     String getString(int offset, int length,  Charset charset);
+    Object getObject(int offset, int length, Type type);
 }

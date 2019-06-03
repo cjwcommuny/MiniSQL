@@ -22,6 +22,7 @@ class DefaultTable implements Table {
     private static IndexFactory indexFactory = new IndexFactory();
     @Getter
     private Catalog catalog;
+    @Getter
     private int tuplesCount = 0;
 
     @Getter
@@ -95,6 +96,7 @@ class DefaultTable implements Table {
 
     @Override
     public void deleteTuple(int i) {
+        tuplesCount -= 1;
         if (i == lastTuplePosition - 1) {
             lastTuplePosition -= 1;
         } else {
@@ -137,27 +139,6 @@ class DefaultTable implements Table {
         return catalog.getColumns().get(i).getColumnName();
     }
 
-//    @Override
-//    public Tuple bytesToTuple(byte[] bytes, int base) {
-//        List<Object> data = new ArrayList<>();
-//        int offset = base;
-//        for (Type type: types) {
-//            int byteCount = type.getSize();
-//            byte[] subArr = Arrays.copyOfRange(bytes, offset, offset + byteCount);
-//            if (type instanceof IntType) {
-//                ByteBuffer byteBuffer = ByteBuffer.wrap(subArr);
-//                data.add(byteBuffer.getInt());
-//            } else if (type instanceof FloatType) {
-//                ByteBuffer byteBuffer = ByteBuffer.wrap(subArr);
-//                data.add(byteBuffer.getDouble());
-//            } else if (type instanceof CharNType) {
-//                data.add(new String(subArr, StandardCharsets.UTF_16).replace("\u0000", ""));
-//            }
-//            offset += byteCount;
-//        }
-//        return tupleFactory.createTuple(data);
-//    }
-
     @Override
     public Index getPrimaryIndex() {
         return indexesNameMap.get(indexFactory.generatePrimaryKeyIndexName(getTableName()));
@@ -178,5 +159,11 @@ class DefaultTable implements Table {
         Index index = indexesNameMap.get(indexName);
         indexesMap.remove(index.getColumnName());
         indexesNameMap.remove(indexName);
+    }
+
+    @Override
+    public void addIndex(Index index, String columnName, String indexName) {
+        indexesMap.put(columnName, index);
+        indexesNameMap.put(indexName, index);
     }
 }

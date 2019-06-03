@@ -45,4 +45,8 @@ public interface Table extends Serializable {
     Column getColumn(String columnName);
 
     void deleteIndex(String indexName);
+
+    void addIndex(Index index, String columnName, String indexName);
+
+    int getTuplesCount();
 }

@@ -7,12 +7,17 @@ import common.info.ColumnNotExistError;
 import common.info.IndexExistError;
 import common.info.Info;
 import common.info.TableNotExistError;
+import common.type.CharNType;
+import common.type.FloatType;
+import common.type.IntType;
+import common.type.Type;
 import file.buffer.DefaultBufferManager;
 import lombok.Getter;
 import manager.FileHandler;
 import manager.TableManager;
 import middlelayer.IndexManager;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -88,8 +93,39 @@ public class DefaultIndexManager implements IndexManager {
 
 
         //create
-//        Index index = indexFactory.createIndex(indexName, table, table.getColumn(columnName));
+        Index index = indexFactory.createIndex(indexName, table, table.getColumn(columnName));
+        table.addIndex(index, columnName, indexName);
+        buildIndexFromRecords(index, table);
         throw new UnsupportedOperationException();//TODO
+    }
+
+    private void buildIndexFromRecords(Index index, Table table) {
+        String tableName = table.getTableName();
+        int tuplesCount = table.getTuplesCount();
+        int tupleSize = table.getTupleSize();
+        int columnIndex = table.getColumnIndex(index.getColumnName());
+        var types = table.getTypes();
+        Type type = types.get(columnIndex);
+        int correspondingTypeSize = type.getSize();
+        int offset = getOffsetWithinTuple(types, columnIndex);
+
+
+        for (int tupleIndex = 0; tupleIndex < tupleSize; ++tupleSize) {
+            int base = tupleIndex * tupleSize;
+            ByteCarrier byteCarrier = fileHandler.readTupleBytes(tableName,
+                    base + offset, correspondingTypeSize);
+            Object key = byteCarrier.getObject(base + offset,
+                    correspondingTypeSize, type);
+            index.update(key, base);
+        }
+    }
+
+    private int getOffsetWithinTuple(List<Type> types, int columnIndex) {
+        int result = 0;
+        for (int i = 0; i < columnIndex; ++i) {
+            result += types.get(i).getSize();
+        }
+        return result;
     }
 
     @Override

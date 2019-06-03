@@ -13,6 +13,7 @@ import error.MiniSqlAbortException;
 import error.StringLengthBeyondLimitException;
 import file.buffer.DefaultBufferManager;
 import lombok.Getter;
+import lombok.NonNull;
 import manager.FileHandler;
 import manager.TableManager;
 import manager.index.DefaultIndexManager;
@@ -185,20 +186,13 @@ public class DefaultRecordManager implements RecordManager {
         return tuples;
     }
 
-    private Tuple bytesToTuple(String tableName, List<Type> types, int base) {
+    public Tuple bytesToTuple(String tableName, List<Type> types, int base) {
         List<Object> data = new ArrayList<>();
         int offset = base;
         for (Type type: types) {
             int bytesCount = type.getSize();
             ByteCarrier byteCarrier = fileHandler.readTupleBytes(tableName, offset, bytesCount);
-            if (type instanceof IntType) {
-                data.add(byteCarrier.getInt(offset));
-            } else if (type instanceof FloatType) {
-                data.add(byteCarrier.getDouble(offset));
-            } else if (type instanceof CharNType) {
-                data.add(byteCarrier.getString(offset, bytesCount, StandardCharsets.UTF_16)
-                        .replace("\u0000", ""));
-            }
+            data.add(byteCarrier.getObject(offset, bytesCount, type));
             offset += bytesCount;
         }
         return tupleFactory.createTuple(data);
