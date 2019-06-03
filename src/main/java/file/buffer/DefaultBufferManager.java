@@ -1,8 +1,10 @@
 package file.buffer;
 
 import common.datastructure.ByteCarrier;
+import common.datastructure.Pair;
 import common.datastructure.Table;
 import common.datastructure.Tuple;
+import common.datastructure.implementation.ByteCarrierImpl;
 import common.datastructure.implementation.TupleFactory;
 import common.info.Info;
 import common.type.CharNType;
@@ -25,9 +27,12 @@ public class DefaultBufferManager implements FileHandler {
     private static TupleFactory tupleFactory = new TupleFactory();
     private static DiskFileManager diskFileManager = new DefaultDiskFileManager();
 
-    private Map<String, RandomAccessFile> filesMap = new HashMap<>();
+//    private Map<String, RandomAccessFile> filesMap = new HashMap<>();
+    private Map<String, MappedByteBuffer> recordFilesMap = new HashMap<>();
+    private Map<String, RandomAccessFile> catalogFilesMap = new HashMap<>();
 
     private static final String RANDOM_ACCESS_FILE_MODE = "rw";
+    private static final int BYTE_BUFFER_SIZE = Integer.MAX_VALUE;
     private static final int BLOCK_SIZE = 4096;
     private static final long FILE_EXTEND_SIZE = BLOCK_SIZE;
     private static final long INIT_LENGTH_OF_FILE = BLOCK_SIZE;
@@ -46,15 +51,19 @@ public class DefaultBufferManager implements FileHandler {
     }
 
     private void writeAllTablesToDisk() {
-        try {
-            for (var entry: filesMap.entrySet()) {
-                var file = entry.getValue();
-                file.close();
-            }
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            throw new MiniSqlRuntimeException();
+        //TODO: close
+        for (var entry: recordFilesMap.entrySet()) {
+            entry.getValue().force();
         }
+//        try {
+//            for (var entry: filesMap.entrySet()) {
+//                var file = entry.getValue();
+//                file.close();
+//            }
+//        } catch (IOException e) {
+//            System.err.println(e.getMessage());
+//            throw new MiniSqlRuntimeException();
+//        }
     }
 
     @Override
@@ -80,22 +89,12 @@ public class DefaultBufferManager implements FileHandler {
 
     @Override
     public void writeTupleToFile(byte[] bytes, String tableName, int offset) {
-        var file = filesMap.get(tableName);
-        if (file == null) {
+        var byteBuffer = recordFilesMap.get(tableName);
+        if (offset + bytes.length > byteBuffer.capacity()) {
             System.err.println("random access file not exists");
             throw new MiniSqlRuntimeException();
         }
-        try {
-            if (offset + bytes.length > file.length()) {
-                file.setLength(file.length() + FILE_EXTEND_SIZE);
-            }
-            file.seek(offset);
-            file.write(bytes);
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            throw new MiniSqlRuntimeException();
-        }
-
+        byteBuffer.put(bytes, offset, bytes.length);
     }
 
     //TODO
@@ -148,43 +147,41 @@ public class DefaultBufferManager implements FileHandler {
 //        throw new UnsupportedOperationException();
 //    }
 
-    @Override
-    public byte[] readTupleBytes(String tableName) {
-        var randomAccessFile = filesMap.get(tableName);
-        if (randomAccessFile == null) {
-            return new byte[0];
-        }
-        try {
-            byte[] bytes = new byte[(int) randomAccessFile.length()]; //TODO: may not read the whole file!!
-            randomAccessFile.seek(0);
-            randomAccessFile.read(bytes);
-            return bytes;
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            throw new MiniSqlRuntimeException();
-        }
-    }
+//    @Override
+//    public byte[] readTupleBytes(String tableName) {
+//        var randomAccessFile = filesMap.get(tableName);
+//        if (randomAccessFile == null) {
+//            return new byte[0];
+//        }
+//        try {
+//            byte[] bytes = new byte[(int) randomAccessFile.length()]; //TODO: may not read the whole file!!
+//            randomAccessFile.seek(0);
+//            randomAccessFile.read(bytes);
+//            return bytes;
+//        } catch (IOException e) {
+//            System.err.println(e.getMessage());
+//            throw new MiniSqlRuntimeException();
+//        }
+//    }
 
     @Override
     public ByteCarrier readTupleBytes(String tableName, int offset, int length) {
-        var randomAccessFile = filesMap.get(tableName);
-        if (randomAccessFile == null) {
-            System.err.println("random access file not exist");
-        }
-        FileChannel channel = randomAccessFile.getChannel();
-        try {
-            MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_WRITE, 0, channel.size());
-        } catch (IOException e) {
-            //TODO
-        }
+        var byteBuffer = recordFilesMap.get(tableName);
+        return new ByteCarrierImpl(byteBuffer);
     }
 
     @Override
     public void createTable(String tableName) {
-        File tableFile = diskFileManager.createRecordFile(tableName);
+        File tableFile = diskFileManager.createTableCatalogFile(tableName);
+        File recordFile = diskFileManager.createRecordFile(tableName);
         try {
-            var file = new RandomAccessFile(tableFile, RANDOM_ACCESS_FILE_MODE);
-            filesMap.put(tableName, file);
+            var randomTableFile = new RandomAccessFile(tableFile, RANDOM_ACCESS_FILE_MODE);
+            catalogFilesMap.put(tableName, randomTableFile);
+
+            var randomRecordFile = new RandomAccessFile(recordFile, RANDOM_ACCESS_FILE_MODE);
+            var byteBuffer = randomRecordFile.getChannel()
+                    .map(FileChannel.MapMode.READ_WRITE, 0, BYTE_BUFFER_SIZE);
+            recordFilesMap.put(tableName, byteBuffer);
         } catch (IOException e) {
             System.err.println(e.getMessage());
             throw new MiniSqlRuntimeException();
@@ -211,7 +208,7 @@ public class DefaultBufferManager implements FileHandler {
             for (var pair: diskFileManager.getAllRecordFiles()) {
                 String tableName = pair.getValue2();
                 File file = pair.getValue1();
-                filesMap.put(tableName, new RandomAccessFile(file, RANDOM_ACCESS_FILE_MODE));
+                catalogFilesMap.put(tableName, new RandomAccessFile(file, RANDOM_ACCESS_FILE_MODE));
             }
         } catch (IOException e) {
             System.err.println(e.getMessage());
