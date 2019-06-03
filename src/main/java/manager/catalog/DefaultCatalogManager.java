@@ -2,6 +2,7 @@ package manager.catalog;
 
 import common.datastructure.Column;
 import common.datastructure.Table;
+import common.datastructure.implementation.DefaultIndex;
 import common.info.Info;
 import error.MiniSqlAbortException;
 import error.MiniSqlRuntimeException;
@@ -40,6 +41,7 @@ public class DefaultCatalogManager implements CatalogManager {
 
     @Override
     public List<Info> quit() {
+        ((DefaultIndex)tableManager.getTable("student").getIndex("sno")).getTree().print();
         for (Table table: tableManager.getAllTables()) {
             //TODO: 并发
             fileHandler.writeTableCatalogToFile(table);

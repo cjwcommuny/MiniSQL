@@ -61,4 +61,8 @@ public class DefaultIndex implements Index {
     public boolean exist(Object key) {
         return tree.exist(key);
     }
+
+    public BPlusTree getTree() {
+        return tree;
+    }
 }
