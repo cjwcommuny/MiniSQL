@@ -298,5 +298,12 @@ public class BPlusTreeImpl implements BPlusTree {
 
     }
 
-//    private List<LeafNode>
+    @Override
+    public boolean exist(Object key) {
+        if (root == null) {
+            return false;
+        }
+        var leaf = findLeafNode(key);
+        return leaf.containsKey(key);
+    }
 }

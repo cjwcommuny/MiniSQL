@@ -52,9 +52,15 @@ public class DefaultRecordManager implements RecordManager {
         if (!typesMatch) {
             return infos;
         }
+        Tuple tuple = tupleFactory.createTuple(values);
+        if (indexManager.violatePrimaryKey(table, tuple)) {
+            Column primaryColumn = table.getPrimaryKey();
+            Object value = tuple.getValue(table.getColumnIndex(primaryColumn.getColumnName()));
+            infos.add(new ViolateUniquenessError(primaryColumn, value));
+            return infos;
+        }
 
         //insert
-        Tuple tuple = tupleFactory.createTuple(values);
         int tupleIndex = table.addTuple();
         int offset = tupleIndex * table.getTupleSize();
         byte[] tupleBytes = tuple.toBytes(table.getTypes(), table.getTupleSize());

@@ -32,9 +32,9 @@ public class DefaultBufferManager implements FileHandler {
 
     private static final String RANDOM_ACCESS_FILE_MODE = "rw";
     private static final int BYTE_BUFFER_SIZE = 4096;
-    private static final int BLOCK_SIZE = 4096;
-    private static final long FILE_EXTEND_SIZE = BLOCK_SIZE;
-    private static final long INIT_LENGTH_OF_FILE = BLOCK_SIZE;
+//    private static final int BLOCK_SIZE = 4096;
+//    private static final long FILE_EXTEND_SIZE = BLOCK_SIZE;
+//    private static final long INIT_LENGTH_OF_FILE = BLOCK_SIZE;
 
     @Getter
     private static FileHandler instance = new DefaultBufferManager();
@@ -89,7 +89,7 @@ public class DefaultBufferManager implements FileHandler {
     public void writeTupleToFile(byte[] bytes, String tableName, int offset) {
         var byteBuffer = recordFilesMap.get(tableName);
         if (offset + bytes.length > byteBuffer.capacity()) {
-            System.err.println("random access file not exists");
+            System.err.println("buffer overflow");
             throw new MiniSqlRuntimeException();
         }
         byteBuffer.position(offset);

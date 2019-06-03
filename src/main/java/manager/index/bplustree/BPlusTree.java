@@ -13,4 +13,5 @@ public interface BPlusTree extends Serializable {
     void delete(Object key);
     void delete(Range range, List<Object> notEqualValues);
     void print();
+    boolean exist(Object key);
 }

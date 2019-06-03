@@ -227,4 +227,8 @@ class LeafNode implements Node {
         this.records = records;
         this.keys = keys;
     }
+
+    boolean containsKey(Object key) {
+        return keys.contains(key);
+    }
 }

@@ -1,9 +1,6 @@
 package manager.index;
 
-import common.datastructure.Index;
-import common.datastructure.Pair;
-import common.datastructure.Table;
-import common.datastructure.Tuple;
+import common.datastructure.*;
 import common.datastructure.implementation.IndexFactory;
 import common.datastructure.restriction.Restriction;
 import common.info.ColumnNotExistError;
@@ -44,12 +41,6 @@ public class DefaultIndexManager implements IndexManager {
             Index index = entry.getValue();
             index.update(tuple.getValue(columnIndex), offset);
         }
-//        writeIndex(); //TODO
-    }
-
-    private void writeIndex() {
-        //TODO
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -120,5 +111,13 @@ public class DefaultIndexManager implements IndexManager {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean violatePrimaryKey(Table table, Tuple tuple) {
+        Column primaryColumn = table.getPrimaryKey();
+        Object key = tuple.getValue(table.getColumnIndex(primaryColumn.getColumnName()));
+        Index index = table.getPrimaryIndex();
+        return index.exist(key);
     }
 }
