@@ -27,12 +27,11 @@ public class DefaultBufferManager implements FileHandler {
     private static TupleFactory tupleFactory = new TupleFactory();
     private static DiskFileManager diskFileManager = new DefaultDiskFileManager();
 
-//    private Map<String, RandomAccessFile> filesMap = new HashMap<>();
     private Map<String, MappedByteBuffer> recordFilesMap = new HashMap<>();
-    private Map<String, RandomAccessFile> catalogFilesMap = new HashMap<>();
+    private List<FileChannel> channels = new LinkedList<>();
 
     private static final String RANDOM_ACCESS_FILE_MODE = "rw";
-    private static final int BYTE_BUFFER_SIZE = Integer.MAX_VALUE;
+    private static final int BYTE_BUFFER_SIZE = 4096;
     private static final int BLOCK_SIZE = 4096;
     private static final long FILE_EXTEND_SIZE = BLOCK_SIZE;
     private static final long INIT_LENGTH_OF_FILE = BLOCK_SIZE;
@@ -55,15 +54,14 @@ public class DefaultBufferManager implements FileHandler {
         for (var entry: recordFilesMap.entrySet()) {
             entry.getValue().force();
         }
-//        try {
-//            for (var entry: filesMap.entrySet()) {
-//                var file = entry.getValue();
-//                file.close();
-//            }
-//        } catch (IOException e) {
-//            System.err.println(e.getMessage());
-//            throw new MiniSqlRuntimeException();
-//        }
+        try {
+            for (var channel: channels) {
+                channel.close();
+            }
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            throw new MiniSqlRuntimeException();
+        }
     }
 
     @Override
@@ -94,7 +92,8 @@ public class DefaultBufferManager implements FileHandler {
             System.err.println("random access file not exists");
             throw new MiniSqlRuntimeException();
         }
-        byteBuffer.put(bytes, offset, bytes.length);
+        byteBuffer.position(offset);
+        byteBuffer.put(bytes);
     }
 
     //TODO
@@ -172,15 +171,12 @@ public class DefaultBufferManager implements FileHandler {
 
     @Override
     public void createTable(String tableName) {
-        File tableFile = diskFileManager.createTableCatalogFile(tableName);
         File recordFile = diskFileManager.createRecordFile(tableName);
         try {
-            var randomTableFile = new RandomAccessFile(tableFile, RANDOM_ACCESS_FILE_MODE);
-            catalogFilesMap.put(tableName, randomTableFile);
-
             var randomRecordFile = new RandomAccessFile(recordFile, RANDOM_ACCESS_FILE_MODE);
-            var byteBuffer = randomRecordFile.getChannel()
-                    .map(FileChannel.MapMode.READ_WRITE, 0, BYTE_BUFFER_SIZE);
+            var fileChannel = randomRecordFile.getChannel();
+            channels.add(fileChannel);
+            var byteBuffer = fileChannel.map(FileChannel.MapMode.READ_WRITE, 0, BYTE_BUFFER_SIZE);
             recordFilesMap.put(tableName, byteBuffer);
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -208,7 +204,11 @@ public class DefaultBufferManager implements FileHandler {
             for (var pair: diskFileManager.getAllRecordFiles()) {
                 String tableName = pair.getValue2();
                 File file = pair.getValue1();
-                catalogFilesMap.put(tableName, new RandomAccessFile(file, RANDOM_ACCESS_FILE_MODE));
+                var randomAccessFile = new RandomAccessFile(file, RANDOM_ACCESS_FILE_MODE);
+                var fileChannel = randomAccessFile.getChannel();
+                channels.add(fileChannel);
+                var byteBuffer = fileChannel.map(FileChannel.MapMode.READ_WRITE, 0, BYTE_BUFFER_SIZE);
+                recordFilesMap.put(tableName, byteBuffer);
             }
         } catch (IOException e) {
             System.err.println(e.getMessage());

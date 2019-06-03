@@ -37,7 +37,8 @@ public class ByteCarrierImpl implements ByteCarrier {
     @Override
     public String getString(int offset, int length, Charset charset) {
         byte[] bytes = new byte[length];
-        buffer.get(bytes, offset, length);
+        buffer.position(offset);
+        buffer.get(bytes);
         return new String(bytes, charset);
     }
 }
