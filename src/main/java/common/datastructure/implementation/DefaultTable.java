@@ -9,6 +9,8 @@ import error.MiniSqlRuntimeException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import manager.FileHandler;
+import middlelayer.RecordManager;
 
 import javax.naming.OperationNotSupportedException;
 import java.io.*;
@@ -36,6 +38,7 @@ class DefaultTable implements Table {
     private Map<String, Index> indexesNameMap = new HashMap<>();
 
     //store index (not offset)
+    @Getter
     private Queue<Integer> freeTuplePositions = new LinkedList<>();
 
     @Getter
@@ -245,6 +248,25 @@ class DefaultTable implements Table {
             pair.setValue2(indexName);
         }
         return reverseMap;
+    }
+
+    @Override
+    public List<Tuple> getAllTuplesAndOffsets(FileHandler fileHandler,
+                                              List<Integer> OUT_offsets,
+                                              RecordManager recordManager) {
+        int index = 0;
+        Set<Integer> freePositionsSet = new HashSet<>(freeTuplePositions);
+        int offset = 0;
+        List<Tuple> tuples = new LinkedList<>();
+        while (index < getTuplesCount()) {
+            if (!freePositionsSet.contains(index)) {
+                tuples.add(recordManager.bytesToTuple(getTableName(), getTypes(), offset));
+                OUT_offsets.add(offset);
+                index += 1;
+            }
+            offset += getTupleSize();
+        }
+        return tuples;
     }
 }
 /*

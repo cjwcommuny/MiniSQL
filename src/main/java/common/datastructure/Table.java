@@ -2,6 +2,7 @@ package common.datastructure;
 
 import common.type.Type;
 import manager.FileHandler;
+import middlelayer.RecordManager;
 
 import java.io.Serializable;
 import java.util.List;
@@ -49,4 +50,6 @@ public interface Table extends Serializable {
     void addIndex(Index index, String columnName, String indexName);
 
     int getTuplesCount();
+
+    List<Tuple> getAllTuplesAndOffsets(FileHandler fileHandler, List<Integer> OUT_offsets, RecordManager recordManager);
 }

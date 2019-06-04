@@ -41,7 +41,7 @@ public class DefaultCatalogManager implements CatalogManager {
 
     @Override
     public List<Info> quit() {
-        ((DefaultIndex)tableManager.getTable("student").getIndex("sno")).getTree().print();
+//        ((DefaultIndex)tableManager.getTable("student").getIndex("sno")).getTree().print();
         for (Table table: tableManager.getAllTables()) {
             //TODO: 并发
             fileHandler.writeTableCatalogToFile(table);

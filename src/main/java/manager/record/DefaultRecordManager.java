@@ -1,6 +1,7 @@
 package manager.record;
 
 import common.datastructure.*;
+import common.datastructure.implementation.DefaultTuple;
 import common.datastructure.implementation.TupleFactory;
 import common.datastructure.restriction.Range;
 import common.datastructure.restriction.Restriction;
@@ -24,6 +25,8 @@ import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class DefaultRecordManager implements RecordManager {
     private TableManager tableManager = TableManager.getInstance();
@@ -93,12 +96,17 @@ public class DefaultRecordManager implements RecordManager {
     private List<Tuple> getTuplesAndOffsets(Table table,
                                             List<Restriction> restrictions,
                                             List<Integer> OUT_offsets) throws MiniSqlAbortException {
-        Set<Integer> offsetsIntersection = new HashSet<>(); //offsets stored in index
-        var noIndexRestrictions = searchByIndex(restrictions, table, offsetsIntersection);
-        var tuples = getTuplesFromFile(offsetsIntersection, table);
-        OUT_offsets.addAll(offsetsIntersection);
-        filterTuplesAndOffsetsByRestrictions(OUT_offsets, tuples, noIndexRestrictions, table);
-        return tuples;
+        if (restrictions.size() == 0) {
+            //no restrictions
+            return table.getAllTuplesAndOffsets(fileHandler, OUT_offsets,this);
+        } else {
+            Set<Integer> offsetsIntersection = new HashSet<>(); //offsets stored in index
+            var noIndexRestrictions = searchByIndex(restrictions, table, offsetsIntersection);
+            var tuples = getTuplesFromFile(offsetsIntersection, table);
+            OUT_offsets.addAll(offsetsIntersection);
+            filterTuplesAndOffsetsByRestrictions(OUT_offsets, tuples, noIndexRestrictions, table);
+            return tuples;
+        }
     }
 
     private void deleteTuplesFromFile(Collection<Integer> offsets, Table table) {
