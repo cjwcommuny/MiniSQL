@@ -323,10 +323,23 @@ public class BPlusTreeImpl implements BPlusTree {
     }
 
     private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
-
+        rank = inputStream.readInt();
+        Object obj = inputStream.readObject();
+        if (obj instanceof String) {
+            root = null;
+        } else {
+            root = (Node) obj;
+        }
     }
 
     private void writeObject(ObjectOutputStream outputStream) throws IOException {
-
+        outputStream.writeInt(rank);
+        outputStream.writeObject(Objects.requireNonNullElse(root, "null"));
     }
 }
+/*
+* serialization format
+*
+* rank: int
+* root (recursively)
+* */

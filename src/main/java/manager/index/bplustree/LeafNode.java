@@ -263,7 +263,7 @@ class LeafNode implements Node {
         }
 
         for (var key: keys) {
-            outputStream.writeObject(keys);
+            outputStream.writeObject(key);
         }
     }
 }

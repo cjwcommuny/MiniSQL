@@ -2,7 +2,11 @@ package manager.index.bplustree;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.antlr.v4.codegen.model.LeftRecursiveRuleFunction;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.*;
 
 import static manager.index.bplustree.BPlusTreeImpl.compareKeys;
@@ -259,4 +263,51 @@ public class NonLeafNode implements Node {
         children.addAll(nodes);
         nodes.forEach(node -> node.setParent(this));
     }
+
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+        int rank = inputStream.readInt();
+        children = new ArrayList<>(rank);
+        keys = new ArrayList<>(rank - 1);
+        for (int i = 0; i < rank - 1; ++i) {
+            keys.add(inputStream.readObject());
+        }
+
+        for (int i = 0; i < rank; ++i) {
+            Node node = (Node) inputStream.readObject();
+            node.setParent(this);
+            children.add(node);
+        }
+
+        if (children.get(0) instanceof LeafNode) {
+            //set siblings
+            for (int i = 0; i < children.size(); ++i) {
+                Node leftNode = (i == 0) ? null : children.get(i - 1);
+                Node rightNode = (i == children.size() - 1) ? null : children.get(i + 1);
+                LeafNode leaf = (LeafNode) children.get(i);
+                leaf.setPreviousLeaf((LeafNode) leftNode);
+                leaf.setNextLeaf((LeafNode) rightNode);
+            }
+        }
+
+    }
+
+    private void writeObject(ObjectOutputStream outputStream) throws IOException {
+        outputStream.writeInt(getRank());
+        for (Object key: keys) {
+            outputStream.writeObject(key);
+        }
+
+        for (Node node: children) {
+            outputStream.writeObject(node);
+        }
+    }
 }
+/*
+* serialization format
+*
+* rank: int
+* (key: Object)*
+*
+* operation:
+* set parent and children
+* */
