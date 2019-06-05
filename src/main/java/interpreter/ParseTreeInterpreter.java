@@ -16,6 +16,8 @@ import interpreter.error.NameDuplicationException;
 import interpreter.error.ParseException;
 import interpreter.error.QuitException;
 import interpreter.visittree.*;
+import manager.TableManager;
+import middlelayer.IndexManager;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.io.FileInputStream;
@@ -229,6 +231,7 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
             long totalTime = endTime - startTime;
             double seconds = (double)totalTime / 1_000_000_000.0;
             System.out.println("exec file time: " + seconds + "s");
+            TableManager.getInstance().getTable("student").getIndex("sno").print();
         }
     }
 

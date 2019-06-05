@@ -100,7 +100,7 @@ public class BPlusTreeImpl implements BPlusTree {
         if (node.isRoot() && node.childrenCount() == 1) {
             setRoot(((NonLeafNode) node).getChild(0));
         } else {
-            boolean needRearrange = node.getRank() < getMinimumRank();
+            boolean needRearrange = node.getRank() < getMinimumRank(node);
             if (needRearrange) {
                 //merge with the sibling
                 Node leftNode;
@@ -149,8 +149,8 @@ public class BPlusTreeImpl implements BPlusTree {
     }
 
     public static void main(String[] args) {
-        var tree = testInsert();
-        testRange(tree);
+        var tree = testInsert2();
+//        testRange(tree);
 //        testDelete(tree);
     }
 
@@ -168,7 +168,16 @@ public class BPlusTreeImpl implements BPlusTree {
         tree.insert(52, 52);
         tree.insert(58, 58);
         tree.insert(61, 61);
-//        tree.print();
+        tree.print();
+        return tree;
+    }
+
+    private static BPlusTree testInsert2() {
+        var tree  = new BPlusTreeImpl(5);
+        for (int i = 0; i <= 21; ++i) {
+            tree.insert(i, i);
+        }
+        tree.print();
         return tree;
     }
 
@@ -220,8 +229,12 @@ public class BPlusTreeImpl implements BPlusTree {
         tree.print();
     }
 
-    private int getMinimumRank() {
-        return (rank - 1) / 2 + 1;
+    private int getMinimumRank(Node node) {
+        if (node.isRoot()) {
+            return 2;
+        } else {
+            return (rank - 1) / 2 + 1;
+        }
     }
 
     private void setRoot(Node node) {

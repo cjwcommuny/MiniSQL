@@ -61,3 +61,17 @@ execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/Mini
 quit;
 
 //B+ tree depth: log_{M/2}N, M: rank, N item number
+
+
+execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/100_000insert.sql';
+select * from student where sgender = 'M' and sage > 4 and sage <= 34;
+create index sageindex on student(sage);
+select * from student where sgender = 'F' and sage = 5;
+delete from student where sage = 1;
+drop index sageindex;
+drop table student;
+
+
+
+
+execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/101_000insert.sql';

@@ -68,4 +68,9 @@ public class DefaultIndex implements Index {
     public BPlusTree getTree() {
         return tree;
     }
+
+    @Override
+    public void print() {
+        tree.print();
+    }
 }

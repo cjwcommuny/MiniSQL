@@ -226,12 +226,12 @@ public class NonLeafNode implements Node {
         childrenBorrowed.forEach(node -> node.setParent(this));
         this.children.addAll(0, childrenBorrowed);
 
-        var keysBorrowed = nonLeafNode.keys.subList(nonLeafNode.childrenCount() - childrenRemained, nonLeafNode.childrenCount());
+        var keysBorrowed = nonLeafNode.keys.subList(nonLeafNode.childrenCount() - childrenRemained, nonLeafNode.childrenCount() - 1);
         this.keys.addAll(0, keysBorrowed);
 
         childrenBorrowed.clear();
         keysBorrowed.clear();
-        nonLeafNode.keys.remove(nonLeafNode.keysCount());
+        nonLeafNode.keys.remove(nonLeafNode.keysCount() - 1);
     }
 
     private void borrowChildrenFromFollow(NonLeafNode nonLeafNode, int childrenRemained) {

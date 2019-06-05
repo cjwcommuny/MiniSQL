@@ -1,6 +1,7 @@
 tableName = "student"
-other = "'haha', 25, 'M'"
-sql_formatter = "insert into {} values ('{}', {});\n"
+sname = "'test'"
+sage = 25
+sql_formatter = "insert into {} values ('{}', {}, {}, {});\n"
 
 total = 10_0000
 
@@ -21,7 +22,10 @@ select * from student where sno = '10000';\n
 with open('100_000insert.sql', 'w') as the_file:
     the_file.write(sql_create_table)
     for i in range(total):
-        sql = sql_formatter.format(tableName, i, other)
+        sgender = "'M'"
+        if i % 2 == 0:
+            sgender = "'F'"
+        sql = sql_formatter.format(tableName, i, sname, i % 60 + 1, sgender)
         the_file.write(sql)
 
-    the_file.write(sql_tail)
+    # the_file.write(sql_tail)

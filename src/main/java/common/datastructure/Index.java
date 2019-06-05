@@ -15,4 +15,5 @@ public interface Index extends Serializable {
     void delete(Restriction restriction);
     void delete(Object value);
     boolean exist(Object key);
+    void print();
 }
