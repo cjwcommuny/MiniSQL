@@ -175,9 +175,10 @@ public class BPlusTreeImpl implements BPlusTree {
     private static BPlusTree testInsert2() {
         var tree  = new BPlusTreeImpl(5);
         for (int i = 0; i <= 21; ++i) {
-            tree.insert(i, i);
+            tree.insert(String.valueOf(i), i);
         }
         tree.print();
+
         return tree;
     }
 

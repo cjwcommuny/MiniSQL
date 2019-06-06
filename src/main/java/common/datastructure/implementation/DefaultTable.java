@@ -98,12 +98,13 @@ class DefaultTable implements Table {
     }
 
     @Override
-    public void deleteTuple(int i) {
+    public void deleteTuple(int offset) {
         tuplesCount -= 1;
-        if (i == lastTuplePosition - 1) {
+        int index = offset / getTupleSize();
+        if (index == lastTuplePosition - 1) {
             lastTuplePosition -= 1;
         } else {
-            freeTuplePositions.add(i);
+            freeTuplePositions.add(index);
         }
     }
 
@@ -259,7 +260,7 @@ class DefaultTable implements Table {
         int offset = 0;
         List<Tuple> tuples = new LinkedList<>();
         while (index < getTuplesCount()) {
-            if (!freePositionsSet.contains(index)) {
+            if (!freePositionsSet.contains(offset / getTupleSize())) {
                 tuples.add(recordManager.bytesToTuple(getTableName(), getTypes(), offset));
                 OUT_offsets.add(offset);
                 index += 1;

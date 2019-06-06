@@ -23,7 +23,7 @@ literal:
 INT_LITERAL: [+-]? DIGIT+;
 
 STRING_LITERAL:
-    '\'' (DIGIT | [a-zA-Z:/\\_.~\- \t])* '\''
+    '\'' (DIGIT | [a-zA-Z:/\\_.~\- \t()])* '\''
     ;
 
 DIGIT:
@@ -197,6 +197,7 @@ instruction:
     | deleteTuple
     | quit
     | executeFile
+    | EOF
     ;
 
 createTable:

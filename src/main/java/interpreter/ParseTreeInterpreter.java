@@ -46,7 +46,11 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
         if (ctx.getChildCount() == 0) {
             return new InstructionVisitResult(new LinkedList<>());
         }
-        return (InstructionVisitResult) visit(ctx.getChild(0));
+        ParseTreeVisitResult visitResult = visit(ctx.getChild(0));
+        if (visitResult instanceof EofVisitResult) {
+            return new InstructionVisitResult(new LinkedList<>());
+        }
+        return (InstructionVisitResult) visitResult;
     }
 
     @Override
@@ -110,13 +114,15 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
     }
 
     @Override
-    public LiteralVisitResult visitTerminal(TerminalNode node) {
+    public ParseTreeVisitResult visitTerminal(TerminalNode node) {
         String symbol = node.getSymbol().getText();
         switch (node.getSymbol().getType()) {
             case MiniSqlParser.INT_LITERAL:
                 return new IntLiteralVisitResult(Integer.valueOf(symbol));
             case MiniSqlParser.STRING_LITERAL:
                 return new StringLiteralVisitResult(symbol.substring(1, symbol.length() - 1));
+            case MiniSqlParser.EOF:
+                return new EofVisitResult();
             default:
                 //error
                 System.err.println("visit terminal error");
@@ -231,7 +237,7 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
             long totalTime = endTime - startTime;
             double seconds = (double)totalTime / 1_000_000_000.0;
             System.out.println("exec file time: " + seconds + "s");
-            TableManager.getInstance().getTable("student").getIndex("sno").print();
+//            TableManager.getInstance().getTable("student").getIndex("sno").print();
         }
     }
 

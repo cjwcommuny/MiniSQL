@@ -111,8 +111,8 @@ public class DefaultRecordManager implements RecordManager {
 
     private void deleteTuplesFromFile(Collection<Integer> offsets, Table table) {
         //lazy delete
-        for (int i: offsets) {
-            table.deleteTuple(i);
+        for (int offset: offsets) {
+            table.deleteTuple(offset);
         }
     }
 
