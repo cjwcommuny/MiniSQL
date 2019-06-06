@@ -121,6 +121,8 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
                 return new IntLiteralVisitResult(Integer.valueOf(symbol));
             case MiniSqlParser.STRING_LITERAL:
                 return new StringLiteralVisitResult(symbol.substring(1, symbol.length() - 1));
+            case MiniSqlParser.FLOAT_LITERAL:
+                return new FloatLiteralVisitResult(Double.valueOf(symbol));
             case MiniSqlParser.EOF:
                 return new EofVisitResult();
             default:

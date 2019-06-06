@@ -90,6 +90,12 @@ public class BPlusTreeImpl implements BPlusTree {
     public void delete(Object key) {
         var leaf = findLeafNode(key);
         deleteEntry(leaf, key);
+
+        //for debug
+        System.out.println("=====================================");
+        System.out.println("key: " + key);
+        this.print();
+        System.out.println("=====================================");
     }
 
     private void deleteEntry(Node node, Object key) {

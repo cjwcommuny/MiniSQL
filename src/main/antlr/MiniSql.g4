@@ -13,6 +13,7 @@ package interpreter.antlrparser;
 literal:
     STRING_LITERAL
     | INT_LITERAL
+    | FLOAT_LITERAL
     ;
 
 //identifier:
@@ -21,6 +22,7 @@ literal:
 //    ;
 
 INT_LITERAL: [+-]? DIGIT+;
+FLOAT_LITERAL: [+-]? DIGIT* '.'? DIGIT+;
 
 STRING_LITERAL:
     '\'' (DIGIT | [a-zA-Z:/\\_.~\- \t()])* '\''

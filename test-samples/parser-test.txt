@@ -82,3 +82,4 @@ delete from student where sno = '17';
 
 execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/offcial/0_create_table_scheme.sql';
 execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/offcial/1_insert_small_data.sql';
+execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/offcial/3_delete_test.sql';

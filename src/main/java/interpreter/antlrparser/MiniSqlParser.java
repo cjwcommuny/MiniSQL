@@ -19,12 +19,13 @@ public class MiniSqlParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, INT_LITERAL=6, STRING_LITERAL=7, 
-		DIGIT=8, CREATE=9, TABLE=10, PRIMARY=11, KEY=12, UNIQUE=13, INT=14, CHAR=15, 
-		FLOAT=16, DROP=17, INDEX=18, ON=19, SELECT=20, WHERE=21, FROM=22, AND=23, 
-		INSERT=24, INTO=25, DELETE=26, VALUES=27, QUIT=28, EXECFILE=29, OP=30, 
-		EQUAL=31, NOT_EQUAL=32, GREATER=33, LESS=34, GREATER_OR_EQUAL=35, LESS_OR_EQUAL=36, 
-		NAME_IDENTIFIER=37, WHITE_SPACE=38, LINE_COMMENT=39, COMMENT=40;
+		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, INT_LITERAL=6, FLOAT_LITERAL=7, 
+		STRING_LITERAL=8, DIGIT=9, CREATE=10, TABLE=11, PRIMARY=12, KEY=13, UNIQUE=14, 
+		INT=15, CHAR=16, FLOAT=17, DROP=18, INDEX=19, ON=20, SELECT=21, WHERE=22, 
+		FROM=23, AND=24, INSERT=25, INTO=26, DELETE=27, VALUES=28, QUIT=29, EXECFILE=30, 
+		OP=31, EQUAL=32, NOT_EQUAL=33, GREATER=34, LESS=35, GREATER_OR_EQUAL=36, 
+		LESS_OR_EQUAL=37, NAME_IDENTIFIER=38, WHITE_SPACE=39, LINE_COMMENT=40, 
+		COMMENT=41;
 	public static final int
 		RULE_literal = 0, RULE_type_identifier = 1, RULE_instructionWrap = 2, 
 		RULE_instruction = 3, RULE_createTable = 4, RULE_primaryKeyDefinition = 5, 
@@ -45,14 +46,14 @@ public class MiniSqlParser extends Parser {
 		return new String[] {
 			null, "'('", "')'", "','", "'*'", "'and'", null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, "'='", "'<>'", "'>'", 
-			"'<'", "'>='", "'<='"
+			null, null, null, null, null, null, null, null, null, "'='", "'<>'", 
+			"'>'", "'<'", "'>='", "'<='"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, null, null, null, "INT_LITERAL", "STRING_LITERAL", 
+			null, null, null, null, null, null, "INT_LITERAL", "FLOAT_LITERAL", "STRING_LITERAL", 
 			"DIGIT", "CREATE", "TABLE", "PRIMARY", "KEY", "UNIQUE", "INT", "CHAR", 
 			"FLOAT", "DROP", "INDEX", "ON", "SELECT", "WHERE", "FROM", "AND", "INSERT", 
 			"INTO", "DELETE", "VALUES", "QUIT", "EXECFILE", "OP", "EQUAL", "NOT_EQUAL", 
@@ -117,6 +118,7 @@ public class MiniSqlParser extends Parser {
 	public static class LiteralContext extends ParserRuleContext {
 		public TerminalNode STRING_LITERAL() { return getToken(MiniSqlParser.STRING_LITERAL, 0); }
 		public TerminalNode INT_LITERAL() { return getToken(MiniSqlParser.INT_LITERAL, 0); }
+		public TerminalNode FLOAT_LITERAL() { return getToken(MiniSqlParser.FLOAT_LITERAL, 0); }
 		public LiteralContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -145,7 +147,7 @@ public class MiniSqlParser extends Parser {
 			{
 			setState(34);
 			_la = _input.LA(1);
-			if ( !(_la==INT_LITERAL || _la==STRING_LITERAL) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << INT_LITERAL) | (1L << FLOAT_LITERAL) | (1L << STRING_LITERAL))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -1234,7 +1236,7 @@ public class MiniSqlParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3*\u009a\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3+\u009a\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\5\3-\n\3\3\4\3\4\3\4\3\5\3\5\3\5\3\5"+
@@ -1245,35 +1247,35 @@ public class MiniSqlParser extends Parser {
 		"\3\16\3\16\3\16\3\16\7\16|\n\16\f\16\16\16\177\13\16\3\16\3\16\3\16\3"+
 		"\17\3\17\3\17\3\17\3\17\5\17\u0089\n\17\3\20\3\20\3\20\7\20\u008e\n\20"+
 		"\f\20\16\20\u0091\13\20\3\20\3\20\3\21\3\21\3\22\3\22\3\22\3\22\2\2\23"+
-		"\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"\2\3\3\2\b\t\2\u0099\2$\3\2"+
+		"\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"\2\3\3\2\b\n\2\u0099\2$\3\2"+
 		"\2\2\4,\3\2\2\2\6.\3\2\2\2\b;\3\2\2\2\n=\3\2\2\2\fK\3\2\2\2\16Q\3\2\2"+
 		"\2\20V\3\2\2\2\22Z\3\2\2\2\24c\3\2\2\2\26g\3\2\2\2\30o\3\2\2\2\32s\3\2"+
 		"\2\2\34\u0083\3\2\2\2\36\u008f\3\2\2\2 \u0094\3\2\2\2\"\u0096\3\2\2\2"+
-		"$%\t\2\2\2%\3\3\2\2\2&-\7\20\2\2\'-\7\22\2\2()\7\21\2\2)*\7\3\2\2*+\7"+
+		"$%\t\2\2\2%\3\3\2\2\2&-\7\21\2\2\'-\7\23\2\2()\7\22\2\2)*\7\3\2\2*+\7"+
 		"\b\2\2+-\7\4\2\2,&\3\2\2\2,\'\3\2\2\2,(\3\2\2\2-\5\3\2\2\2./\5\b\5\2/"+
 		"\60\7\2\2\3\60\7\3\2\2\2\61<\5\n\6\2\62<\5\20\t\2\63<\5\22\n\2\64<\5\24"+
 		"\13\2\65<\5\26\f\2\66<\5\32\16\2\67<\5\34\17\28<\5 \21\29<\5\"\22\2:<"+
 		"\7\2\2\3;\61\3\2\2\2;\62\3\2\2\2;\63\3\2\2\2;\64\3\2\2\2;\65\3\2\2\2;"+
-		"\66\3\2\2\2;\67\3\2\2\2;8\3\2\2\2;9\3\2\2\2;:\3\2\2\2<\t\3\2\2\2=>\7\13"+
-		"\2\2>?\7\f\2\2?@\7\'\2\2@D\7\3\2\2AB\5\16\b\2BC\7\5\2\2CE\3\2\2\2DA\3"+
-		"\2\2\2EF\3\2\2\2FD\3\2\2\2FG\3\2\2\2GH\3\2\2\2HI\5\f\7\2IJ\7\4\2\2J\13"+
-		"\3\2\2\2KL\7\r\2\2LM\7\16\2\2MN\7\3\2\2NO\7\'\2\2OP\7\4\2\2P\r\3\2\2\2"+
-		"QR\7\'\2\2RT\5\4\3\2SU\7\17\2\2TS\3\2\2\2TU\3\2\2\2U\17\3\2\2\2VW\7\23"+
-		"\2\2WX\7\f\2\2XY\7\'\2\2Y\21\3\2\2\2Z[\7\13\2\2[\\\7\24\2\2\\]\7\'\2\2"+
-		"]^\7\25\2\2^_\7\'\2\2_`\7\3\2\2`a\7\'\2\2ab\7\4\2\2b\23\3\2\2\2cd\7\23"+
-		"\2\2de\7\24\2\2ef\7\'\2\2f\25\3\2\2\2gh\7\26\2\2hi\7\6\2\2ij\7\30\2\2"+
-		"jm\7\'\2\2kl\7\27\2\2ln\5\36\20\2mk\3\2\2\2mn\3\2\2\2n\27\3\2\2\2op\7"+
-		"\'\2\2pq\7 \2\2qr\5\2\2\2r\31\3\2\2\2st\7\32\2\2tu\7\33\2\2uv\7\'\2\2"+
-		"vw\7\35\2\2w}\7\3\2\2xy\5\2\2\2yz\7\5\2\2z|\3\2\2\2{x\3\2\2\2|\177\3\2"+
-		"\2\2}{\3\2\2\2}~\3\2\2\2~\u0080\3\2\2\2\177}\3\2\2\2\u0080\u0081\5\2\2"+
-		"\2\u0081\u0082\7\4\2\2\u0082\33\3\2\2\2\u0083\u0084\7\34\2\2\u0084\u0085"+
-		"\7\30\2\2\u0085\u0088\7\'\2\2\u0086\u0087\7\27\2\2\u0087\u0089\5\36\20"+
-		"\2\u0088\u0086\3\2\2\2\u0088\u0089\3\2\2\2\u0089\35\3\2\2\2\u008a\u008b"+
-		"\5\30\r\2\u008b\u008c\7\7\2\2\u008c\u008e\3\2\2\2\u008d\u008a\3\2\2\2"+
-		"\u008e\u0091\3\2\2\2\u008f\u008d\3\2\2\2\u008f\u0090\3\2\2\2\u0090\u0092"+
-		"\3\2\2\2\u0091\u008f\3\2\2\2\u0092\u0093\5\30\r\2\u0093\37\3\2\2\2\u0094"+
-		"\u0095\7\36\2\2\u0095!\3\2\2\2\u0096\u0097\7\37\2\2\u0097\u0098\7\t\2"+
-		"\2\u0098#\3\2\2\2\n,;FTm}\u0088\u008f";
+		"\66\3\2\2\2;\67\3\2\2\2;8\3\2\2\2;9\3\2\2\2;:\3\2\2\2<\t\3\2\2\2=>\7\f"+
+		"\2\2>?\7\r\2\2?@\7(\2\2@D\7\3\2\2AB\5\16\b\2BC\7\5\2\2CE\3\2\2\2DA\3\2"+
+		"\2\2EF\3\2\2\2FD\3\2\2\2FG\3\2\2\2GH\3\2\2\2HI\5\f\7\2IJ\7\4\2\2J\13\3"+
+		"\2\2\2KL\7\16\2\2LM\7\17\2\2MN\7\3\2\2NO\7(\2\2OP\7\4\2\2P\r\3\2\2\2Q"+
+		"R\7(\2\2RT\5\4\3\2SU\7\20\2\2TS\3\2\2\2TU\3\2\2\2U\17\3\2\2\2VW\7\24\2"+
+		"\2WX\7\r\2\2XY\7(\2\2Y\21\3\2\2\2Z[\7\f\2\2[\\\7\25\2\2\\]\7(\2\2]^\7"+
+		"\26\2\2^_\7(\2\2_`\7\3\2\2`a\7(\2\2ab\7\4\2\2b\23\3\2\2\2cd\7\24\2\2d"+
+		"e\7\25\2\2ef\7(\2\2f\25\3\2\2\2gh\7\27\2\2hi\7\6\2\2ij\7\31\2\2jm\7(\2"+
+		"\2kl\7\30\2\2ln\5\36\20\2mk\3\2\2\2mn\3\2\2\2n\27\3\2\2\2op\7(\2\2pq\7"+
+		"!\2\2qr\5\2\2\2r\31\3\2\2\2st\7\33\2\2tu\7\34\2\2uv\7(\2\2vw\7\36\2\2"+
+		"w}\7\3\2\2xy\5\2\2\2yz\7\5\2\2z|\3\2\2\2{x\3\2\2\2|\177\3\2\2\2}{\3\2"+
+		"\2\2}~\3\2\2\2~\u0080\3\2\2\2\177}\3\2\2\2\u0080\u0081\5\2\2\2\u0081\u0082"+
+		"\7\4\2\2\u0082\33\3\2\2\2\u0083\u0084\7\35\2\2\u0084\u0085\7\31\2\2\u0085"+
+		"\u0088\7(\2\2\u0086\u0087\7\30\2\2\u0087\u0089\5\36\20\2\u0088\u0086\3"+
+		"\2\2\2\u0088\u0089\3\2\2\2\u0089\35\3\2\2\2\u008a\u008b\5\30\r\2\u008b"+
+		"\u008c\7\7\2\2\u008c\u008e\3\2\2\2\u008d\u008a\3\2\2\2\u008e\u0091\3\2"+
+		"\2\2\u008f\u008d\3\2\2\2\u008f\u0090\3\2\2\2\u0090\u0092\3\2\2\2\u0091"+
+		"\u008f\3\2\2\2\u0092\u0093\5\30\r\2\u0093\37\3\2\2\2\u0094\u0095\7\37"+
+		"\2\2\u0095!\3\2\2\2\u0096\u0097\7 \2\2\u0097\u0098\7\n\2\2\u0098#\3\2"+
+		"\2\2\n,;FTm}\u0088\u008f";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
