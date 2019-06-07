@@ -202,8 +202,6 @@ public class NonLeafNode implements Node {
                 keys.remove(index - 1);
             }
         }
-
-//        children.remove(index + 1);
     }
 
     Node getChild(int i) {
@@ -222,11 +220,15 @@ public class NonLeafNode implements Node {
     }
 
     private void borrowChildrenFromPrevious(NonLeafNode nonLeafNode, int childrenRemained) {
-        var childrenBorrowed = nonLeafNode.children.subList(nonLeafNode.childrenCount() - childrenRemained, nonLeafNode.childrenCount());
+        //TODO: buggy
+        this.keys.add(0, this.getChild(0).getSmallestKey());
+
+        var childrenBorrowed = nonLeafNode.children.subList(childrenRemained, nonLeafNode.childrenCount());
         childrenBorrowed.forEach(node -> node.setParent(this));
         this.children.addAll(0, childrenBorrowed);
 
-        var keysBorrowed = nonLeafNode.keys.subList(nonLeafNode.childrenCount() - childrenRemained, nonLeafNode.childrenCount() - 1);
+        var keysBorrowed = nonLeafNode.keys.subList(childrenRemained, nonLeafNode.keysCount());
+
         this.keys.addAll(0, keysBorrowed);
 
         childrenBorrowed.clear();
@@ -235,6 +237,8 @@ public class NonLeafNode implements Node {
     }
 
     private void borrowChildrenFromFollow(NonLeafNode nonLeafNode, int childrenRemained) {
+        this.keys.add(nonLeafNode.getSmallestKey());
+
         var childrenBorrowed = nonLeafNode.children.subList(0, nonLeafNode.childrenCount() - childrenRemained);
         childrenBorrowed.forEach(node -> node.setParent(this));
         this.children.addAll(childrenBorrowed);
@@ -253,9 +257,15 @@ public class NonLeafNode implements Node {
         keys.set(i, key);
     }
 
-    void updateKey(Node node) {
-        //for node i, update key i - 1
+    public boolean isFirstChild(Node node) {
         int i = children.indexOf(node);
+        return i == 0;
+    }
+
+    void updateKey(Node node) {
+        //for node i, update key i - 1, i must > 0
+        int i = children.indexOf(node);
+        assert i > 0;
         keys.set(i - 1, node.getSmallestKey());
     }
 

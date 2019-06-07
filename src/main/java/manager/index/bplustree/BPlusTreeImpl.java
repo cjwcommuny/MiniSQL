@@ -4,6 +4,7 @@ import common.datastructure.MaxValue;
 import common.datastructure.MinValue;
 import common.datastructure.Pair;
 import common.datastructure.restriction.Range;
+import interpreter.error.ParseException;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -88,14 +89,14 @@ public class BPlusTreeImpl implements BPlusTree {
 
     @Override
     public void delete(Object key) {
-        var leaf = findLeafNode(key);
-        deleteEntry(leaf, key);
-
         //for debug
         System.out.println("=====================================");
         System.out.println("key: " + key);
         this.print();
         System.out.println("=====================================");
+
+        var leaf = findLeafNode(key);
+        deleteEntry(leaf, key);
     }
 
     private void deleteEntry(Node node, Object key) {
@@ -106,9 +107,9 @@ public class BPlusTreeImpl implements BPlusTree {
         if (node.isRoot() && node.childrenCount() == 1) {
             setRoot(((NonLeafNode) node).getChild(0));
         } else {
-            boolean needRearrange = node.getRank() < getMinimumRank(node);
-            if (needRearrange) {
-                //merge with the sibling
+            boolean needRearrangeNodes = node.getRank() < getMinimumRank(node);
+            if (needRearrangeNodes) {
+                //try to merge with the sibling
                 Node leftNode;
                 Node rightNode;
                 var previousNode = node.getPreviousSibling();
@@ -141,8 +142,23 @@ public class BPlusTreeImpl implements BPlusTree {
                     }
                     parent.updateKey(rightNode);
                 }
+            } else if (!node.isRoot()) {
+                //recursively update key in ancestors
+                var parent = (NonLeafNode) node.getParent();
+                update(parent, node);
             }
         }
+    }
+
+    private void update(NonLeafNode nodeToBeUpdated, Node child) {
+        if (nodeToBeUpdated == null) {
+            return;
+        }
+        if (nodeToBeUpdated.isFirstChild(child)) {
+            update((NonLeafNode) nodeToBeUpdated.getParent(), nodeToBeUpdated);
+            return;
+        }
+        nodeToBeUpdated.updateKey(child);
     }
 
     @Override
