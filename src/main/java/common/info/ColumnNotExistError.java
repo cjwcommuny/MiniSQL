@@ -18,6 +18,6 @@ public class ColumnNotExistError implements OrdinaryInfo {
 
     @Override
     public String getMessage() {
-        return "column name " + columnName + " not exits in table: " + tableName;
+        return "column name: '" + columnName + "' not exits in table: " + tableName;
     }
 }

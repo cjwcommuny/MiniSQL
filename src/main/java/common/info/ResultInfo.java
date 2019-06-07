@@ -20,6 +20,9 @@ public class ResultInfo implements Info {
 
     @Override
     public String getFormatMessage() {
+        if (tuples.size() == 0) {
+            return "Empty result set";
+        }
         StringBuilder sb = new StringBuilder();
         for (var column: columns) {
             sb.append(column.visualInfo());

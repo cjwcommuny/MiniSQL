@@ -61,7 +61,7 @@ class LeafNode implements Node {
     List<Integer> getIndexes(Object key) {
         int i = searchSmallestLargerKeyIndex(key);
         if (i > keys.size() || !keys.get(i).equals(key)) {
-            return null;
+            return new LinkedList<>();
         } else {
             return records.get(i);
         }

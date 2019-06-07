@@ -25,7 +25,7 @@ INT_LITERAL: [+-]? DIGIT+;
 FLOAT_LITERAL: [+-]? DIGIT* '.'? DIGIT+;
 
 STRING_LITERAL:
-    '\'' (DIGIT | [a-zA-Z:/\\_.~\- \t()])* '\''
+    '\'' (DIGIT | [a-zA-Z:/\\_.~\- \t] | '[' | ']' | '(' | ')' | '&')* '\''
     ;
 
 DIGIT:
@@ -170,7 +170,7 @@ LESS_OR_EQUAL:
     ;
 
 NAME_IDENTIFIER:
-    [a-zA-Z][a-zA-Z0-9]*
+    [a-zA-Z][a-zA-Z0-9_]*
     ;
 
 type_identifier:

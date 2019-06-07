@@ -30,9 +30,9 @@ public class BPlusTreeImpl implements BPlusTree {
 
     @Override
     public List<Integer> find(Object key) {
-        Node currentNode = findLeafNode(key);
+        var currentNode = findLeafNode(key);
         //currentNode instanceof LeafNode
-        return ((LeafNode) currentNode).getIndexes(key);
+        return currentNode.getIndexes(key);
     }
 
     private LeafNode findLeafNode(Object key) {
