@@ -90,4 +90,19 @@ public class DefaultDiskFileManager implements DiskFileManager {
     private String extractTableName(String fileName) {
         return Files.getNameWithoutExtension(fileName);
     }
+
+    @Override
+    public void deleteTableFile(String tableName) {
+        var recordFile = Paths.get(DATABASE_DIRECTORY,
+                RECORDS_RELATIVE_DIRECTORY,
+                tableName + RECORD_FILE_POSTFIX).toFile();
+        if (recordFile != null) {
+            recordFile.delete();
+        }
+        var catalogFile = Paths.get(DATABASE_DIRECTORY,
+                CATALOG_RELATIVE_DIRECTORY, tableName + CATALOG_FILE_EXTENSION).toFile();
+        if (catalogFile != null) {
+            catalogFile.delete();
+        }
+    }
 }

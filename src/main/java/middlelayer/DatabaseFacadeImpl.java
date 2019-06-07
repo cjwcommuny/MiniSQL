@@ -57,8 +57,8 @@ public class DatabaseFacadeImpl implements DatabaseFacade {
     @Override
     public List<Info> quit() {
         var catalogInfos = catalogManager.quit();
-//        var fileHandlerInfos = fileHandler.quit();
-//        catalogInfos.addAll(fileHandlerInfos);
+        var fileHandlerInfos = fileHandler.quit();
+        catalogInfos.addAll(fileHandlerInfos);
         return catalogInfos;
     }
 

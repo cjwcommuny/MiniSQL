@@ -76,6 +76,7 @@ drop table student;
 
 execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/101_000insert.sql';
 select * from student;
+create index sageindex on student(sage);
 delete from student where sage = 1;
 delete from student where sage = 15;
 delete from student where sno = '17';

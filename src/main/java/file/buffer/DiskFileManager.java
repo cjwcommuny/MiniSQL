@@ -12,4 +12,6 @@ public interface DiskFileManager {
 
     List<File> getAllTableFiles();
     List<Pair<File, String>> getAllRecordFiles();
+
+    void deleteTableFile(String tableName);
 }

@@ -25,4 +25,6 @@ public interface FileHandler {
 //    long getTableTuplesTotalLength(String tableName);
 
     void init();
+
+    List<Info> deleteTable(String tableName);
 }

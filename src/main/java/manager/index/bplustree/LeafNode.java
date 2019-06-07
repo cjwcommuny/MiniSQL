@@ -39,12 +39,12 @@ class LeafNode implements Node {
     @Override
     public void printSubTree(String prefix, boolean isTail) {
         System.out.println(prefix + (isTail ? "└── " : "├── ") + printSelf());
-        for (int i = 0; i < records.size() - 1; i++) {
-            System.out.println(prefix + (isTail ? "    " : "│   ") + "├── " + records.get(i));
-        }
-        if (records.size() > 0) {
-            System.out.println(prefix + (isTail ?"    " : "│   ") + "└── " + records.get(records.size() - 1));
-        }
+//        for (int i = 0; i < records.size() - 1; i++) {
+//            System.out.println(prefix + (isTail ? "    " : "│   ") + "├── " + records.get(i));
+//        }
+//        if (records.size() > 0) {
+//            System.out.println(prefix + (isTail ?"    " : "│   ") + "└── " + records.get(records.size() - 1));
+//        }
     }
 
     public String printSelf() {

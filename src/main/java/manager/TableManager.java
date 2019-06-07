@@ -8,6 +8,7 @@ import common.info.TableExistError;
 import common.info.TableNotExistError;
 import lombok.Getter;
 
+import java.io.File;
 import java.util.*;
 
 public class TableManager {

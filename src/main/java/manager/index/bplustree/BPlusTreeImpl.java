@@ -16,7 +16,6 @@ import java.util.function.Function;
 public class BPlusTreeImpl implements BPlusTree {
     private Node root;
     private int rank;
-//    private Class keyClass;
 
 
     public BPlusTreeImpl(int rank) {
@@ -90,12 +89,15 @@ public class BPlusTreeImpl implements BPlusTree {
     @Override
     public void delete(Object key) {
         //for debug
-        System.out.println("=====================================");
-        System.out.println("key: " + key);
-        this.print();
-        System.out.println("=====================================");
+//        System.out.println("=====================================");
+//        System.out.println("key: " + key);
+//        this.print();
+//        System.out.println("=====================================");
 
         var leaf = findLeafNode(key);
+        if (!leaf.containsKey(key)) {
+            return;
+        }
         deleteEntry(leaf, key);
     }
 

@@ -11,6 +11,7 @@ import lombok.Getter;
 import manager.FileHandler;
 import manager.TableManager;
 import middlelayer.CatalogManager;
+import middlelayer.RecordManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -36,7 +37,9 @@ public class DefaultCatalogManager implements CatalogManager {
 
     @Override
     public List<Info> deleteTable(String tableName) {
-        return tableManager.deleteTable(tableName);
+        var infos = tableManager.deleteTable(tableName);
+        fileHandler.deleteTable(tableName);
+        return infos;
     }
 
     @Override
