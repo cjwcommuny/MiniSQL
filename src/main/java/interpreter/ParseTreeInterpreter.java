@@ -56,7 +56,7 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
 
     @Override
     public InstructionVisitResult visitCreateTable(MiniSqlParser.CreateTableContext ctx) {
-        String tableName = ctx.NAME_IDENTIFIER().getText();
+        String tableName = ctx.NAME_IDENTIFIER().getText().toLowerCase();
 
         var primaryKeyVisitResult = (PrimaryKeyVisitResult) visit(ctx.primaryKeyDefinition());
         String primaryKeyName = primaryKeyVisitResult.getPrimaryKeyName();
@@ -86,12 +86,12 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
 
     @Override
     public PrimaryKeyVisitResult visitPrimaryKeyDefinition(MiniSqlParser.PrimaryKeyDefinitionContext ctx) {
-        return new PrimaryKeyVisitResult(ctx.NAME_IDENTIFIER().getText());
+        return new PrimaryKeyVisitResult(ctx.NAME_IDENTIFIER().getText().toLowerCase());
     }
 
     @Override
     public ColumnDefinitionVisitResult visitColumnDefinition(MiniSqlParser.ColumnDefinitionContext ctx) {
-        String columnName = ctx.NAME_IDENTIFIER().getText();
+        String columnName = ctx.NAME_IDENTIFIER().getText().toLowerCase();
         Type type = ((TypeVisitResult) visit(ctx.type_identifier())).getType();
         boolean isUnique = ctx.UNIQUE() != null;
         Column column = new DefaultColumn(isUnique, columnName, type);
@@ -135,30 +135,30 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
 
     @Override
     public InstructionVisitResult visitDropTable(MiniSqlParser.DropTableContext ctx) {
-        String tableName = ctx.NAME_IDENTIFIER().getText();
+        String tableName = ctx.NAME_IDENTIFIER().getText().toLowerCase();
         List<Info> infos = database.deleteTable(tableName);
         return new InstructionVisitResult(infos);
     }
 
     @Override
     public InstructionVisitResult visitCreateIndex(MiniSqlParser.CreateIndexContext ctx) {
-        String indexName = ctx.NAME_IDENTIFIER(0).getText();
-        String tableName = ctx.NAME_IDENTIFIER(1).getText();
-        String columnName = ctx.NAME_IDENTIFIER(2).getText();
+        String indexName = ctx.NAME_IDENTIFIER(0).getText().toLowerCase();
+        String tableName = ctx.NAME_IDENTIFIER(1).getText().toLowerCase();
+        String columnName = ctx.NAME_IDENTIFIER(2).getText().toLowerCase();
         List<Info> infos = database.createIndex(indexName, tableName, columnName);
         return new InstructionVisitResult(infos);
     }
 
     @Override
     public InstructionVisitResult visitDropIndex(MiniSqlParser.DropIndexContext ctx) {
-        String indexName = ctx.NAME_IDENTIFIER(0).getText();
+        String indexName = ctx.NAME_IDENTIFIER(0).getText().toLowerCase();
         List<Info> infos = database.deleteIndex(indexName);
         return new InstructionVisitResult(infos);
     }
 
     @Override
     public ParseTreeVisitResult visitSelectAll(MiniSqlParser.SelectAllContext ctx) {
-        String tableName = ctx.NAME_IDENTIFIER().getText();
+        String tableName = ctx.NAME_IDENTIFIER().getText().toLowerCase();
         List<Condition> conditions;
         if (ctx.WHERE() == null) {
             //where clause not exists
@@ -174,7 +174,7 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
     @Override
     public ParseTreeVisitResult visitSelectColumns(MiniSqlParser.SelectColumnsContext ctx) {
         List<String> columnNames = ((ColumnNamesVisitResult) visit(ctx.columnNames())).getColumnNames();
-        String tableName = ctx.NAME_IDENTIFIER().getText();
+        String tableName = ctx.NAME_IDENTIFIER().getText().toLowerCase();
         List<Condition> conditions;
         if (ctx.WHERE() == null) {
             //where clause not exists
@@ -202,7 +202,7 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
     public ParseTreeVisitResult visitColumnNames(MiniSqlParser.ColumnNamesContext ctx) {
         var columnNames = new LinkedList<String>();
         for (var context: ctx.NAME_IDENTIFIER()) {
-            String columnName = context.getText();
+            String columnName = context.getText().toLowerCase();
             columnNames.add(columnName);
         }
         return new ColumnNamesVisitResult(columnNames);
@@ -220,8 +220,8 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
 
     @Override
     public ConditionVisitResult visitCondition(MiniSqlParser.ConditionContext ctx) {
-        String columnName = ctx.NAME_IDENTIFIER().getText();
-        String op = ctx.OP().getText();
+        String columnName = ctx.NAME_IDENTIFIER().getText().toLowerCase();
+        String op = ctx.OP().getText().toLowerCase();
         var literalVisitResult = (LiteralVisitResult) visit(ctx.literal());
         Object value = literalVisitResult.getValue();
         Condition condition = new DefaultCondition(Condition.ConditionType.construct(op), columnName, value);
@@ -230,7 +230,7 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
 
     @Override
     public InstructionVisitResult visitInsertTuple(MiniSqlParser.InsertTupleContext ctx) {
-        String tableName = ctx.NAME_IDENTIFIER().getText();
+        String tableName = ctx.NAME_IDENTIFIER().getText().toLowerCase();
         List<Object> values = new LinkedList<>();
         for (var literalContext: ctx.literal()) {
             values.add(((LiteralVisitResult) visit(literalContext)).getValue());
@@ -241,7 +241,7 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
 
     @Override
     public InstructionVisitResult visitDeleteTuple(MiniSqlParser.DeleteTupleContext ctx) {
-        String tableName = ctx.NAME_IDENTIFIER().getText();
+        String tableName = ctx.NAME_IDENTIFIER().getText().toLowerCase();
         List<Condition> conditions;
         if (ctx.WHERE() == null) {
             conditions = new LinkedList<>();
