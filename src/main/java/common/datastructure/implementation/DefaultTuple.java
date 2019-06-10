@@ -64,18 +64,35 @@ public class DefaultTuple implements Tuple {
     }
 
     @Override
-    public String visualInfo() {
-        StringBuilder sb = new StringBuilder();
-        for (var value: data) {
-            if (value instanceof String) {
-                sb.append("'");
-                sb.append(value);
-                sb.append("'");
-            } else {
-                sb.append(value);
+    public String visualInfo(List<Integer> filterColumnIndexes) {
+        if (filterColumnIndexes == null) {
+            StringBuilder sb = new StringBuilder();
+            for (var value: data) {
+                if (value instanceof String) {
+                    sb.append("'");
+                    sb.append(value);
+                    sb.append("'");
+                } else {
+                    sb.append(value);
+                }
+                sb.append(", ");
             }
-            sb.append(", ");
+            return sb.toString();
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for (var index: filterColumnIndexes) {
+                Object value = data.get(index);
+                if (value instanceof String) {
+                    sb.append("'");
+                    sb.append(value);
+                    sb.append("'");
+                } else {
+                    sb.append(value);
+                }
+                sb.append(", ");
+            }
+            return sb.toString();
         }
-        return sb.toString();
+
     }
 }

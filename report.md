@@ -351,7 +351,7 @@ BufferManager 和 DiskFileManager：
 * Gradle：工程依赖管理
 * ANTLR 4.7.2：辅助解析 SQL 语句
 * Guava 27.1：提供一些 Java 标准库没有的常用函数
-* Lombok 1.18.8：提供一些 Java 没有的方便语言特性
+* Lombok 1.18.8：提供一些 Java 没有的方便的语言特性
 
 
 

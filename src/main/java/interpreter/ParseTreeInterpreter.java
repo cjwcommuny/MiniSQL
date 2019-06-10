@@ -3,12 +3,12 @@ package interpreter;
 import common.datastructure.Column;
 import common.datastructure.Condition;
 import common.datastructure.implementation.DefaultColumn;
-import common.info.FileNotFoundError;
-import common.info.Info;
-import common.info.NameDuplicationInfo;
+import common.info.*;
 import common.type.Type;
 import common.type.implementation.DefaultCondition;
 import common.type.implementation.TypeFactory;
+import error.ColumnNameNotExistException;
+import error.MiniSqlCheckedError;
 import interpreter.antlrparser.MiniSqlBaseVisitor;
 import interpreter.antlrparser.MiniSqlParser;
 import interpreter.api.DatabaseFacade;
@@ -23,6 +23,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.sql.ResultSet;
 import java.util.*;
 
 public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResult> {
@@ -156,7 +157,7 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
     }
 
     @Override
-    public InstructionVisitResult visitSelectInstruction(MiniSqlParser.SelectInstructionContext ctx) {
+    public ParseTreeVisitResult visitSelectAll(MiniSqlParser.SelectAllContext ctx) {
         String tableName = ctx.NAME_IDENTIFIER().getText();
         List<Condition> conditions;
         if (ctx.WHERE() == null) {
@@ -168,6 +169,43 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
         }
         List<Info> infos = database.select(tableName, conditions);
         return new InstructionVisitResult(infos);
+    }
+
+    @Override
+    public ParseTreeVisitResult visitSelectColumns(MiniSqlParser.SelectColumnsContext ctx) {
+        List<String> columnNames = ((ColumnNamesVisitResult) visit(ctx.columnNames())).getColumnNames();
+        String tableName = ctx.NAME_IDENTIFIER().getText();
+        List<Condition> conditions;
+        if (ctx.WHERE() == null) {
+            //where clause not exists
+            conditions = new LinkedList<>();
+        } else {
+            var conditionsVisitResult = (ConditionsVisitResult) visit(ctx.conditions());
+            conditions = conditionsVisitResult.getConditions();
+        }
+        List<Info> infos = database.select(tableName, conditions);
+        try {
+            for (var info: infos) {
+                if (info instanceof ResultInfo) {
+                    ((ResultInfo) info).filterColumnName(columnNames);
+                }
+            }
+            return new InstructionVisitResult(infos);
+        } catch (ColumnNameNotExistException e) {
+            List<Info> errInfos
+                    = Collections.singletonList(new ColumnNotExistError(tableName, e.getColumnName()));
+            return new InstructionVisitResult(errInfos);
+        }
+    }
+
+    @Override
+    public ParseTreeVisitResult visitColumnNames(MiniSqlParser.ColumnNamesContext ctx) {
+        var columnNames = new LinkedList<String>();
+        for (var context: ctx.NAME_IDENTIFIER()) {
+            String columnName = ((StringLiteralVisitResult) visit(context)).getValue();
+            columnNames.add(columnName);
+        }
+        return new ColumnNamesVisitResult(columnNames);
     }
 
     @Override

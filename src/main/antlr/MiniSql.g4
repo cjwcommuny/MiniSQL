@@ -181,7 +181,7 @@ type_identifier:
 
 WHITE_SPACE: [ \t\r\n]+ -> skip;
 
-LINE_COMMENT: '--' ~[\r\n]* -> skip;
+LINE_COMMENT: ('--'| '#') ~[\r\n]* -> skip;
 
 COMMENT: '/*' .*? '*/' -> skip;
 
@@ -231,7 +231,12 @@ dropIndex:
     ;
 
 selectInstruction:
-    SELECT '*' FROM NAME_IDENTIFIER (WHERE conditions)?
+    SELECT '*' FROM NAME_IDENTIFIER (WHERE conditions)? # selectAll
+    | SELECT columnNames FROM NAME_IDENTIFIER (WHERE conditions)? # selectColumns
+    ;
+
+columnNames:
+    (NAME_IDENTIFIER ',')* NAME_IDENTIFIER
     ;
 
 condition:

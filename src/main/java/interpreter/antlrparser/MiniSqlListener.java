@@ -136,15 +136,39 @@ public interface MiniSqlListener extends ParseTreeListener {
 	 */
 	void exitDropIndex(MiniSqlParser.DropIndexContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MiniSqlParser#selectInstruction}.
+	 * Enter a parse tree produced by the {@code selectAll}
+	 * labeled alternative in {@link MiniSqlParser#selectInstruction}.
 	 * @param ctx the parse tree
 	 */
-	void enterSelectInstruction(MiniSqlParser.SelectInstructionContext ctx);
+	void enterSelectAll(MiniSqlParser.SelectAllContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MiniSqlParser#selectInstruction}.
+	 * Exit a parse tree produced by the {@code selectAll}
+	 * labeled alternative in {@link MiniSqlParser#selectInstruction}.
 	 * @param ctx the parse tree
 	 */
-	void exitSelectInstruction(MiniSqlParser.SelectInstructionContext ctx);
+	void exitSelectAll(MiniSqlParser.SelectAllContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code selectColumns}
+	 * labeled alternative in {@link MiniSqlParser#selectInstruction}.
+	 * @param ctx the parse tree
+	 */
+	void enterSelectColumns(MiniSqlParser.SelectColumnsContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code selectColumns}
+	 * labeled alternative in {@link MiniSqlParser#selectInstruction}.
+	 * @param ctx the parse tree
+	 */
+	void exitSelectColumns(MiniSqlParser.SelectColumnsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MiniSqlParser#columnNames}.
+	 * @param ctx the parse tree
+	 */
+	void enterColumnNames(MiniSqlParser.ColumnNamesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MiniSqlParser#columnNames}.
+	 * @param ctx the parse tree
+	 */
+	void exitColumnNames(MiniSqlParser.ColumnNamesContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MiniSqlParser#condition}.
 	 * @param ctx the parse tree

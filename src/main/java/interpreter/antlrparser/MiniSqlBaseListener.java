@@ -162,13 +162,37 @@ public class MiniSqlBaseListener implements MiniSqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSelectInstruction(MiniSqlParser.SelectInstructionContext ctx) { }
+	@Override public void enterSelectAll(MiniSqlParser.SelectAllContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSelectInstruction(MiniSqlParser.SelectInstructionContext ctx) { }
+	@Override public void exitSelectAll(MiniSqlParser.SelectAllContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSelectColumns(MiniSqlParser.SelectColumnsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSelectColumns(MiniSqlParser.SelectColumnsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterColumnNames(MiniSqlParser.ColumnNamesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitColumnNames(MiniSqlParser.ColumnNamesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

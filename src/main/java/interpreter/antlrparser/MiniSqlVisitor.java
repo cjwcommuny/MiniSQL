@@ -88,11 +88,25 @@ public interface MiniSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDropIndex(MiniSqlParser.DropIndexContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MiniSqlParser#selectInstruction}.
+	 * Visit a parse tree produced by the {@code selectAll}
+	 * labeled alternative in {@link MiniSqlParser#selectInstruction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSelectInstruction(MiniSqlParser.SelectInstructionContext ctx);
+	T visitSelectAll(MiniSqlParser.SelectAllContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code selectColumns}
+	 * labeled alternative in {@link MiniSqlParser#selectInstruction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSelectColumns(MiniSqlParser.SelectColumnsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MiniSqlParser#columnNames}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColumnNames(MiniSqlParser.ColumnNamesContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MiniSqlParser#condition}.
 	 * @param ctx the parse tree
