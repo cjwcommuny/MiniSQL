@@ -4,6 +4,7 @@ import common.datastructure.Column;
 import common.datastructure.Condition;
 import common.datastructure.restriction.Restriction;
 import common.info.Info;
+import common.info.SuccessInfo;
 import interpreter.api.DatabaseFacade;
 import manager.FileHandler;
 
@@ -31,22 +32,38 @@ public class DatabaseFacadeImpl implements DatabaseFacade {
 
     @Override
     public List<Info> createTable(String tableName, List<Column> columns, Column primaryColumn) {
-        return catalogManager.createTable(tableName, columns, primaryColumn);
+        List<Info> infos = catalogManager.createTable(tableName, columns, primaryColumn);
+        if (infos.size() == 0) {
+            infos.add(new SuccessInfo());
+        }
+        return infos;
     }
 
     @Override
     public List<Info> deleteTable(String tableName) {
-        return catalogManager.deleteTable(tableName);
+        List<Info> infos = catalogManager.deleteTable(tableName);
+        if (infos.size() == 0) {
+            infos.add(new SuccessInfo());
+        }
+        return infos;
     }
 
     @Override
     public List<Info> createIndex(String indexName, String tableName, String columnName) {
-        return indexManager.createIndex(indexName, tableName, columnName);
+        var infos = indexManager.createIndex(indexName, tableName, columnName);
+        if (infos.size() == 0) {
+            infos.add(new SuccessInfo());
+        }
+        return infos;
     }
 
     @Override
     public List<Info> deleteIndex(String indexName) {
-        return indexManager.deleteIndex(indexName);
+        var infos = indexManager.deleteIndex(indexName);
+        if (infos.size() == 0) {
+            infos.add(new SuccessInfo());
+        }
+        return infos;
     }
 
     @Override
@@ -70,12 +87,20 @@ public class DatabaseFacadeImpl implements DatabaseFacade {
 
     @Override
     public List<Info> insertTuple(String tableName, List<Object> values) {
-        return recordManager.insertTuple(tableName, values);
+        var infos = recordManager.insertTuple(tableName, values);
+        if (infos.size() == 0) {
+            infos.add(new SuccessInfo());
+        }
+        return infos;
     }
 
     @Override
     public List<Info> deleteTuple(String tableName, List<Condition> conditions) {
-        return recordManager.deleteTuple(tableName, convertConditionsToRestrictions(conditions));
+        var infos = recordManager.deleteTuple(tableName, convertConditionsToRestrictions(conditions));
+        if (infos.size() == 0) {
+            infos.add(new SuccessInfo());
+        }
+        return infos;
     }
 
     private static List<Restriction> convertConditionsToRestrictions(List<Condition> conditions) {
