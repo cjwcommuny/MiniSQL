@@ -227,7 +227,7 @@ createIndex:
     ;
 
 dropIndex:
-    DROP INDEX NAME_IDENTIFIER
+    DROP INDEX NAME_IDENTIFIER ON NAME_IDENTIFIER
     ;
 
 selectInstruction:

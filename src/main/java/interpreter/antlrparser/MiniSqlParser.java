@@ -774,7 +774,11 @@ public class MiniSqlParser extends Parser {
 	public static class DropIndexContext extends ParserRuleContext {
 		public TerminalNode DROP() { return getToken(MiniSqlParser.DROP, 0); }
 		public TerminalNode INDEX() { return getToken(MiniSqlParser.INDEX, 0); }
-		public TerminalNode NAME_IDENTIFIER() { return getToken(MiniSqlParser.NAME_IDENTIFIER, 0); }
+		public List<TerminalNode> NAME_IDENTIFIER() { return getTokens(MiniSqlParser.NAME_IDENTIFIER); }
+		public TerminalNode NAME_IDENTIFIER(int i) {
+			return getToken(MiniSqlParser.NAME_IDENTIFIER, i);
+		}
+		public TerminalNode ON() { return getToken(MiniSqlParser.ON, 0); }
 		public DropIndexContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -805,6 +809,10 @@ public class MiniSqlParser extends Parser {
 			setState(100);
 			match(INDEX);
 			setState(101);
+			match(NAME_IDENTIFIER);
+			setState(102);
+			match(ON);
+			setState(103);
 			match(NAME_IDENTIFIER);
 			}
 		}
@@ -885,29 +893,29 @@ public class MiniSqlParser extends Parser {
 		enterRule(_localctx, 20, RULE_selectInstruction);
 		int _la;
 		try {
-			setState(119);
+			setState(121);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
 			case 1:
 				_localctx = new SelectAllContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(103);
-				match(SELECT);
-				setState(104);
-				match(T__3);
 				setState(105);
-				match(FROM);
+				match(SELECT);
 				setState(106);
+				match(T__3);
+				setState(107);
+				match(FROM);
+				setState(108);
 				match(NAME_IDENTIFIER);
-				setState(109);
+				setState(111);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==WHERE) {
 					{
-					setState(107);
+					setState(109);
 					match(WHERE);
-					setState(108);
+					setState(110);
 					conditions();
 					}
 				}
@@ -918,22 +926,22 @@ public class MiniSqlParser extends Parser {
 				_localctx = new SelectColumnsContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(111);
-				match(SELECT);
-				setState(112);
-				columnNames();
 				setState(113);
-				match(FROM);
+				match(SELECT);
 				setState(114);
+				columnNames();
+				setState(115);
+				match(FROM);
+				setState(116);
 				match(NAME_IDENTIFIER);
-				setState(117);
+				setState(119);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==WHERE) {
 					{
-					setState(115);
+					setState(117);
 					match(WHERE);
-					setState(116);
+					setState(118);
 					conditions();
 					}
 				}
@@ -984,25 +992,25 @@ public class MiniSqlParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(125);
+			setState(127);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(121);
+					setState(123);
 					match(NAME_IDENTIFIER);
-					setState(122);
+					setState(124);
 					match(T__2);
 					}
 					} 
 				}
-				setState(127);
+				setState(129);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
 			}
-			setState(128);
+			setState(130);
 			match(NAME_IDENTIFIER);
 			}
 		}
@@ -1048,11 +1056,11 @@ public class MiniSqlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(130);
-			match(NAME_IDENTIFIER);
-			setState(131);
-			match(OP);
 			setState(132);
+			match(NAME_IDENTIFIER);
+			setState(133);
+			match(OP);
+			setState(134);
 			literal();
 			}
 		}
@@ -1104,37 +1112,37 @@ public class MiniSqlParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(134);
-			match(INSERT);
-			setState(135);
-			match(INTO);
 			setState(136);
-			match(NAME_IDENTIFIER);
+			match(INSERT);
 			setState(137);
-			match(VALUES);
+			match(INTO);
 			setState(138);
+			match(NAME_IDENTIFIER);
+			setState(139);
+			match(VALUES);
+			setState(140);
 			match(T__0);
-			setState(144);
+			setState(146);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,8,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(139);
+					setState(141);
 					literal();
-					setState(140);
+					setState(142);
 					match(T__2);
 					}
 					} 
 				}
-				setState(146);
+				setState(148);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,8,_ctx);
 			}
-			setState(147);
+			setState(149);
 			literal();
-			setState(148);
+			setState(150);
 			match(T__1);
 			}
 		}
@@ -1183,20 +1191,20 @@ public class MiniSqlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(150);
-			match(DELETE);
-			setState(151);
-			match(FROM);
 			setState(152);
+			match(DELETE);
+			setState(153);
+			match(FROM);
+			setState(154);
 			match(NAME_IDENTIFIER);
-			setState(155);
+			setState(157);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==WHERE) {
 				{
-				setState(153);
+				setState(155);
 				match(WHERE);
-				setState(154);
+				setState(156);
 				conditions();
 				}
 			}
@@ -1247,25 +1255,25 @@ public class MiniSqlParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(162);
+			setState(164);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,10,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(157);
+					setState(159);
 					condition();
-					setState(158);
+					setState(160);
 					match(T__4);
 					}
 					} 
 				}
-				setState(164);
+				setState(166);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,10,_ctx);
 			}
-			setState(165);
+			setState(167);
 			condition();
 			}
 		}
@@ -1307,7 +1315,7 @@ public class MiniSqlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(167);
+			setState(169);
 			match(QUIT);
 			}
 		}
@@ -1350,9 +1358,9 @@ public class MiniSqlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(169);
+			setState(171);
 			match(EXECFILE);
-			setState(170);
+			setState(172);
 			match(STRING_LITERAL);
 			}
 		}
@@ -1368,54 +1376,55 @@ public class MiniSqlParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3+\u00af\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3+\u00b1\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\5\3/\n\3\3\4\3\4\3\4\3\5\3"+
 		"\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\5\5>\n\5\3\6\3\6\3\6\3\6\3\6\3\6\3"+
 		"\6\6\6G\n\6\r\6\16\6H\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\7\3\b\3\b\3\b"+
 		"\5\bW\n\b\3\t\3\t\3\t\3\t\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\13\3\13"+
-		"\3\13\3\13\3\f\3\f\3\f\3\f\3\f\3\f\5\fp\n\f\3\f\3\f\3\f\3\f\3\f\3\f\5"+
-		"\fx\n\f\5\fz\n\f\3\r\3\r\7\r~\n\r\f\r\16\r\u0081\13\r\3\r\3\r\3\16\3\16"+
-		"\3\16\3\16\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\7\17\u0091\n\17\f\17"+
-		"\16\17\u0094\13\17\3\17\3\17\3\17\3\20\3\20\3\20\3\20\3\20\5\20\u009e"+
-		"\n\20\3\21\3\21\3\21\7\21\u00a3\n\21\f\21\16\21\u00a6\13\21\3\21\3\21"+
-		"\3\22\3\22\3\23\3\23\3\23\3\23\2\2\24\2\4\6\b\n\f\16\20\22\24\26\30\32"+
-		"\34\36 \"$\2\3\3\2\b\n\2\u00b0\2&\3\2\2\2\4.\3\2\2\2\6\60\3\2\2\2\b=\3"+
-		"\2\2\2\n?\3\2\2\2\fM\3\2\2\2\16S\3\2\2\2\20X\3\2\2\2\22\\\3\2\2\2\24e"+
-		"\3\2\2\2\26y\3\2\2\2\30\177\3\2\2\2\32\u0084\3\2\2\2\34\u0088\3\2\2\2"+
-		"\36\u0098\3\2\2\2 \u00a4\3\2\2\2\"\u00a9\3\2\2\2$\u00ab\3\2\2\2&\'\t\2"+
-		"\2\2\'\3\3\2\2\2(/\7\21\2\2)/\7\23\2\2*+\7\22\2\2+,\7\3\2\2,-\7\b\2\2"+
-		"-/\7\4\2\2.(\3\2\2\2.)\3\2\2\2.*\3\2\2\2/\5\3\2\2\2\60\61\5\b\5\2\61\62"+
-		"\7\2\2\3\62\7\3\2\2\2\63>\5\n\6\2\64>\5\20\t\2\65>\5\22\n\2\66>\5\24\13"+
-		"\2\67>\5\26\f\28>\5\34\17\29>\5\36\20\2:>\5\"\22\2;>\5$\23\2<>\7\2\2\3"+
-		"=\63\3\2\2\2=\64\3\2\2\2=\65\3\2\2\2=\66\3\2\2\2=\67\3\2\2\2=8\3\2\2\2"+
-		"=9\3\2\2\2=:\3\2\2\2=;\3\2\2\2=<\3\2\2\2>\t\3\2\2\2?@\7\f\2\2@A\7\r\2"+
-		"\2AB\7(\2\2BF\7\3\2\2CD\5\16\b\2DE\7\5\2\2EG\3\2\2\2FC\3\2\2\2GH\3\2\2"+
-		"\2HF\3\2\2\2HI\3\2\2\2IJ\3\2\2\2JK\5\f\7\2KL\7\4\2\2L\13\3\2\2\2MN\7\16"+
-		"\2\2NO\7\17\2\2OP\7\3\2\2PQ\7(\2\2QR\7\4\2\2R\r\3\2\2\2ST\7(\2\2TV\5\4"+
-		"\3\2UW\7\20\2\2VU\3\2\2\2VW\3\2\2\2W\17\3\2\2\2XY\7\24\2\2YZ\7\r\2\2Z"+
-		"[\7(\2\2[\21\3\2\2\2\\]\7\f\2\2]^\7\25\2\2^_\7(\2\2_`\7\26\2\2`a\7(\2"+
-		"\2ab\7\3\2\2bc\7(\2\2cd\7\4\2\2d\23\3\2\2\2ef\7\24\2\2fg\7\25\2\2gh\7"+
-		"(\2\2h\25\3\2\2\2ij\7\27\2\2jk\7\6\2\2kl\7\31\2\2lo\7(\2\2mn\7\30\2\2"+
-		"np\5 \21\2om\3\2\2\2op\3\2\2\2pz\3\2\2\2qr\7\27\2\2rs\5\30\r\2st\7\31"+
-		"\2\2tw\7(\2\2uv\7\30\2\2vx\5 \21\2wu\3\2\2\2wx\3\2\2\2xz\3\2\2\2yi\3\2"+
-		"\2\2yq\3\2\2\2z\27\3\2\2\2{|\7(\2\2|~\7\5\2\2}{\3\2\2\2~\u0081\3\2\2\2"+
-		"\177}\3\2\2\2\177\u0080\3\2\2\2\u0080\u0082\3\2\2\2\u0081\177\3\2\2\2"+
-		"\u0082\u0083\7(\2\2\u0083\31\3\2\2\2\u0084\u0085\7(\2\2\u0085\u0086\7"+
-		"!\2\2\u0086\u0087\5\2\2\2\u0087\33\3\2\2\2\u0088\u0089\7\33\2\2\u0089"+
-		"\u008a\7\34\2\2\u008a\u008b\7(\2\2\u008b\u008c\7\36\2\2\u008c\u0092\7"+
-		"\3\2\2\u008d\u008e\5\2\2\2\u008e\u008f\7\5\2\2\u008f\u0091\3\2\2\2\u0090"+
-		"\u008d\3\2\2\2\u0091\u0094\3\2\2\2\u0092\u0090\3\2\2\2\u0092\u0093\3\2"+
-		"\2\2\u0093\u0095\3\2\2\2\u0094\u0092\3\2\2\2\u0095\u0096\5\2\2\2\u0096"+
-		"\u0097\7\4\2\2\u0097\35\3\2\2\2\u0098\u0099\7\35\2\2\u0099\u009a\7\31"+
-		"\2\2\u009a\u009d\7(\2\2\u009b\u009c\7\30\2\2\u009c\u009e\5 \21\2\u009d"+
-		"\u009b\3\2\2\2\u009d\u009e\3\2\2\2\u009e\37\3\2\2\2\u009f\u00a0\5\32\16"+
-		"\2\u00a0\u00a1\7\7\2\2\u00a1\u00a3\3\2\2\2\u00a2\u009f\3\2\2\2\u00a3\u00a6"+
-		"\3\2\2\2\u00a4\u00a2\3\2\2\2\u00a4\u00a5\3\2\2\2\u00a5\u00a7\3\2\2\2\u00a6"+
-		"\u00a4\3\2\2\2\u00a7\u00a8\5\32\16\2\u00a8!\3\2\2\2\u00a9\u00aa\7\37\2"+
-		"\2\u00aa#\3\2\2\2\u00ab\u00ac\7 \2\2\u00ac\u00ad\7\n\2\2\u00ad%\3\2\2"+
-		"\2\r.=HVowy\177\u0092\u009d\u00a4";
+		"\3\13\3\13\3\13\3\13\3\f\3\f\3\f\3\f\3\f\3\f\5\fr\n\f\3\f\3\f\3\f\3\f"+
+		"\3\f\3\f\5\fz\n\f\5\f|\n\f\3\r\3\r\7\r\u0080\n\r\f\r\16\r\u0083\13\r\3"+
+		"\r\3\r\3\16\3\16\3\16\3\16\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\7\17"+
+		"\u0093\n\17\f\17\16\17\u0096\13\17\3\17\3\17\3\17\3\20\3\20\3\20\3\20"+
+		"\3\20\5\20\u00a0\n\20\3\21\3\21\3\21\7\21\u00a5\n\21\f\21\16\21\u00a8"+
+		"\13\21\3\21\3\21\3\22\3\22\3\23\3\23\3\23\3\23\2\2\24\2\4\6\b\n\f\16\20"+
+		"\22\24\26\30\32\34\36 \"$\2\3\3\2\b\n\2\u00b2\2&\3\2\2\2\4.\3\2\2\2\6"+
+		"\60\3\2\2\2\b=\3\2\2\2\n?\3\2\2\2\fM\3\2\2\2\16S\3\2\2\2\20X\3\2\2\2\22"+
+		"\\\3\2\2\2\24e\3\2\2\2\26{\3\2\2\2\30\u0081\3\2\2\2\32\u0086\3\2\2\2\34"+
+		"\u008a\3\2\2\2\36\u009a\3\2\2\2 \u00a6\3\2\2\2\"\u00ab\3\2\2\2$\u00ad"+
+		"\3\2\2\2&\'\t\2\2\2\'\3\3\2\2\2(/\7\21\2\2)/\7\23\2\2*+\7\22\2\2+,\7\3"+
+		"\2\2,-\7\b\2\2-/\7\4\2\2.(\3\2\2\2.)\3\2\2\2.*\3\2\2\2/\5\3\2\2\2\60\61"+
+		"\5\b\5\2\61\62\7\2\2\3\62\7\3\2\2\2\63>\5\n\6\2\64>\5\20\t\2\65>\5\22"+
+		"\n\2\66>\5\24\13\2\67>\5\26\f\28>\5\34\17\29>\5\36\20\2:>\5\"\22\2;>\5"+
+		"$\23\2<>\7\2\2\3=\63\3\2\2\2=\64\3\2\2\2=\65\3\2\2\2=\66\3\2\2\2=\67\3"+
+		"\2\2\2=8\3\2\2\2=9\3\2\2\2=:\3\2\2\2=;\3\2\2\2=<\3\2\2\2>\t\3\2\2\2?@"+
+		"\7\f\2\2@A\7\r\2\2AB\7(\2\2BF\7\3\2\2CD\5\16\b\2DE\7\5\2\2EG\3\2\2\2F"+
+		"C\3\2\2\2GH\3\2\2\2HF\3\2\2\2HI\3\2\2\2IJ\3\2\2\2JK\5\f\7\2KL\7\4\2\2"+
+		"L\13\3\2\2\2MN\7\16\2\2NO\7\17\2\2OP\7\3\2\2PQ\7(\2\2QR\7\4\2\2R\r\3\2"+
+		"\2\2ST\7(\2\2TV\5\4\3\2UW\7\20\2\2VU\3\2\2\2VW\3\2\2\2W\17\3\2\2\2XY\7"+
+		"\24\2\2YZ\7\r\2\2Z[\7(\2\2[\21\3\2\2\2\\]\7\f\2\2]^\7\25\2\2^_\7(\2\2"+
+		"_`\7\26\2\2`a\7(\2\2ab\7\3\2\2bc\7(\2\2cd\7\4\2\2d\23\3\2\2\2ef\7\24\2"+
+		"\2fg\7\25\2\2gh\7(\2\2hi\7\26\2\2ij\7(\2\2j\25\3\2\2\2kl\7\27\2\2lm\7"+
+		"\6\2\2mn\7\31\2\2nq\7(\2\2op\7\30\2\2pr\5 \21\2qo\3\2\2\2qr\3\2\2\2r|"+
+		"\3\2\2\2st\7\27\2\2tu\5\30\r\2uv\7\31\2\2vy\7(\2\2wx\7\30\2\2xz\5 \21"+
+		"\2yw\3\2\2\2yz\3\2\2\2z|\3\2\2\2{k\3\2\2\2{s\3\2\2\2|\27\3\2\2\2}~\7("+
+		"\2\2~\u0080\7\5\2\2\177}\3\2\2\2\u0080\u0083\3\2\2\2\u0081\177\3\2\2\2"+
+		"\u0081\u0082\3\2\2\2\u0082\u0084\3\2\2\2\u0083\u0081\3\2\2\2\u0084\u0085"+
+		"\7(\2\2\u0085\31\3\2\2\2\u0086\u0087\7(\2\2\u0087\u0088\7!\2\2\u0088\u0089"+
+		"\5\2\2\2\u0089\33\3\2\2\2\u008a\u008b\7\33\2\2\u008b\u008c\7\34\2\2\u008c"+
+		"\u008d\7(\2\2\u008d\u008e\7\36\2\2\u008e\u0094\7\3\2\2\u008f\u0090\5\2"+
+		"\2\2\u0090\u0091\7\5\2\2\u0091\u0093\3\2\2\2\u0092\u008f\3\2\2\2\u0093"+
+		"\u0096\3\2\2\2\u0094\u0092\3\2\2\2\u0094\u0095\3\2\2\2\u0095\u0097\3\2"+
+		"\2\2\u0096\u0094\3\2\2\2\u0097\u0098\5\2\2\2\u0098\u0099\7\4\2\2\u0099"+
+		"\35\3\2\2\2\u009a\u009b\7\35\2\2\u009b\u009c\7\31\2\2\u009c\u009f\7(\2"+
+		"\2\u009d\u009e\7\30\2\2\u009e\u00a0\5 \21\2\u009f\u009d\3\2\2\2\u009f"+
+		"\u00a0\3\2\2\2\u00a0\37\3\2\2\2\u00a1\u00a2\5\32\16\2\u00a2\u00a3\7\7"+
+		"\2\2\u00a3\u00a5\3\2\2\2\u00a4\u00a1\3\2\2\2\u00a5\u00a8\3\2\2\2\u00a6"+
+		"\u00a4\3\2\2\2\u00a6\u00a7\3\2\2\2\u00a7\u00a9\3\2\2\2\u00a8\u00a6\3\2"+
+		"\2\2\u00a9\u00aa\5\32\16\2\u00aa!\3\2\2\2\u00ab\u00ac\7\37\2\2\u00ac#"+
+		"\3\2\2\2\u00ad\u00ae\7 \2\2\u00ae\u00af\7\n\2\2\u00af%\3\2\2\2\r.=HVq"+
+		"y{\u0081\u0094\u009f\u00a6";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

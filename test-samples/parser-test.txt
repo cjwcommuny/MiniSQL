@@ -81,10 +81,10 @@ delete from student where sage = 1;
 delete from student where sage = 15;
 delete from student where sno = '17';
 
-execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/offcial/0_create_table_scheme.sql';
-execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/offcial/1_insert_small_data.sql';
-execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/offcial/2_select_test.sql';
-execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/offcial/3_delete_test.sql';
-execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/offcial/4_index_test.sql';
-execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/offcial/5_drop_table.sql';
-execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/offcial/6_insert_large_data.sql';
+execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/official/0_create_table_scheme.sql';
+execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/official/1_insert_small_data.sql';
+execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/official/2_select_test.sql';
+execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/official/3_delete_test.sql';
+execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/official/4_index_test.sql';
+execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/official/5_drop_table.sql';
+execfile '/Users/cjw/Library/Mobile Documents/com~apple~CloudDocs/workspace/MiniSQL/test-samples/official/6_insert_large_data.sql';

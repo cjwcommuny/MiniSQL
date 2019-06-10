@@ -151,7 +151,7 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
 
     @Override
     public InstructionVisitResult visitDropIndex(MiniSqlParser.DropIndexContext ctx) {
-        String indexName = ctx.NAME_IDENTIFIER().getText();
+        String indexName = ctx.NAME_IDENTIFIER(0).getText();
         List<Info> infos = database.deleteIndex(indexName);
         return new InstructionVisitResult(infos);
     }
@@ -202,7 +202,7 @@ public class ParseTreeInterpreter extends MiniSqlBaseVisitor<ParseTreeVisitResul
     public ParseTreeVisitResult visitColumnNames(MiniSqlParser.ColumnNamesContext ctx) {
         var columnNames = new LinkedList<String>();
         for (var context: ctx.NAME_IDENTIFIER()) {
-            String columnName = ((StringLiteralVisitResult) visit(context)).getValue();
+            String columnName = context.getText();
             columnNames.add(columnName);
         }
         return new ColumnNamesVisitResult(columnNames);

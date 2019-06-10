@@ -28,10 +28,19 @@ public class ResultInfo implements Info {
             return "Empty result set";
         }
         StringBuilder sb = new StringBuilder();
-        for (var column: columns) {
-            sb.append(column.visualInfo());
-            sb.append(", ");
+        if (filterList == null) {
+            for (var column: columns) {
+                sb.append(column.visualInfo());
+                sb.append(", ");
+            }
+        } else {
+            for (var index: filterList) {
+                var column = columns.get(index);
+                sb.append(column.visualInfo());
+                sb.append(", ");
+            }
         }
+
         sb.append("\n");
         for (var tuple: tuples) {
             sb.append(tuple.visualInfo(filterList));
