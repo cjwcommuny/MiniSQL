@@ -7,6 +7,7 @@ import middlelayer.RecordManager;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 public interface Table extends Serializable {
     String getTableName();
@@ -52,4 +53,6 @@ public interface Table extends Serializable {
     int getTuplesCount();
 
     List<Tuple> getAllTuplesAndOffsets(FileHandler fileHandler, List<Integer> OUT_offsets, RecordManager recordManager);
+
+    Queue<Integer> getFreeTuplePositions();
 }

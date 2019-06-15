@@ -66,6 +66,7 @@ public class DefaultRecordManager implements RecordManager {
 
         //insert
         int tupleIndex = table.addTuple();
+//        System.out.println(tableName + " tuples count: "+ table.getTuplesCount());//for debug
         int offset = tupleIndex * table.getTupleSize();
         byte[] tupleBytes = tuple.toBytes(table.getTypes(), table.getTupleSize());
         fileHandler.writeTupleToFile(tupleBytes, tableName, offset);
@@ -86,6 +87,7 @@ public class DefaultRecordManager implements RecordManager {
             var tuples = getTuplesAndOffsets(table, restrictions, offsetsFiltered);
             indexManager.deleteOffsets(tuples, table);
             deleteTuplesFromFile(offsetsFiltered, table);
+//            System.out.println(tableName + " tuples count: " + table.getTuplesCount()); //for debug
             return infos;
         } catch (MiniSqlAbortException e) {
             infos.addAll(e.getInfos());

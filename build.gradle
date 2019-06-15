@@ -32,3 +32,16 @@ run {
     mainClassName = 'main.Main'
     args = [""]
 }
+
+mainClassName = "main.Main"
+jar {
+    manifest {
+        attributes "Main-Class": "$mainClassName"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+//    args = "-xlint"
+}

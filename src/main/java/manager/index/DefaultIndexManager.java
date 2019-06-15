@@ -18,10 +18,7 @@ import manager.TableManager;
 import middlelayer.IndexManager;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DefaultIndexManager implements IndexManager {
     private static TableManager tableManager = TableManager.getInstance();
@@ -108,16 +105,34 @@ public class DefaultIndexManager implements IndexManager {
         Type type = types.get(columnIndex);
         int correspondingTypeSize = type.getSize();
         int offset = getOffsetWithinTuple(types, columnIndex);
+        Set<Integer> freePositions = new HashSet<>(table.getFreeTuplePositions());
 
-
-        for (int tupleIndex = 0; tupleIndex < tuplesCount; ++tupleIndex) {
+        int tupleNum = 0;
+        int tupleIndex = 0;
+        while (tupleNum < tuplesCount) {
+            if (freePositions.contains(tupleIndex)) {
+                tupleIndex += 1;
+                continue;
+            }
             int base = tupleIndex * tupleSize;
             ByteCarrier byteCarrier = fileHandler.readTupleBytes(tableName,
                     base + offset, correspondingTypeSize);
             Object key = byteCarrier.getObject(base + offset,
                     correspondingTypeSize, type);
             index.update(key, base);
+            tupleNum += 1;
+            tupleIndex += 1;
         }
+
+//        for (int tupleIndex = 0; tupleIndex < tuplesCount; ++tupleIndex) {
+//            int base = tupleIndex * tupleSize;
+//            ByteCarrier byteCarrier = fileHandler.readTupleBytes(tableName,
+//                    base + offset, correspondingTypeSize);
+//            Object key = byteCarrier.getObject(base + offset,
+//                    correspondingTypeSize, type);
+////            System.out.println(key); //for debug
+//            index.update(key, base);
+//        }
     }
 
     private int getOffsetWithinTuple(List<Type> types, int columnIndex) {
