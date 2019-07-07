@@ -1,7 +1,21 @@
+# intellij
 .idea
 .gradle
 out/
-db/
+bin/
+gradle/
+build/
+
+# vscode
+.vscode/
+
+# ecllipse
+.settings/
+.classpath
+.project
+
+# macOS
+.DS_Store
 
 # Compiled class file
 *.class
